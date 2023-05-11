@@ -2,16 +2,32 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 17vw;
 }
-
 
 ul {
   color: #54667a;
-  padding: 15px;
+  width: 17vw;
 }
 
 li {
-    font-weight: 300;
-    list-style-type: none;
-    padding: 15px;
+  font-size: 18px;
+  font-weight: 300;
+  list-style-type: none;
+  padding: 15px;
+  cursor: pointer;
+  width: 17vw;
+}
+
+li:hover {
+  background-color: #edf1f5;
+}
+
+li:nth-child(5n):hover {
+  background-color: #ff0000;
+  color: #fff;
+}
+
+span {
+  font-size: 20px;
 }
