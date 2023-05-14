@@ -2,7 +2,6 @@ const router = require("express").Router();
 const User = require("../models/usersModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const checkAuthMiddleware = require("../middlewares/checkAuthMiddleware");
 
 // Generates JWT
 const generateToken = (id) => {
@@ -71,6 +70,36 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     res.status(500).send({
       message: error.message,
+      data: error,
+      success: false,
+    });
+  }
+});
+
+// getting user info
+router.get("/user/info", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const id = decoded.id;
+
+    const user = await User.findById(id);
+
+    if (user) {
+      res.status(200).send({
+        success: true,
+        data: user,
+      });
+    } else {
+      res.status(404).send({
+        message: "User not found",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(401).send({
       data: error,
       success: false,
     });

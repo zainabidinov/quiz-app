@@ -23,6 +23,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    userType: {
+      type: String,
+      enum: ["student", "teacher"],
+      default: "student",
+    }
   },
   {
     timestamps: true,

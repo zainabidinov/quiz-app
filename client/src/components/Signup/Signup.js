@@ -16,13 +16,22 @@ const Signup = () => {
     email: "",
     password: "",
     password2: "",
+    userType: "",
   });
 
   const { password, password2 } = formValues;
 
   function updateForm(value) {
     return setFormValues((prevState) => {
-      return { ...prevState, ...value };
+      // return { ...prevState, ...value };
+
+      let updatedFormValues = { ...prevState, ...value };
+
+      if (updatedFormValues.userType === "undefined") {
+        updatedFormValues.userType = "student";
+      }
+
+      return updatedFormValues;
     });
   }
 
@@ -57,6 +66,7 @@ const Signup = () => {
             email: "",
             password: "",
             password2: "",
+            userType: "",
           });
         } else {
           toast({
@@ -86,6 +96,7 @@ const Signup = () => {
           </span>
           <label htmlFor="firstName">First Name</label>
           <input
+            autocomplete="off"
             type="text"
             id="firstName"
             placeholder="Enter your first name"
@@ -95,6 +106,7 @@ const Signup = () => {
           ></input>
           <label htmlFor="lastName">Last Name</label>
           <input
+            autocomplete="off"
             type="text"
             placeholder="Enter your last name"
             id="lastName"
@@ -104,6 +116,7 @@ const Signup = () => {
           ></input>
           <label htmlFor="email">Email</label>
           <input
+            autocomplete="off"
             type="email"
             id="email"
             placeholder="Enter your Email here"
@@ -129,7 +142,19 @@ const Signup = () => {
             value={formValues.password2}
             onChange={(e) => updateForm({ password2: e.target.value })}
           ></input>
-          <div className="signup-from__btn">
+          <div className="signup-form__user-type">
+            <label htmlFor="userType">User Type </label>
+            <select
+              id="userType"
+              value={formValues.userType}
+              onChange={(e) => updateForm({ userType: e.target.value })}
+            >
+              <option value="">Select user type</option>
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+            </select>
+          </div>
+          <div className="signup-form__btn">
             <button type="submit">Create Account</button>
             <span>
               Already have an account?{" "}

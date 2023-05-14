@@ -64,6 +64,7 @@ const Login = () => {
 
           <label htmlFor="email">Email</label>
           <input
+            autocomplete="off"
             type="email"
             id="email"
             placeholder="Enter your Email here"
@@ -73,6 +74,7 @@ const Login = () => {
           ></input>
           <label htmlFor="password">Password</label>
           <input
+            autocomplete="off"
             type="password"
             id="password"
             placeholder="Enter your Password"
