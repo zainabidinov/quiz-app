@@ -50,8 +50,8 @@ const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
               Students
             </li>
             <li
-              className={activeNavItem === "manage-exams" ? "active" : ""}
-              onClick={() => onNavItemClick("manage-exams")}
+              className={activeNavItem === "quizzes" ? "active" : ""}
+              onClick={() => onNavItemClick("quizzes")}
             >
               <span className="mdi mdi-pencil-box-multiple"></span> Manage Exams
             </li>

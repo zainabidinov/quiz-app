@@ -10,6 +10,8 @@ import Students from "../../Instructor/StudentsInfo/Students";
 import StudentResults from "../../Instructor/StudentResults/StudentResults";
 import MyProfile from "../MyProfile/MyProfile";
 import MyResults from "../../Student/MyResults/MyResults";
+import CreateExams from "../../Instructor/ManageExams/CreateExams";
+import { useParams } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,8 +20,9 @@ const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState("home");
 
   const handleNavItemClick = (navItem) => {
-    setActiveNavItem(navItem);
     if (navItem !== "home") {
+      setActiveNavItem(navItem);
+
       navigate(`/home/${navItem}`);
     }
   };
@@ -42,7 +45,13 @@ const Home = () => {
           {activeNavItem === "home" && <h2>Home Page Content for Teacher</h2>}
           {/* {activeNavItem === "testBank" && <TestBank />} */}
           {activeNavItem === "student-info" && <Students />}
-          {activeNavItem === "manage-exams" && <ManageExams />}
+          {activeNavItem === "quizzes" && (
+            <ManageExams
+              activeNavItem={activeNavItem}
+              onNavItemClick={handleNavItemClick}
+            />
+          )}
+          {activeNavItem === "quizzes/create" && <CreateExams />}
           {activeNavItem === "exam-results" && <StudentResults />}
           {activeNavItem === "profile" && <MyProfile />}
         </div>
@@ -58,7 +67,7 @@ const Home = () => {
           throw new Error("No token found");
         }
 
-        const response = await fetch("/api/users/user/info", {
+        const response = await fetch("/api/account/accountInfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

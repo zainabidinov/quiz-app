@@ -77,7 +77,7 @@ router.post("/login", async (req, res) => {
 });
 
 // getting user info
-router.get("/user/info", async (req, res) => {
+router.get("/accountInfo", async (req, res) => {
   try {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];

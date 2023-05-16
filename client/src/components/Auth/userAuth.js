@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
 
 export const signUp = async (payload) => {
   try {
-    const response = await api.post("/users/register", payload);
+    const response = await api.post("/account/register", payload);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -27,7 +27,7 @@ export const signUp = async (payload) => {
 
 export const logIn = async (payload) => {
   try {
-    const response = await api.post("/users/login", payload);
+    const response = await api.post("/account/login", payload);
     return response.data;
   } catch (error) {
     if (error.response) {

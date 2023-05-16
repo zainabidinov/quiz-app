@@ -10,30 +10,22 @@ const examSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    gradeToPass: {
-      type: Number,
-      required: true,
-    },
     duration: {
       type: Number,
       required: true,
     },
     questions: [
       {
-        answers: {
+        options: {
           type: [String],
           required: true,
         },
-        correctAnswer: {
+        correctOption: {
           type: String,
           required: true,
         },
         questionName: {
           type: String,
-          required: true,
-        },
-        duration: {
-          type: Number,
           required: true,
         },
         questionType: {

@@ -10,11 +10,11 @@ dbConnect();
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
-const users = require("./routes/users");
+const accounts = require("./routes/users");
 const exams = require("./routes/exams");
 
-app.use("/api/users", users);
-app.use("/", exams);
+app.use("/api/account", accounts);
+app.use("/api/quizzes", exams);
 
 const port = process.env.PORT || 5000;
 

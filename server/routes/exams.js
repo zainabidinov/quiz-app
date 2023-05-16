@@ -26,7 +26,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.get("/getExams", async (req, res) => {
+router.get("/getQuizzes", async (req, res) => {
   try {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
@@ -48,7 +48,7 @@ router.get("/getExams", async (req, res) => {
         .send({ message: "No exams found in the database", success: false });
     }
   } catch (error) {
-    res.status(500).send({ message: error, success: false });
+    res.status(501).send({ message: error, success: false });
   }
 });
 

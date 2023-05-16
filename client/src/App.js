@@ -10,6 +10,7 @@ import ManageExams from "./components/Instructor/ManageExams/ManageExams";
 import StudentResults from "./components/Instructor/StudentResults/StudentResults";
 import Students from "./components/Instructor/StudentsInfo/Students";
 import MyResults from "./components/Student/MyResults/MyResults";
+import CreateExams from "./components/Instructor/ManageExams/CreateExams";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home/" element={<Home />}>
               <Route path="profile" element={<MyProfile />} />
-              <Route path="manage-exams" element={<ManageExams />} />
+              <Route path="quizzes" element={<ManageExams />} />
+              <Route path="quizzes/create" element={<CreateExams />} />
               <Route path="student-results" element={<StudentResults />} />
               <Route path="student-info" element={<Students />} />
               <Route path="exam-results" element={<MyResults />} />
