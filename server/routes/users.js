@@ -83,9 +83,9 @@ router.get("/accountInfo", async (req, res) => {
     const token = tokenHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const id = decoded.id;
+    req.body.uId = decoded.id;
 
-    const user = await User.findById(id);
+    const user = await User.findById(req.body.uId);
 
     if (user) {
       res.status(200).send({

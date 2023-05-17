@@ -8,20 +8,26 @@ router.post("/create", async (req, res) => {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.body.uId = decoded.id;
+    req.body.userId = decoded.id;
 
-    const examData = req.body;
+    const { examName, numberOfQuestions, examDuration } = req.body;
+    const examData = {
+      name: examName,
+      numberOfQuestions: numberOfQuestions,
+      duration: examDuration,
+      // questions: [],
+    };
     await Exam.create(examData);
 
     res.status(201).send({
-      message: "Exam successfully created",
       success: true,
+      message: "Exam successfully created",
     });
   } catch (error) {
     res.status(500).send({
+      success: false,
       message: error.message,
       data: error,
-      success: false,
     });
   }
 });
@@ -33,7 +39,7 @@ router.get("/getQuizzes", async (req, res) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.body.uId = decoded.id;
 
-    const examData = await Exam.find();
+    const examData = await Exam.find({});
 
     if (examData) {
       res.status(200).send({

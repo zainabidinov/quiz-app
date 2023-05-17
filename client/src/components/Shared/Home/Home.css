@@ -39,7 +39,12 @@
 
 .home-content {
   height: 91vh;
+  width: 83vw;
   background-color: #edf1f5;
+}
+
+.home-content__content {
+  background-color: #fff;
 }
 
 .main-content {

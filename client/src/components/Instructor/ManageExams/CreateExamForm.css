@@ -1,0 +1,72 @@
+.createExamFormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.createExamForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.createExamForm form {
+  width: 100%;
+}
+
+.createExamForm form > * {
+  margin-bottom: 20px;
+}
+
+.createExamForm form > *:last-child {
+  margin-bottom: 0;
+}
+
+.createExamForm form label {
+  font-weight: bold;
+}
+
+.createExamForm form input[type="text"],
+.createExamForm form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.createExamForm form input[type="number"]::-webkit-inner-spin-button,
+.createExamForm form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.createExamForm form input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.createExamForm form button {
+  padding: 10px 20px;
+  background-color: #f33155;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.createExamForm form button:hover {
+  background-color: #e22f51;
+}
+
+.createExamForm form button:active {
+  background-color: #d12749;
+}
+
+.createExamForm form button:focus {
+  outline: none;
+}

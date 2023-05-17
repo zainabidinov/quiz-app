@@ -5,9 +5,9 @@ import { useToast } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-const ManageExams = ({activeNavItem, onNavItemClick}) => {
+const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const BASE_API_URL = "/api/quizzes";
-  const [examData, setExamData] = useState();
+  const [examData, setExamData] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -23,7 +23,16 @@ const ManageExams = ({activeNavItem, onNavItemClick}) => {
   useEffect(() => {
     const fetchExamData = async () => {
       try {
-        const quizResponse = await axios.get(`${BASE_API_URL}/getQuizzes`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const quizResponse = await axios.get("/api/quizzes/getQuizzes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const { success, message, data } = quizResponse.data;
 
         if (success) {
