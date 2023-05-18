@@ -37,24 +37,26 @@ router.get("/getQuizzes", async (req, res) => {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.body.uId = decoded.id;
+    req.body.userId = decoded.id;
 
     const examData = await Exam.find({});
 
-    if (examData) {
+    if (examData.length > 0) {
       res.status(200).send({
         message: "Exams successfully retrieved",
         success: true,
         data: examData,
+        user: req.body.userId,
+      });
+    } else {
+      res.status(500).send({
+        message: "No exams found in the database",
+        success: false,
       });
     }
-    {
-      res
-        .status(500)
-        .send({ message: "No exams found in the database", success: false });
-    }
   } catch (error) {
-    res.status(501).send({ message: error, success: false });
+    res.status(501).send({ success: false });
+    console.log("Exams retrieval error", error);
   }
 });
 

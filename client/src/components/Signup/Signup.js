@@ -2,11 +2,13 @@ import React from "react";
 import "./Signup.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import myImg from "../../assets/images/woman_working.jpg";
+// import myImg from "../../assets/images/woman_working.jpg";
 import { signUp } from "../Auth/userAuth";
 import { useToast } from "@chakra-ui/react";
 
 const Signup = () => {
+  const myImg = require("../../assets/images/woman_working.jpg");
+
   const navigate = useNavigate();
   const toast = useToast();
 

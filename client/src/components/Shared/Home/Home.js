@@ -12,8 +12,11 @@ import MyProfile from "../MyProfile/MyProfile";
 import MyResults from "../../Student/MyResults/MyResults";
 import CreateExams from "../../Instructor/ManageExams/CreateExams";
 import { useParams } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
+import EditExam from "../../Instructor/ManageExams/EditExam";
 
 const Home = () => {
+  const toast = useToast();
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -54,9 +57,10 @@ const Home = () => {
           {activeNavItem === "quizzes/create" && <CreateExams />}
           {activeNavItem === "exam-results" && <StudentResults />}
           {activeNavItem === "profile" && <MyProfile />}
+          {activeNavItem === "edit-exam/:id" && <EditExam/>}
         </div>
       );
-    }
+    } 
   };
 
   useEffect(() => {
@@ -77,9 +81,21 @@ const Home = () => {
         if (response.status === 200 && data.success) {
           dispatch(setCurrentUser(data.data));
         } else {
+          toast({
+            description: data.message,
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+          });
           console.log("No user found");
         }
       } catch (error) {
+        toast({
+          description: error,
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
         alert("No user found");
       }
     };

@@ -11,6 +11,7 @@ import StudentResults from "./components/Instructor/StudentResults/StudentResult
 import Students from "./components/Instructor/StudentsInfo/Students";
 import MyResults from "./components/Student/MyResults/MyResults";
 import CreateExams from "./components/Instructor/ManageExams/CreateExams";
+import EditExam from "./components/Instructor/ManageExams/EditExam";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="student-results" element={<StudentResults />} />
               <Route path="student-info" element={<Students />} />
               <Route path="exam-results" element={<MyResults />} />
+              <Route path="edit-exam/:id" element={<EditExam />} />
             </Route>
           </Routes>
         </BrowserRouter>

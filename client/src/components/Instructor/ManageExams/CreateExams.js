@@ -14,6 +14,7 @@ import {
 import "./CreateExamForm.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const CreateExams = () => {
   const [examName, setExamName] = useState("");
@@ -21,6 +22,7 @@ const CreateExams = () => {
   const [examDuration, setExamDuration] = useState("");
   const BASE_API_URL = "/api/quizzes";
   const toast = useToast();
+  const navigate = useNavigate();
 
   const displayNotification = (message, status) => {
     toast({
@@ -59,6 +61,7 @@ const CreateExams = () => {
 
       if (response.data.success) {
         displayNotification(response.data.message, "success");
+        window.location.href = "/home";
       } else {
         displayNotification(response.data.message, "error");
       }

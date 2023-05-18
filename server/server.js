@@ -7,11 +7,7 @@ app.use(express.json());
 const dbConnect = require("./config/db");
 dbConnect();
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 
