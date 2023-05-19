@@ -60,4 +60,35 @@ router.get("/getQuizzes", async (req, res) => {
   }
 });
 
+router.get("/getQuiz/:quizId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+    
+    const { quizId } = req.params;
+
+    const examData = await Exam.findById(quizId);
+    if (examData) {
+      res.status(200).send({
+        success: true,
+        message: "Exam successfully retrieved",
+        data: examData,
+      });
+    } else {
+      res.status(404).send({
+        success: false,
+        message: "Exam not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error.message,
+      data: error,
+    });
+  }
+});
+
 module.exports = router;

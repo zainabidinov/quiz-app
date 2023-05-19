@@ -24,11 +24,15 @@ const Home = () => {
 
   const handleNavItemClick = (navItem) => {
     if (navItem !== "home") {
-      setActiveNavItem(navItem);
-
+      if (navItem.startsWith("quizzes/edit-exam")) {
+        setActiveNavItem("quizzes/edit-exam/:id"); 
+      } else {
+        setActiveNavItem(navItem);
+      }
       navigate(`/home/${navItem}`);
     }
   };
+  
 
   const renderContent = () => {
     if (currentUser && currentUser.userType === "student") {
@@ -36,7 +40,6 @@ const Home = () => {
         <div>
           {/* Render the content for student */}
           {activeNavItem === "home" && <h2>Home Page Content for Student</h2>}
-          {/* {activeNavItem === "testBank" && <TestBank />} */}
           {activeNavItem === "student-results" && <MyResults />}
           {activeNavItem === "profile" && <MyProfile />}
         </div>
@@ -46,7 +49,6 @@ const Home = () => {
         <div>
           {/* Render the content for teacher */}
           {activeNavItem === "home" && <h2>Home Page Content for Teacher</h2>}
-          {/* {activeNavItem === "testBank" && <TestBank />} */}
           {activeNavItem === "student-info" && <Students />}
           {activeNavItem === "quizzes" && (
             <ManageExams
@@ -57,7 +59,7 @@ const Home = () => {
           {activeNavItem === "quizzes/create" && <CreateExams />}
           {activeNavItem === "exam-results" && <StudentResults />}
           {activeNavItem === "profile" && <MyProfile />}
-          {activeNavItem === "edit-exam/:id" && <EditExam/>}
+          {activeNavItem === "quizzes/edit-exam/:id" && <EditExam/>}
         </div>
       );
     } 

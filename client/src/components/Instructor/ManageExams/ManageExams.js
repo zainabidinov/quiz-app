@@ -4,14 +4,17 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { Button as ButtonMantine } from "@mantine/core";
 import { Pagination } from "@mantine/core";
+import { useDispatch } from "react-redux";
+import { setExam } from "../../../redux/examSlice";
 
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const BASE_API_URL = "/api/quizzes";
   const [examData, setExamData] = useState([]);
+  const [quizData, setQuizData] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const examsPerPage = 8;
 
@@ -58,8 +61,32 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
     onNavItemClick("quizzes/create");
   };
 
-  const handleEditExamButton = async () => {
-    onNavItemClick("edit-exam/:id");
+  const handleEditExamButton = async (quizId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.get(`/api/quizzes/getQuiz/${quizId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { success, message, data } = response.data;
+
+      if (success) {
+        displayNotification(message, "success");
+        dispatch(setExam(data));
+        setQuizData(data);
+        onNavItemClick(`quizzes/edit-exam/${data._id}`);
+
+        console.log("this is a specific exam", data);
+      } else {
+        displayNotification(message, "error");
+      }
+    } catch (error) {}
   };
 
   const handlePageChange = (page) => {
@@ -75,29 +102,38 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       <div className="manage-exams">
         {currentExams.length > 0 ? (
           <div>
-            <Button
-              className={activeNavItem === "quizzes/create" ? "active" : ""}
-              colorScheme="teal"
-              size="sm"
-              onClick={onButtonClick}
-            >
-              Add Exam
-            </Button>
-
             {currentExams.map((exam) => (
               <div className="examContent">
                 <div key={exam._id}>{exam.name}</div>
                 <Button
+                  className={
+                    activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
+                  }
                   size="sm"
                   colorScheme="teal"
                   variant="outline"
-                  className="edit-exam__button"
-                  onClick={handleEditExamButton}
+                  onClick={() => handleEditExamButton(exam._id)}
                 >
                   Edit Exam
                 </Button>
               </div>
             ))}
+            <Button
+              className={activeNavItem === "quizzes/create" ? "active" : ""}
+              colorScheme="teal"
+              size="sm"
+              onClick={() => onNavItemClick("quizzes/create")}
+            >
+              Add Exam
+            </Button>
+            <Pagination
+              style={{ marginTop: "16px" }}
+              size="sm"
+              total={examData.length}
+              perPage={examsPerPage}
+              value={currentPage}
+              onChange={handlePageChange}
+            />
           </div>
         ) : (
           <div>
@@ -106,21 +142,20 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
               className={activeNavItem === "quizzes/create" ? "active" : ""}
               colorScheme="teal"
               size="sm"
-              onClick={onButtonClick}
+              onClick={() => onNavItemClick("quizzes/create")}
             >
               Add Exam
             </Button>
+            <Pagination
+              style={{ marginTop: "16px" }}
+              size="sm"
+              total={examData.length}
+              perPage={examsPerPage}
+              value={currentPage}
+              onChange={handlePageChange}
+            />
           </div>
         )}
-
-        <Pagination
-          style={{ marginTop: "16px" }}
-          size="sm"
-          total={examData.length}
-          perPage={examsPerPage}
-          value={currentPage}
-          onChange={handlePageChange}
-        />
       </div>
     </>
   );

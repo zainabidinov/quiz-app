@@ -28,7 +28,7 @@ function App() {
               <Route path="student-results" element={<StudentResults />} />
               <Route path="student-info" element={<Students />} />
               <Route path="exam-results" element={<MyResults />} />
-              <Route path="edit-exam/:id" element={<EditExam />} />
+              <Route path="quizzes/edit-exam/:id" element={<EditExam />} />
             </Route>
           </Routes>
         </BrowserRouter>

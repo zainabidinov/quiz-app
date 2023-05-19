@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
   const navigate = useNavigate();
 
-  console.log("This is from Navigation.js", currentUser);
+  // console.log("This is from Navigation.js", currentUser);
 
   return (
     <div className="sidebar-navigation">
