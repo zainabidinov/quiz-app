@@ -82,7 +82,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         setQuizData(data);
         onNavItemClick(`quizzes/edit-exam/${data._id}`);
 
-        console.log("this is a specific exam", data);
+        // console.log("this is a specific exam", data);
       } else {
         displayNotification(message, "error");
       }
@@ -104,7 +104,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           <div>
             {currentExams.map((exam) => (
               <div className="examContent">
-                <div key={exam._id}>{exam.name}</div>
+                <div key={exam._id}>Exam Title: {exam.name}</div>
                 <Button
                   className={
                     activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""

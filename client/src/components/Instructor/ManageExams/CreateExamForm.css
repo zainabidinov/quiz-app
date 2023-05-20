@@ -32,23 +32,23 @@
   font-weight: bold;
 }
 
-.createExamForm form input[type="text"],
+/* .createExamForm form input[type="text"],
 .createExamForm form input[type="number"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
+} */
 
-.createExamForm form input[type="number"]::-webkit-inner-spin-button,
+/* .createExamForm form input[type="number"]::-webkit-inner-spin-button,
 .createExamForm form input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
+} */
 
-.createExamForm form input[type="number"] {
+/* .createExamForm form input[type="number"] {
   -moz-appearance: textfield;
-}
+} */
 
 .createExamForm form button {
   padding: 10px 20px;

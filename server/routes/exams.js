@@ -66,7 +66,7 @@ router.get("/getQuiz/:quizId", async (req, res) => {
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.body.userId = decoded.id;
-    
+
     const { quizId } = req.params;
 
     const examData = await Exam.findById(quizId);
@@ -88,6 +88,36 @@ router.get("/getQuiz/:quizId", async (req, res) => {
       message: error.message,
       data: error,
     });
+  }
+});
+
+router.put("/update-quiz/:quizId", async (req, res) => {
+  try {
+    const { name, numberOfQuestions, duration } = req.body;
+    const { quizId } = req.params;
+
+    const exam = await Exam.findById(quizId);
+
+    if (exam) {
+      exam.name = name;
+      exam.numberOfQuestions = numberOfQuestions;
+      exam.duration = duration;
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: "No such exam in database",
+      });
+    }
+
+    await exam.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Exam successfully updated",
+      data: exam,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message, success: false });
   }
 });
 

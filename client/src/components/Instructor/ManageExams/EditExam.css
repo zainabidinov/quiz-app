@@ -1,0 +1,72 @@
+.editExamFormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 35px;
+}
+
+.editExamForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.editExamForm form {
+  width: 100%;
+}
+
+.editExamForm form > * {
+  margin-bottom: 20px;
+}
+
+.editExamForm form > *:last-child {
+  margin-bottom: 0;
+}
+
+.editExamForm form label {
+  font-weight: bold;
+}
+
+/* .editExamForm form input[type="text"],
+  .editExamForm form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  } */
+
+/* .editExamForm form input[type="number"]::-webkit-inner-spin-button,
+  .editExamForm form input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  } */
+
+/* .editExamForm form input[type="number"] {
+    -moz-appearance: textfield;
+  } */
+
+.editExamForm form button {
+  padding: 10px 20px;
+  background-color: #f33155;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.editExamForm form button:hover {
+  background-color: #e22f51;
+}
+
+.editExamForm form button:active {
+  background-color: #d12749;
+}
+
+.editExamForm form button:focus {
+  outline: none;
+}
