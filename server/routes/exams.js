@@ -93,6 +93,11 @@ router.get("/getQuiz/:quizId", async (req, res) => {
 
 router.put("/update-quiz/:quizId", async (req, res) => {
   try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
     const { name, numberOfQuestions, duration } = req.body;
     const { quizId } = req.params;
 
@@ -105,7 +110,7 @@ router.put("/update-quiz/:quizId", async (req, res) => {
     } else {
       return res.status(404).send({
         success: false,
-        message: "No such exam in database",
+        message: "No such exam found in database",
       });
     }
 
@@ -119,6 +124,41 @@ router.put("/update-quiz/:quizId", async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: error.message, success: false });
   }
+});
+
+router.post("/add-question/:quizId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
+    const { quizId } = req.params;
+
+    const exam = await Exam.findById(quizId);
+    if (!exam) {
+      return res
+        .status(404)
+        .send({ success: false, message: "No such exam found in database" });
+    }
+
+    const { questionName, questionType, correctOption, options } = req.body;
+
+    exam.questions = {
+      questionName: questionName,
+      questionType: questionType,
+      correctOption: correctOption,
+      options: options,
+    };
+
+    await exam.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Question successfully added",
+      data: exam,
+    });
+  } catch (error) {}
 });
 
 module.exports = router;

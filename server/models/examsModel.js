@@ -30,7 +30,7 @@ const examSchema = new mongoose.Schema(
         },
         questionType: {
           type: String,
-          enum: ["multipleChoice", "trueFalse"],
+          enum: ["multipleChoice", "trueFalse", "fillBlank"],
           default: "multipleChoice",
         },
       },
