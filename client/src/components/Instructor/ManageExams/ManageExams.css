@@ -5,6 +5,7 @@
   flex-wrap: wrap;
   justify-content: center;
   padding-top: 40px;
+  
 }
 
 .examContent {
@@ -16,6 +17,8 @@
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  max-width: 650px;
 }
 
 .edit-exam__button {

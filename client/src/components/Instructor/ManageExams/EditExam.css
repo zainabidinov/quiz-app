@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 35px;
+  margin-top: 18px;
 }
 
 .editExamForm {
@@ -32,26 +32,8 @@
   font-weight: bold;
 }
 
-/* .editExamForm form input[type="text"],
-  .editExamForm form input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  } */
-
-/* .editExamForm form input[type="number"]::-webkit-inner-spin-button,
-  .editExamForm form input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  } */
-
-/* .editExamForm form input[type="number"] {
-    -moz-appearance: textfield;
-  } */
-
 .editExamForm form button {
-  padding: 10px 20px;
+  padding: 6px 20px;
   background-color: #f33155;
   color: #fff;
   border: none;
@@ -69,4 +51,68 @@
 
 .editExamForm form button:focus {
   outline: none;
+}
+
+/* /////////////////////////////////// */
+
+.editQuestionsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
+}
+
+.editQuestionsForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.editQuestionsForm form {
+  width: 100%;
+}
+
+.editQuestionsForm form > * {
+  margin-bottom: 20px;
+}
+
+.editQuestionsForm form > *:last-child {
+  margin-bottom: 0;
+}
+
+.editQuestionsForm form label {
+  font-weight: bold;
+}
+
+.editQuestionsForm form button {
+  padding: 10px 20px;
+  background-color: #f33155;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.editQuestionsForm form button:hover {
+  background-color: #e22f51;
+}
+
+.editQuestionsForm form button:active {
+  background-color: #d12749;
+}
+
+.editQuestionsForm form button:focus {
+  outline: none;
+}
+
+.editQuestionsForm__absence {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
 }

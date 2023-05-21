@@ -104,7 +104,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           <div>
             {currentExams.map((exam) => (
               <div className="examContent">
-                <div key={exam._id}>Exam Title: {exam.name}</div>
+                <div key={exam._id}>{exam.name}</div>
                 <Button
                   className={
                     activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
