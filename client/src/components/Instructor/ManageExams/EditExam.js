@@ -13,7 +13,11 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { setExam, setExamProperty } from "../../../redux/examSlice.js";
+import {
+  setExam,
+  setExamProperty,
+  setQuestionProperty,
+} from "../../../redux/examSlice.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
@@ -30,8 +34,10 @@ import {
 
 const EditExam = () => {
   const API_URL = "/api/quizzes";
-  const currentExam = useSelector((state) => state.exam);
+  const params = useParams();
+  const toast = useToast();
   const dispatch = useDispatch();
+  const currentExam = useSelector((state) => state.exam);
   const { name, numberOfQuestions, duration } = currentExam.exam;
   const [isExamOpen, setIsExamOpen] = useState(false);
   const [isQuestionOpen, setIsQuestionOpen] = useState(false);
@@ -46,8 +52,6 @@ const EditExam = () => {
     options: [],
     correctOption: "",
   });
-  const params = useParams();
-  const toast = useToast();
 
   console.log("Current Redux: ", currentExam);
 
@@ -176,6 +180,38 @@ const EditExam = () => {
           options: [],
           correctOption: "",
         });
+        setIsQuestionOpen(false);
+      } else {
+        displayNotification(response.data.message, "error");
+      }
+    } catch (error) {
+      displayNotification(error.message, "error");
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId) => {
+    try {
+      console.log("sent question _id", questionId);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      let quizId = params.id;
+
+      const response = await axios.delete(
+        `${API_URL}/delete-question/${quizId}/${questionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        displayNotification(response.data.message, "success");
+        dispatch(setExam(response.data.data));
+        console.log("The redux after update", currentExam.exam);
       } else {
         displayNotification(response.data.message, "error");
       }
@@ -298,14 +334,32 @@ const EditExam = () => {
       </Modal>
 
       {currentExam.exam.questions.length > 0 ? (
-        <div className="editQuestionsContainer">
-          <div className="editQuestionsForm">
-            <Stack direction="row">
-              <p>Your question:</p>
-              {currentExam.exam.questions[0].questionName}
-            </Stack>
-          </div>
-        </div>
+        currentExam.exam.questions.map((question) => {
+          return (
+            <div className="editQuestionsContainer" key={question._id}>
+              <div className="editQuestionsForm">
+                <Stack direction="row">
+                  <div className="editQuestionsForm__absence">
+                    <div>
+                      <p>Question: {question.questionName}</p>
+                      <p>Correct Option: {question.correctOption}</p>
+                    </div>
+
+                    <Button
+                      colorScheme="red"
+                      mr={3}
+                      type="submit"
+                      size="sm"
+                      onClick={() => handleDeleteQuestion(question._id)}
+                    >
+                      Delete Question
+                    </Button>
+                  </div>
+                </Stack>
+              </div>
+            </div>
+          );
+        })
       ) : (
         <div className="editQuestionsContainer">
           <div className="editQuestionsForm">

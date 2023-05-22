@@ -144,12 +144,14 @@ router.post("/add-question/:quizId", async (req, res) => {
 
     const { questionName, questionType, correctOption, options } = req.body;
 
-    exam.questions = {
+    const newQuestion = {
       questionName: questionName,
       questionType: questionType,
       correctOption: correctOption,
       options: options,
     };
+
+    exam.questions.push(newQuestion);
 
     await exam.save();
 
@@ -159,6 +161,49 @@ router.post("/add-question/:quizId", async (req, res) => {
       data: exam,
     });
   } catch (error) {}
+});
+
+router.delete("/delete-question/:quizId/:questionId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
+    const { quizId, questionId } = req.params;
+
+    const exam = await Exam.findById(quizId);
+
+    if (!exam) {
+      return res.status(404).send({
+        success: false,
+        message: "No such exam found in the database",
+      });
+    }
+
+    const questionIndex = exam.questions.findIndex(
+      (question) => question._id.toString() === questionId
+    );
+
+    if (questionIndex === -1) {
+      return res.status(404).send({
+        success: false,
+        message: "No such question found in the database",
+      });
+    }
+
+    exam.questions.splice(questionIndex, 1);
+
+    await exam.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Question has been deleted",
+      data: exam,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message, success: false });
+  }
 });
 
 module.exports = router;
