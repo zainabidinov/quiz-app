@@ -229,11 +229,11 @@ const EditExam = () => {
     setCurrentPage(page);
   };
 
-  const indexOfLastQuestion = currentPage * questionsPerPage;
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const lastIndex = currentPage * questionsPerPage;
+  const firstIndex = lastIndex - questionsPerPage;
   const currentQuestions = currentExam.exam.questions.slice(
-    indexOfFirstQuestion,
-    indexOfLastQuestion
+    firstIndex,
+    lastIndex
   );
 
   return (
@@ -348,11 +348,10 @@ const EditExam = () => {
           </form>
         </ModalContent>
       </Modal>
-
       <div>
-        {currentExam.exam.questions.length > 0 ? (
-          currentExam.exam.questions.map((question) => {
-            return (
+        {currentQuestions.length > 0 ? (
+          <div>
+            {currentQuestions.map((question) => (
               <div className="editQuestionsContainer" key={question._id}>
                 <div className="editQuestionsForm">
                   <Stack direction="row">
@@ -375,8 +374,8 @@ const EditExam = () => {
                   </Stack>
                 </div>
               </div>
-            );
-          })
+            ))}
+          </div>
         ) : (
           <div className="editQuestionsContainer">
             <div className="editQuestionsForm">
@@ -398,9 +397,11 @@ const EditExam = () => {
           </div>
         )}
         <Pagination
+          style={{ marginTop: "16px" }}
+          size="sm"
           total={currentExam.exam.questions.length}
-          page={currentPage}
-          limit={questionsPerPage}
+          perPage={questionsPerPage}
+          value={currentPage}
           onChange={handlePageChange}
         />
       </div>
