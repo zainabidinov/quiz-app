@@ -50,7 +50,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           displayNotification(message, "error");
         }
       } catch (error) {
-        // displayNotification(error.message, "error");
+        displayNotification(error.message, "error");
       }
     };
 
@@ -82,7 +82,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         setQuizData(data);
         onNavItemClick(`quizzes/edit-exam/${data._id}`);
 
-        // console.log("this is a specific exam", data);
+        console.log("this is a specific exam", data);
       } else {
         displayNotification(message, "error");
       }

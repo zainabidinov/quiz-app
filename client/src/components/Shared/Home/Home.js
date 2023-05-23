@@ -14,6 +14,7 @@ import CreateExams from "../../Instructor/ManageExams/CreateExams";
 import { useParams } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import EditExam from "../../Instructor/ManageExams/EditExam";
+import TestBank from "../TestBank/TestBank";
 
 const Home = () => {
   const toast = useToast();
@@ -25,21 +26,22 @@ const Home = () => {
   const handleNavItemClick = (navItem) => {
     if (navItem !== "home") {
       if (navItem.startsWith("quizzes/edit-exam")) {
-        setActiveNavItem("quizzes/edit-exam/:id"); 
+        setActiveNavItem("quizzes/edit-exam/:id");
       } else {
         setActiveNavItem(navItem);
       }
       navigate(`/home/${navItem}`);
+    } else {
+      setActiveNavItem("home");
+      navigate("/home");
     }
   };
-  
 
   const renderContent = () => {
     if (currentUser && currentUser.userType === "student") {
       return (
         <div>
-          {/* Render the content for student */}
-          {activeNavItem === "home" && <h2>Home Page Content for Student</h2>}
+          {activeNavItem === "home" && <TestBank />}
           {activeNavItem === "student-results" && <MyResults />}
           {activeNavItem === "profile" && <MyProfile />}
         </div>
@@ -47,7 +49,6 @@ const Home = () => {
     } else if (currentUser && currentUser.userType === "teacher") {
       return (
         <div>
-          {/* Render the content for teacher */}
           {activeNavItem === "home" && <h2>Home Page Content for Teacher</h2>}
           {activeNavItem === "student-info" && <Students />}
           {activeNavItem === "quizzes" && (
@@ -59,10 +60,10 @@ const Home = () => {
           {activeNavItem === "quizzes/create" && <CreateExams />}
           {activeNavItem === "exam-results" && <StudentResults />}
           {activeNavItem === "profile" && <MyProfile />}
-          {activeNavItem === "quizzes/edit-exam/:id" && <EditExam/>}
+          {activeNavItem === "quizzes/edit-exam/:id" && <EditExam />}
         </div>
       );
-    } 
+    }
   };
 
   useEffect(() => {
