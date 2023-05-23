@@ -18,6 +18,7 @@ import {
   setExamProperty,
   setQuestionProperty,
 } from "../../../redux/examSlice.js";
+import { Pagination } from "@mantine/core";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
@@ -52,6 +53,10 @@ const EditExam = () => {
     options: [],
     correctOption: "",
   });
+  const isLimitReached = currentExam.exam.questions.length;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 4;
 
   console.log("Current Redux: ", currentExam);
 
@@ -220,6 +225,17 @@ const EditExam = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = currentExam.exam.questions.slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion
+  );
+
   return (
     <>
       <div className="editExamFormContainer">
@@ -333,53 +349,83 @@ const EditExam = () => {
         </ModalContent>
       </Modal>
 
-      {currentExam.exam.questions.length > 0 ? (
-        currentExam.exam.questions.map((question) => {
-          return (
-            <div className="editQuestionsContainer" key={question._id}>
-              <div className="editQuestionsForm">
-                <Stack direction="row">
-                  <div className="editQuestionsForm__absence">
-                    <div>
-                      <p>Question: {question.questionName}</p>
-                      <p>Correct Option: {question.correctOption}</p>
-                    </div>
+      <div>
+        {currentExam.exam.questions.length > 0 ? (
+          currentExam.exam.questions.map((question) => {
+            return (
+              <div className="editQuestionsContainer" key={question._id}>
+                <div className="editQuestionsForm">
+                  <Stack direction="row">
+                    <div className="editQuestionsForm__absence">
+                      <div>
+                        <p>Question: {question.questionName}</p>
+                        <p>Correct Option: {question.correctOption}</p>
+                      </div>
 
-                    <Button
-                      colorScheme="red"
-                      mr={3}
-                      type="submit"
-                      size="sm"
-                      onClick={() => handleDeleteQuestion(question._id)}
-                    >
-                      Delete Question
-                    </Button>
-                  </div>
-                </Stack>
+                      <Button
+                        colorScheme="red"
+                        mr={3}
+                        type="submit"
+                        size="sm"
+                        onClick={() => handleDeleteQuestion(question._id)}
+                      >
+                        Delete Question
+                      </Button>
+                    </div>
+                  </Stack>
+                </div>
               </div>
+            );
+          })
+        ) : (
+          <div className="editQuestionsContainer">
+            <div className="editQuestionsForm">
+              <Stack direction="row">
+                <div className="editQuestionsForm__absence">
+                  <p>No Questions For Exam Added Yet</p>
+                  <Button
+                    colorScheme="teal"
+                    mr={3}
+                    type="submit"
+                    size="sm"
+                    onClick={handleQuestionOpenModal}
+                  >
+                    Add Question
+                  </Button>
+                </div>
+              </Stack>
             </div>
-          );
-        })
-      ) : (
-        <div className="editQuestionsContainer">
-          <div className="editQuestionsForm">
-            <Stack direction="row">
-              <div className="editQuestionsForm__absence">
-                <p>No Questions For Exam Added Yet</p>
-                <Button
-                  colorScheme="teal"
-                  mr={3}
-                  type="submit"
-                  size="sm"
-                  onClick={handleQuestionOpenModal}
-                >
-                  Add Question
-                </Button>
-              </div>
-            </Stack>
           </div>
-        </div>
-      )}
+        )}
+        <Pagination
+          total={currentExam.exam.questions.length}
+          page={currentPage}
+          limit={questionsPerPage}
+          onChange={handlePageChange}
+        />
+      </div>
+
+      <div className="EditExamFormFooter">
+        {isLimitReached === numberOfQuestions ? (
+          ""
+        ) : (
+          <Button
+            colorScheme="teal"
+            mr={3}
+            type="submit"
+            size="sm"
+            onClick={handleQuestionOpenModal}
+          >
+            Add Question
+          </Button>
+        )}
+        {/* <Pagination
+          total={currentExam.exam.questions.length}
+          page={currentPage}
+          limit={questionsPerPage}
+          onChange={handlePageChange}
+        /> */}
+      </div>
 
       <Modal isOpen={isQuestionOpen} onClose={handleQuestionCloseModal}>
         <ModalOverlay />
