@@ -10,12 +10,12 @@ router.post("/create", async (req, res) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.body.userId = decoded.id;
 
-    const { examName, numberOfQuestions, examDuration } = req.body;
+    const { subject, examName, numberOfQuestions, examDuration } = req.body;
     const examData = {
+      subject: subject,
       name: examName,
       numberOfQuestions: numberOfQuestions,
       duration: examDuration,
-      // questions: [],
     };
     await Exam.create(examData);
 
@@ -119,6 +119,36 @@ router.put("/update-quiz/:quizId", async (req, res) => {
     res.status(200).send({
       success: true,
       message: "Exam successfully updated",
+      data: exam,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message, success: false });
+  }
+});
+
+router.delete("/deleteQuiz/:quizId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
+    const { quizId } = req.params;
+
+    let exam = await Exam.findById(quizId);
+
+    if (!exam) {
+      return res.status(404).send({
+        success: false,
+        message: "No such exam found in the database",
+      });
+    }
+
+    exam = await Exam.deleteOne({ _id: quizId });
+
+    res.status(200).send({
+      success: true,
+      message: "Exam has been deleted",
       data: exam,
     });
   } catch (error) {

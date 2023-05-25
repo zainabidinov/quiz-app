@@ -4,6 +4,7 @@
   align-items: center;
   margin-top: 12px;
   min-height: 550px;
+  position: relative;
 }
 
 .examMainContent {
@@ -11,6 +12,8 @@
   flex-direction: column;
   width: 100%;
   max-width: 1050px;
+  position: relative;
+  padding-bottom: 50px;
 }
 
 .examMainContent__header {
@@ -32,8 +35,8 @@
 
 .examMainContent__content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  grid-template-rows: repeat(2, auto); 
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 10px;
   border-radius: 5px;
   margin-top: 8px;
@@ -57,4 +60,15 @@
   color: #000;
   font-size: 22px;
   text-decoration: underline;
+}
+
+.paginationContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

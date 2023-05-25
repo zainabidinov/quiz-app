@@ -5,6 +5,7 @@ const initialState = {
     name: "",
     numberOfQuestions: 0,
     duration: 0,
+    subject: "",
     questions: [
       {
         options: [],

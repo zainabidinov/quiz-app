@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { setExam } from "../../../redux/examSlice";
+import { Pagination } from "@mantine/core";
 
 const TestBank = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [examData, setExamData] = useState([]);
+  const [pageFocus, setPageFocus] = useState(1);
+  const examsPerPage = 6;
   const retrievedExams = useSelector((state) => state.exam.exam);
   console.log("Redux state: ", examData);
 
@@ -53,6 +56,14 @@ const TestBank = () => {
     fetchExamData();
   }, []);
 
+  const pageSwitchHandler = (value) => {
+    setPageFocus(value);
+  };
+
+  const lastIndex = pageFocus * examsPerPage;
+  const firstIndex = lastIndex - examsPerPage;
+  const currentExams = examData.slice(firstIndex, lastIndex);
+
   return (
     <div className="examMainContaioner">
       <div className="examMainContent">
@@ -61,8 +72,8 @@ const TestBank = () => {
         </div>
 
         <div className="examMainContent__content">
-          {examData &&
-            examData.map((exam, index) => (
+          {currentExams &&
+            currentExams.map((exam, index) => (
               <div className="examMainContent__content-items" key={index}>
                 <h1>{exam.name}</h1>
                 <p>Number of Questions: {exam.numberOfQuestions}</p>
@@ -70,12 +81,23 @@ const TestBank = () => {
                 <Button
                   style={{ width: "125px", height: "30px", fontSize: "15px" }}
                   colorScheme="teal"
+                  variant="outline"
                   mt={2}
                 >
                   Attempt exam
                 </Button>
               </div>
             ))}
+        </div>
+        <div className="paginationContainer">
+          <Pagination
+            style={{ marginTop: "16px" }}
+            size="sm"
+            total={examData.length}
+            perPage={examsPerPage}
+            value={pageFocus}
+            onChange={pageSwitchHandler}
+          />
         </div>
       </div>
     </div>

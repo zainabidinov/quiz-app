@@ -11,12 +11,12 @@ import { setExam } from "../../../redux/examSlice";
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const BASE_API_URL = "/api/quizzes";
   const [examData, setExamData] = useState([]);
-  const [quizData, setQuizData] = useState([]);
+  // const [quizData, setQuizData] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const examsPerPage = 8;
+  const [pageFocus, setPageFocus] = useState(1);
+  const examsPerPage = 6;
 
   const displayNotification = (message, status) => {
     toast({
@@ -79,21 +79,56 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       if (success) {
         displayNotification(message, "success");
         dispatch(setExam(data));
-        setQuizData(data);
+        // setQuizData(data);
         onNavItemClick(`quizzes/edit-exam/${data._id}`);
 
         console.log("this is a specific exam", data);
       } else {
         displayNotification(message, "error");
       }
-    } catch (error) {}
+    } catch (error) {
+      displayNotification(error.message, "error");
+    }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const pageSwitchHandler = (value) => {
+    setPageFocus(value);
   };
 
-  const lastIndex = currentPage * examsPerPage;
+  const handleDeleteExamButton = async (quizId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.delete(`/api/quizzes/deleteQuiz/${quizId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { success, message, data } = response.data;
+
+      if (success) {
+        displayNotification(message, "success");
+        dispatch(setExam(data));
+        
+        setExamData((prevExamData) =>
+          prevExamData.filter((exam) => exam._id !== quizId)
+        );
+        console.log("The redux after update", examData);
+
+        console.log("this is a specific exam", data);
+      } else {
+        displayNotification(message, "error");
+      }
+    } catch (error) {
+      displayNotification(error.message, "error");
+    }
+  };
+
+  const lastIndex = pageFocus * examsPerPage;
   const firstIndex = lastIndex - examsPerPage;
   const currentExams = examData.slice(firstIndex, lastIndex);
 
@@ -104,18 +139,37 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           <div>
             {currentExams.map((exam) => (
               <div className="examContent">
-                <div key={exam._id}>{exam.name}</div>
-                <Button
-                  className={
-                    activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
-                  }
-                  size="sm"
-                  colorScheme="teal"
-                  variant="outline"
-                  onClick={() => handleEditExamButton(exam._id)}
-                >
-                  Edit Exam
-                </Button>
+                <div key={exam._id}>
+                  <span className="examSubject">{exam.subject}</span>
+                  <br />
+                  <span className="examName">{exam.name}</span>
+                </div>
+                <div className="examContent__buttons">
+                  <Button
+                    className={
+                      activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
+                    }
+                    margin={1}
+                    size="sm"
+                    colorScheme="teal"
+                    variant="outline"
+                    onClick={() => handleEditExamButton(exam._id)}
+                  >
+                    Edit Exam
+                  </Button>
+                  <Button
+                    className={
+                      activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
+                    }
+                    margin={1}
+                    size="sm"
+                    colorScheme="red"
+                    variant="outline"
+                    onClick={() => handleDeleteExamButton(exam._id)}
+                  >
+                    Delete Exam
+                  </Button>
+                </div>
               </div>
             ))}
             <Button
@@ -131,8 +185,8 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
               size="sm"
               total={examData.length}
               perPage={examsPerPage}
-              value={currentPage}
-              onChange={handlePageChange}
+              value={pageFocus}
+              onChange={pageSwitchHandler}
             />
           </div>
         ) : (
@@ -151,8 +205,8 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
               size="sm"
               total={examData.length}
               perPage={examsPerPage}
-              value={currentPage}
-              onChange={handlePageChange}
+              value={pageFocus}
+              onChange={pageSwitchHandler}
             />
           </div>
         )}

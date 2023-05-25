@@ -55,7 +55,7 @@ const EditExam = () => {
   });
   const isLimitReached = currentExam.exam.questions.length;
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pageFocus, setPageFocus] = useState(1);
   const questionsPerPage = 4;
 
   console.log("Current Redux: ", currentExam);
@@ -196,7 +196,7 @@ const EditExam = () => {
 
   const handleDeleteQuestion = async (questionId) => {
     try {
-      console.log("sent question _id", questionId);
+      // console.log("sent question _id", questionId);
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No token found");
@@ -225,11 +225,11 @@ const EditExam = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const pageSwitchHandler = (value) => {
+    setPageFocus(value);
   };
 
-  const lastIndex = currentPage * questionsPerPage;
+  const lastIndex = pageFocus * questionsPerPage;
   const firstIndex = lastIndex - questionsPerPage;
   const currentQuestions = currentExam.exam.questions.slice(
     firstIndex,
@@ -401,8 +401,8 @@ const EditExam = () => {
           size="sm"
           total={currentExam.exam.questions.length}
           perPage={questionsPerPage}
-          value={currentPage}
-          onChange={handlePageChange}
+          value={pageFocus}
+          onChange={pageSwitchHandler}
         />
       </div>
 
@@ -420,12 +420,6 @@ const EditExam = () => {
             Add Question
           </Button>
         )}
-        {/* <Pagination
-          total={currentExam.exam.questions.length}
-          page={currentPage}
-          limit={questionsPerPage}
-          onChange={handlePageChange}
-        /> */}
       </div>
 
       <Modal isOpen={isQuestionOpen} onClose={handleQuestionCloseModal}>

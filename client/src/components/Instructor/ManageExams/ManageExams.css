@@ -4,13 +4,12 @@
   height: 91vh;
   flex-wrap: wrap;
   justify-content: center;
-  padding-top: 40px;
-  
+  padding-top: 20px;
 }
 
 .examContent {
   display: flex;
-  border: 2px solid #535050;
+  border: 2px solid #2e7d9c;
   padding: 5px 18px;
   margin: 5px;
   border-radius: 5px;
@@ -19,8 +18,26 @@
   justify-content: space-between;
   width: 100%;
   max-width: 650px;
+  background-color: #fff;
 }
 
 .edit-exam__button {
   margin-left: 20px;
+}
+
+.examSubject {
+  color: #000;
+  font-size: 22px;
+  text-decoration: underline;
+}
+
+.examName {
+  font-size: 17px;
+  color: #000;
+}
+
+.examContent__buttons {
+  display: flex;
+  flex-direction: row;
+  
 }

@@ -1,22 +1,13 @@
 import React, { useState } from "react";
-import {
-  Input,
-  Stack,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  FormControl,
-  FormLabel,
-  Button,
-} from "@chakra-ui/react";
+import { NumberInput, NumberInputField, FormControl, FormLabel } from "@chakra-ui/react";
 import "./CreateExamForm.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Button, Input, Stack } from "@chakra-ui/react";
 
 const CreateExams = () => {
+  const [subject, setSubject] = useState("");
   const [examName, setExamName] = useState("");
   const [examQuestions, setExamQuestions] = useState("");
   const [examDuration, setExamDuration] = useState("");
@@ -37,6 +28,7 @@ const CreateExams = () => {
     e.preventDefault();
 
     const formValues = {
+      subject: subject,
       examName: examName,
       numberOfQuestions: examQuestions,
       examDuration: examDuration,
@@ -46,12 +38,6 @@ const CreateExams = () => {
       if (!token) {
         throw new Error("No token found");
       }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
 
       const response = await axios.post(`${BASE_API_URL}/create`, formValues, {
         headers: {
@@ -75,6 +61,17 @@ const CreateExams = () => {
       <form onSubmit={onSubmit} className="createExamForm">
         <Stack direction="column">
           <FormControl>
+            <FormLabel>Subject</FormLabel>
+            <Input
+              type="text"
+              name="subject"
+              _focus={{ boxShadow: "none" }}
+              bg="white"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
             <FormLabel>Name of Exam</FormLabel>
             <Input
               type="text"
@@ -96,10 +93,6 @@ const CreateExams = () => {
                 value={examQuestions}
                 onChange={(e) => setExamQuestions(e.target.value)}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
           </FormControl>
 
@@ -113,10 +106,6 @@ const CreateExams = () => {
                 value={examDuration}
                 onChange={(e) => setExamDuration(e.target.value)}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
           </FormControl>
 
