@@ -113,7 +113,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       if (success) {
         displayNotification(message, "success");
         dispatch(setExam(data));
-        
+
         setExamData((prevExamData) =>
           prevExamData.filter((exam) => exam._id !== quizId)
         );

@@ -8,7 +8,7 @@ router.post("/create", async (req, res) => {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.body.userId = decoded.id;
+    teacherId = decoded.id;
 
     const { subject, examName, numberOfQuestions, examDuration } = req.body;
     const examData = {
@@ -16,6 +16,7 @@ router.post("/create", async (req, res) => {
       name: examName,
       numberOfQuestions: numberOfQuestions,
       duration: examDuration,
+      teacher: teacherId,
     };
     await Exam.create(examData);
 
@@ -37,9 +38,10 @@ router.get("/getQuizzes", async (req, res) => {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    teacherId = decoded.id;
     req.body.userId = decoded.id;
 
-    const examData = await Exam.find({});
+    const examData = await Exam.find({teacher: teacherId});
 
     if (examData.length > 0) {
       res.status(200).send({
@@ -49,14 +51,13 @@ router.get("/getQuizzes", async (req, res) => {
         user: req.body.userId,
       });
     } else {
-      res.status(500).send({
+      res.status(400).send({
         message: "No exams found in the database",
         success: false,
       });
     }
   } catch (error) {
     res.status(501).send({ success: false });
-    console.log("Exams retrieval error", error);
   }
 });
 

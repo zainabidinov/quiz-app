@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { NumberInput, NumberInputField, FormControl, FormLabel } from "@chakra-ui/react";
+import {
+  NumberInput,
+  NumberInputField,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 import "./CreateExamForm.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { Button, Input, Stack } from "@chakra-ui/react";
+import { Button, Input, Stack, Select } from "@chakra-ui/react";
 
 const CreateExams = () => {
   const [subject, setSubject] = useState("");
@@ -62,15 +67,18 @@ const CreateExams = () => {
         <Stack direction="column">
           <FormControl>
             <FormLabel>Subject</FormLabel>
-            <Input
-              type="text"
-              name="subject"
-              _focus={{ boxShadow: "none" }}
-              bg="white"
+            <Select
+              placeholder="Select subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-            />
+            >
+              <option value="computerScience">Computer Science</option>
+              <option value="geography">Geography</option>
+              <option value="history">History</option>
+              <option value="english">English</option>
+            </Select>
           </FormControl>
+          
           <FormControl>
             <FormLabel>Name of Exam</FormLabel>
             <Input

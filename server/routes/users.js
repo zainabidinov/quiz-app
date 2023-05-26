@@ -18,7 +18,6 @@ router.post("/register", async (req, res) => {
     if (userExists) {
       return res.status(200).send({
         message: "This email address is already registered.",
-        //  Please sign in or use a different email address to continue,
         success: false,
       });
     }
