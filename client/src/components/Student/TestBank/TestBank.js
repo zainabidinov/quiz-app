@@ -7,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { setExam } from "../../../redux/examSlice";
 import { Pagination } from "@mantine/core";
 
-const TestBank = () => {
+const TestBank = ({ activeNavItem, onNavItemClick }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [examData, setExamData] = useState([]);
   const [pageFocus, setPageFocus] = useState(1);
   const examsPerPage = 6;
-  const retrievedExams = useSelector((state) => state.exam.exam);
-  console.log("Redux state: ", examData);
+  const selectedExam = useSelector((state) => state.exam.exam);
+  console.log("Local state: ", examData);
 
   const displayNotification = (message, status) => {
     toast({
@@ -34,7 +34,7 @@ const TestBank = () => {
           throw new Error("No token found");
         }
 
-        const response = await axios.get("/api/quizzes/getQuizzes", {
+        const response = await axios.get("/api/quizzes/getStudentQuizzes", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,6 +56,10 @@ const TestBank = () => {
     fetchExamData();
   }, []);
 
+  const onClick = (quizId) => {
+    onNavItemClick(`exam-session/${quizId}`);
+  };
+
   const pageSwitchHandler = (value) => {
     setPageFocus(value);
   };
@@ -76,13 +80,19 @@ const TestBank = () => {
             currentExams.map((exam, index) => (
               <div className="examMainContent__content-items" key={index}>
                 <h1>{exam.name}</h1>
+                <p>Subject: {exam.subject}</p>
                 <p>Number of Questions: {exam.numberOfQuestions}</p>
-                <p>Duration of Exam: {exam.numberOfQuestions}</p>
+                <p>Duration of Exam: {exam.duration}</p>
                 <Button
                   style={{ width: "125px", height: "30px", fontSize: "15px" }}
                   colorScheme="teal"
                   variant="outline"
                   mt={2}
+                  className={
+                    activeNavItem === "exam-session/:id" ? "active" : ""
+                  }
+                  type="submit"
+                  onClick={() => onClick(exam._id)}
                 >
                   Attempt exam
                 </Button>

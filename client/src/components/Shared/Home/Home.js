@@ -14,7 +14,8 @@ import CreateExams from "../../Instructor/ManageExams/CreateExams";
 import { useParams } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import EditExam from "../../Instructor/ManageExams/EditExam";
-import TestBank from "../TestBank/TestBank";
+import TestBank from "../../Student/TestBank/TestBank";
+import ExamSession from "../../Student/ExamSession/ExamSession";
 
 const Home = () => {
   const toast = useToast();
@@ -27,10 +28,14 @@ const Home = () => {
     if (navItem !== "home") {
       if (navItem.startsWith("quizzes/edit-exam")) {
         setActiveNavItem("quizzes/edit-exam/:id");
+        navigate(`/home/${navItem}`);
+      } else if (navItem.startsWith("exam-session")) {
+        setActiveNavItem("exam-session/:id");
+        navigate(`/${navItem}`);
       } else {
         setActiveNavItem(navItem);
+        navigate(`/home/${navItem}`);
       }
-      navigate(`/home/${navItem}`);
     } else {
       setActiveNavItem("home");
       navigate("/home");
@@ -41,9 +46,15 @@ const Home = () => {
     if (currentUser && currentUser.userType === "student") {
       return (
         <div>
-          {activeNavItem === "home" && <TestBank />}
+          {activeNavItem === "home" && (
+            <TestBank
+              activeNavItem={activeNavItem}
+              onNavItemClick={handleNavItemClick}
+            />
+          )}
           {activeNavItem === "student-results" && <MyResults />}
           {activeNavItem === "profile" && <MyProfile />}
+          {activeNavItem === "exam-session/:id" && <ExamSession />}
         </div>
       );
     } else if (currentUser && currentUser.userType === "teacher") {

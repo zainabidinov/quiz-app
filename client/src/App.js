@@ -12,6 +12,7 @@ import Students from "./components/Instructor/StudentsInfo/Students";
 import MyResults from "./components/Student/MyResults/MyResults";
 import CreateExams from "./components/Instructor/ManageExams/CreateExams";
 import EditExam from "./components/Instructor/ManageExams/EditExam";
+import ExamSession from "./components/Student/ExamSession/ExamSession";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="exam-session/:id" element={<ExamSession />} />
             <Route path="/home/" element={<Home />}>
               <Route path="profile" element={<MyProfile />} />
               <Route path="quizzes" element={<ManageExams />} />

@@ -61,6 +61,33 @@ router.get("/getQuizzes", async (req, res) => {
   }
 });
 
+router.get("/getStudentQuizzes", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
+    const examData = await Exam.find();
+
+    if (examData.length > 0) {
+      res.status(200).send({
+        message: "Exams successfully retrieved",
+        success: true,
+        data: examData,
+        user: req.body.userId,
+      });
+    } else {
+      res.status(400).send({
+        message: "No exams found in the database",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(501).send({ success: false });
+  }
+});
+
 router.get("/getQuiz/:quizId", async (req, res) => {
   try {
     const tokenHeader = req.headers.authorization;

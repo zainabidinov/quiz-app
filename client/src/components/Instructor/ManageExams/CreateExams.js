@@ -72,13 +72,13 @@ const CreateExams = () => {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             >
-              <option value="computerScience">Computer Science</option>
-              <option value="geography">Geography</option>
-              <option value="history">History</option>
-              <option value="english">English</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Geography">Geography</option>
+              <option value="History">History</option>
+              <option value="English">English</option>
             </Select>
           </FormControl>
-          
+
           <FormControl>
             <FormLabel>Name of Exam</FormLabel>
             <Input
