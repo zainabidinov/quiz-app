@@ -2,20 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./TestBank.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, ModalContent, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { setExam } from "../../../redux/examSlice";
 import { Pagination } from "@mantine/core";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { ModalCloseButton, ModalOverlay, Stack } from "@chakra-ui/react";
 
 const TestBank = ({ activeNavItem, onNavItemClick }) => {
   const toast = useToast();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [examData, setExamData] = useState([]);
+  const [selectedExam, setSelectedExam] = useState([]);
   const [pageFocus, setPageFocus] = useState(1);
   const examsPerPage = 6;
-  const selectedExam = useSelector((state) => state.exam.exam);
-  console.log("Local state: ", examData);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  // console.log("Local state: ", examData);
+
+  const handleInfoOpenModal = (quizId) => {
+    setSelectedExam(examData.filter((e) => e._id === quizId));
+    console.log("Filtered exam", selectedExam);
+    setIsInfoOpen(true);
+  };
+
+  const handleInfoCloseModal = () => {
+    setIsInfoOpen(false);
+  };
 
   const displayNotification = (message, status) => {
     toast({
@@ -78,7 +90,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
         <div className="examMainContent__content">
           {currentExams &&
             currentExams.map((exam, index) => (
-              <div className="examMainContent__content-items" key={index}>
+              <div className="examMainContent__content-items" key={exam._id}>
                 <h1>{exam.name}</h1>
                 <p>Subject: {exam.subject}</p>
                 <p>Number of Questions: {exam.numberOfQuestions}</p>
@@ -91,8 +103,8 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                   className={
                     activeNavItem === "exam-session/:id" ? "active" : ""
                   }
-                  type="submit"
-                  onClick={() => onClick(exam._id)}
+                  type="button"
+                  onClick={() => handleInfoOpenModal(exam._id)}
                 >
                   Attempt exam
                 </Button>
@@ -110,6 +122,44 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
           />
         </div>
       </div>
+
+      <Modal isOpen={isInfoOpen} onClose={handleInfoCloseModal}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{selectedExam[0]?.name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack spacing={2}>
+              <p>
+                This exam is designed to test your knowledge in{" "}
+                {selectedExam[0]?.subject}
+              </p>
+              <p>
+                You have {selectedExam[0]?.duration} minutes to
+                complete this exam
+              </p>
+              <p>
+                There are {selectedExam[0]?.numberOfQuestions}{" "}
+                questions in this exam
+              </p>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button mr={3} onClick={handleInfoCloseModal}>
+              Cancel
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="outline"
+              type="submit"
+              onClick={() => onClick(selectedExam[0]?._id)}
+            >
+              Start exam now
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
