@@ -11,6 +11,7 @@ const ExamSession = () => {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [chosenData, setChosenData] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
+  const [report, setReport] = useState({});
   // console.log("Quiz data: ", quiz);
 
   useEffect(() => {
@@ -80,10 +81,10 @@ const ExamSession = () => {
     }
   };
 
-  const handleUserAnswers = (questionId, answer) => {
+  const handleUserAnswers = (qId, answer) => {
     setChosenData((prevAnswers) => ({
       ...prevAnswers,
-      [questionId]: answer,
+      [qId]: answer,
     }));
 
     // console.log("onChosenData change: ", chosenData);
@@ -92,10 +93,39 @@ const ExamSession = () => {
   const renderedQuestion = quiz.questions ? quiz.questions[currentIndx] : null;
 
   const onExamSubmit = async (e) => {
-    e.preventDefault();
-
+    if (e) {
+      e.preventDefault();
+    }
+  
+    const newReport = {};
+    const qIds = quiz.questions.map((question) => question._id);
+  
+    quiz.questions.forEach((question) => {
+      const qId = question._id;
+      const correctAnswer = question.correctOption;
+      const userAnswer = chosenData[qId];
+  
+      if (!userAnswer) {
+        newReport[qId] = "Not answered";
+      } else if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+        newReport[qId] = "Correct";
+      } else {
+        newReport[qId] = "Wrong";
+      }
+    });
+  
+    qIds.forEach((qId) => {
+      if (!newReport.hasOwnProperty(qId)) {
+        newReport[qId] = "Not answered";
+      }
+    });
+  
+    setReport(newReport);
+  
     console.log("Data on submission: ", chosenData);
+    console.log("Report on submission: ", report);
   };
+  
 
   return (
     <div className="exam-session">
