@@ -3,15 +3,34 @@ import MultipleChoice from "./MultipleChoice";
 import TrueFalse from "./TrueFalse";
 import FillBlank from "./FillBlank";
 
-const Question = ({ question }) => {
+const Question = ({ question, handleUserAnswers, selectedAnswer }) => {
   return (
     <div>
-      <h3>{question.questionName}</h3>
       {question.questionType === "multipleChoice" && (
-        <MultipleChoice options={question.options} />
+        <MultipleChoice
+          options={question.options}
+          handleUserAnswers={(answer) =>
+            handleUserAnswers(question._id, answer)
+          }
+          selectedAnswer={selectedAnswer}
+        />
       )}
-      {question.questionType === "trueFalse" && <TrueFalse />}
-      {question.questionType === "fillBlank" && <FillBlank />}
+      {question.questionType === "trueFalse" && (
+        <TrueFalse
+          handleUserAnswers={(answer) =>
+            handleUserAnswers(question._id, answer)
+          }
+          selectedAnswer={selectedAnswer}
+        />
+      )}
+      {question.questionType === "fillBlank" && (
+        <FillBlank
+          handleUserAnswers={(answer) =>
+            handleUserAnswers(question._id, answer)
+          }
+          selectedAnswer={selectedAnswer}
+        />
+      )}
     </div>
   );
 };

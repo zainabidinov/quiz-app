@@ -8,12 +8,46 @@
   flex-direction: column;
 }
 
-.exam-session__header p {
-  color: #545658;
+.exam-session__outline {
+  background-color: #fff;
+  width: 68%;
+  height: 85%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); /* Add shadow-box effect */
+}
+
+.exam-session__header {
+  width: 80%;
+  padding: 1rem; /* Add padding to separate header from the outline */
+}
+
+.exam-session__body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exam-session__body > div {
+  width: 77%;
+}
+
+.exam-session__header h1 {
+  color: #959db6;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
+}
+
+.exam-session__header h2 {
+  font-size: 17px;
 }
 
 .exam-session__footer {
   width: 70%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }

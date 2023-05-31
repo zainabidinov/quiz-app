@@ -10,6 +10,8 @@ const ExamSession = () => {
   const [quiz, setQuiz] = useState({});
   const [currentIndx, setCurrentIndx] = useState(0);
   const [chosenData, setChosenData] = useState({});
+  const [timeLeft, setTimeLeft] = useState(0);
+  // console.log("Quiz data: ", quiz);
 
   useEffect(() => {
     const fetchExamSessionData = async () => {
@@ -27,6 +29,7 @@ const ExamSession = () => {
         if (success) {
           console.log("If success message: ", message);
           setQuiz(data);
+          setTimeLeft(data.duration);
         } else {
           console.log("If error message: ", message);
         }
@@ -36,6 +39,33 @@ const ExamSession = () => {
     };
 
     fetchExamSessionData();
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      onExamSubmit();
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
+    let time = null;
+
+    const timerStarts = () => {
+      time = setInterval(() => {
+        setTimeLeft((prevValue) => {
+          if (prevValue === 0) {
+            clearInterval(time);
+            onExamSubmit();
+            return 0;
+          }
+          return prevValue - 1;
+        });
+      }, 1000);
+    };
+
+    timerStarts();
+
+    return () => clearInterval(time);
   }, []);
 
   const nextQuestion = () => {
@@ -50,38 +80,73 @@ const ExamSession = () => {
     }
   };
 
+  const handleUserAnswers = (questionId, answer) => {
+    setChosenData((prevAnswers) => ({
+      ...prevAnswers,
+      [questionId]: answer,
+    }));
+
+    // console.log("onChosenData change: ", chosenData);
+  };
+
   const renderedQuestion = quiz.questions ? quiz.questions[currentIndx] : null;
+
+  const onExamSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log("Data on submission: ", chosenData);
+  };
 
   return (
     <div className="exam-session">
-      <div className="exam-session__header">
-        {renderedQuestion && <h2>Question {currentIndx + 1}</h2>}
-      </div>
-      <div className="exam-session__body">
-        {renderedQuestion && <Question question={renderedQuestion} />}
-      </div>
-      <div className="exam-session__footer">
-        <Button
-          colorScheme="purple"
-          borderRadius="10px"
-          onClick={previousQuestion}
-          disabled={currentIndx === 0}
-        >
-          Previous
-        </Button>
-        <Button
-          colorScheme="purple"
-          borderRadius="10px"
-          onClick={nextQuestion}
-          disabled={currentIndx === quiz.questions?.length - 1}
-        >
-          Next
-        </Button>
-        {currentIndx === quiz.questions?.length - 1 && (
-          <Button colorScheme="purple" borderRadius="10px">
-            Submit
+      <div className="exam-session__outline">
+        <div className="exam-session__header">
+          {renderedQuestion && <h1>Question {currentIndx + 1}</h1>}
+          {renderedQuestion && <h3>Remaining Time: {timeLeft} seconds</h3>}
+          {renderedQuestion && <h2>{renderedQuestion.questionName}</h2>}
+          <hr />
+        </div>
+        <div className="exam-session__body">
+          {renderedQuestion && (
+            <Question
+              question={renderedQuestion}
+              handleUserAnswers={handleUserAnswers}
+              selectedAnswer={chosenData[renderedQuestion._id]}
+            />
+          )}
+        </div>
+        <div className="exam-session__footer">
+          <Button
+            colorScheme="teal"
+            borderRadius="10px"
+            onClick={previousQuestion}
+            disabled={currentIndx === 0}
+          >
+            Previous
           </Button>
-        )}
+          {currentIndx === quiz.questions?.length - 1 ? (
+            ""
+          ) : (
+            <Button
+              colorScheme="teal"
+              borderRadius="10px"
+              onClick={nextQuestion}
+              disabled={currentIndx === quiz.questions?.length - 1}
+            >
+              Next
+            </Button>
+          )}
+          {currentIndx === quiz.questions?.length - 1 && (
+            <Button
+              colorScheme="orange"
+              borderRadius="10px"
+              type="submit"
+              onClick={onExamSubmit}
+            >
+              Submit Exam & Finish
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

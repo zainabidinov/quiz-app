@@ -480,7 +480,7 @@ const EditExam = () => {
                               ],
                             })
                           }
-                          placeholder="Option 1"
+                          placeholder="a"
                         />
                         <Input
                           value={newQuestion.options[1]}
@@ -495,7 +495,7 @@ const EditExam = () => {
                               ],
                             })
                           }
-                          placeholder="Option 2"
+                          placeholder="b"
                         />
                         <Input
                           value={newQuestion.options[2]}
@@ -510,7 +510,7 @@ const EditExam = () => {
                               ],
                             })
                           }
-                          placeholder="Option 3"
+                          placeholder="c"
                         />
                         <Input
                           value={newQuestion.options[3]}
@@ -525,7 +525,7 @@ const EditExam = () => {
                               ],
                             })
                           }
-                          placeholder="Option 4"
+                          placeholder="d"
                         />
                       </Stack>
                     </FormControl>
