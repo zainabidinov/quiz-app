@@ -12,6 +12,11 @@ const ExamSession = () => {
   const [chosenData, setChosenData] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
   const [report, setReport] = useState({});
+  const [score, setScore] = useState(0);
+  const [isExamFinished, setIsExamFinished] = useState(false);
+  const [numCorrect, setNumCorrect] = useState(0);
+  const [numWrong, setNumWrong] = useState(0);
+  const [numUnanswered, setNumUnanswered] = useState(0);
   // console.log("Quiz data: ", quiz);
 
   useEffect(() => {
@@ -96,87 +101,134 @@ const ExamSession = () => {
     if (e) {
       e.preventDefault();
     }
-  
+
     const newReport = {};
     const qIds = quiz.questions.map((question) => question._id);
-  
+
+    let correct = 0;
+    let wrong = 0;
+    let unanswered = 0;
+
     quiz.questions.forEach((question) => {
       const qId = question._id;
       const correctAnswer = question.correctOption;
       const userAnswer = chosenData[qId];
-  
+
       if (!userAnswer) {
         newReport[qId] = "Not answered";
-      } else if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+        unanswered++;
+      } else if (
+        userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
+      ) {
         newReport[qId] = "Correct";
+        correct++;
       } else {
         newReport[qId] = "Wrong";
+        wrong++;
       }
     });
-  
+
     qIds.forEach((qId) => {
       if (!newReport.hasOwnProperty(qId)) {
         newReport[qId] = "Not answered";
+        unanswered++;
       }
     });
-  
+
     setReport(newReport);
-  
+
+    setNumUnanswered(unanswered);
+    setNumCorrect(correct);
+    setNumWrong(wrong);
+
+    const totalQuestions = quiz.questions.length;
+    const examScore = (correct / totalQuestions) * 100;
+    setScore(examScore);
+    setIsExamFinished(true);
+
     console.log("Data on submission: ", chosenData);
     console.log("Report on submission: ", report);
   };
-  
 
   return (
     <div className="exam-session">
       <div className="exam-session__outline">
-        <div className="exam-session__header">
-          {renderedQuestion && <h1>Question {currentIndx + 1}</h1>}
-          {renderedQuestion && <h3>Remaining Time: {timeLeft} seconds</h3>}
-          {renderedQuestion && <h2>{renderedQuestion.questionName}</h2>}
-          <hr />
-        </div>
-        <div className="exam-session__body">
-          {renderedQuestion && (
-            <Question
-              question={renderedQuestion}
-              handleUserAnswers={handleUserAnswers}
-              selectedAnswer={chosenData[renderedQuestion._id]}
-            />
-          )}
-        </div>
-        <div className="exam-session__footer">
-          <Button
-            colorScheme="teal"
-            borderRadius="10px"
-            onClick={previousQuestion}
-            disabled={currentIndx === 0}
-          >
-            Previous
-          </Button>
-          {currentIndx === quiz.questions?.length - 1 ? (
-            ""
-          ) : (
-            <Button
-              colorScheme="teal"
-              borderRadius="10px"
-              onClick={nextQuestion}
-              disabled={currentIndx === quiz.questions?.length - 1}
-            >
-              Next
-            </Button>
-          )}
-          {currentIndx === quiz.questions?.length - 1 && (
-            <Button
-              colorScheme="orange"
-              borderRadius="10px"
-              type="submit"
-              onClick={onExamSubmit}
-            >
-              Submit Exam & Finish
-            </Button>
-          )}
-        </div>
+        {!isExamFinished ? (
+          <>
+            <div className="exam-session__header">
+              {renderedQuestion && <h1>Question {currentIndx + 1}</h1>}
+              {renderedQuestion && <h3>Remaining Time: {timeLeft} seconds</h3>}
+              {renderedQuestion && <h2>{renderedQuestion.questionName}</h2>}
+              <hr />
+            </div>
+            <div className="exam-session__body">
+              {renderedQuestion && (
+                <Question
+                  question={renderedQuestion}
+                  handleUserAnswers={handleUserAnswers}
+                  selectedAnswer={chosenData[renderedQuestion._id]}
+                />
+              )}
+            </div>
+            <div className="exam-session__footer">
+              <Button
+                colorScheme="teal"
+                borderRadius="10px"
+                onClick={previousQuestion}
+                disabled={currentIndx === 0}
+              >
+                Previous
+              </Button>
+              {currentIndx === quiz.questions?.length - 1 ? (
+                ""
+              ) : (
+                <Button
+                  colorScheme="teal"
+                  borderRadius="10px"
+                  onClick={nextQuestion}
+                  disabled={currentIndx === quiz.questions?.length - 1}
+                >
+                  Next
+                </Button>
+              )}
+              {currentIndx === quiz.questions?.length - 1 && (
+                <Button
+                  colorScheme="orange"
+                  borderRadius="10px"
+                  type="submit"
+                  onClick={onExamSubmit}
+                >
+                  Submit Exam & Finish
+                </Button>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="exam-session__result">
+            <div className="exam-session__result-body">
+              <div>
+                <h2>Your exam has been successfully submitted!</h2>
+                <h3>
+                  Your Grade: <strong>{Math.round(score)}%</strong>
+                </h3>
+              </div>
+              <hr className="result-line" />
+              <div>
+                <p>Number of correct answers: {numCorrect}</p>
+                <p>Number of wrong answers: {numWrong}</p>
+                <p>Not Answered: {numUnanswered}</p>
+              </div>
+            </div>
+            <div className="exam-session__result-footer">
+              <Button colorScheme="teal" borderRadius="10px">
+                Go Home
+              </Button>
+              <Button colorScheme="teal" borderRadius="10px">
+                View Feedback
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

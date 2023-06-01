@@ -17,12 +17,12 @@
   align-items: center;
   flex-direction: column;
   border-radius: 10px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); /* Add shadow-box effect */
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
 }
 
 .exam-session__header {
   width: 80%;
-  padding: 1rem; /* Add padding to separate header from the outline */
+  padding: 1rem;
 }
 
 .exam-session__body {
@@ -50,4 +50,49 @@
   width: 70%;
   display: flex;
   justify-content: space-around;
+}
+
+.exam-session__result {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  gap: 3.5rem;
+}
+
+.exam-session__result-body {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+}
+
+.exam-session__result-body hr.result-line {
+  width: 1.5px;
+  height: 100%;
+  background-color: #959db6;
+  margin: 0 2rem;
+  border: none;
+}
+
+.exam-session__result-body h2 {
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.exam-session__result-body h3 {
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+.exam-session__result-body strong {
+  color: #1d7c50;
+}
+
+.exam-session__result-footer {
+  display: flex;
+  width: 40%;
+  justify-content: space-evenly;
 }
