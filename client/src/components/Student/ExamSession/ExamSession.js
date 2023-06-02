@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./ExamSession.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@chakra-ui/react";
 import Question from "./Question";
 
 const ExamSession = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const [quiz, setQuiz] = useState({});
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -48,10 +49,10 @@ const ExamSession = () => {
   }, []);
 
   useEffect(() => {
-    if (timeLeft === 0) {
-      onExamSubmit();
-    }
-  }, [timeLeft]);
+  if (timeLeft === 0 && !isExamFinished) {
+    onExamSubmit();
+  }
+}, [timeLeft, isExamFinished]);
 
   useEffect(() => {
     let time = null;
@@ -95,11 +96,15 @@ const ExamSession = () => {
     // console.log("onChosenData change: ", chosenData);
   };
 
+  const onClick = () => {
+    navigate("/home");
+  };
+
   const renderedQuestion = quiz.questions ? quiz.questions[currentIndx] : null;
 
-  const onExamSubmit = async (e) => {
-    if (e) {
-      e.preventDefault();
+  const onExamSubmit = async () => {
+    if (!quiz.questions) {
+      return;
     }
 
     const newReport = {};
@@ -144,11 +149,50 @@ const ExamSession = () => {
     const totalQuestions = quiz.questions.length;
     const examScore = (correct / totalQuestions) * 100;
     setScore(examScore);
+    setTimeLeft(0);
     setIsExamFinished(true);
 
     console.log("Data on submission: ", chosenData);
     console.log("Report on submission: ", report);
+
+    try {
+      const token = localStorage.getItem("token");
+      const { id: quizId } = params;
+
+      // const resultData = {
+      //   report: report,
+      //   score: score,
+      //   numCorrect: numCorrect,
+      //   numWrong: numWrong,
+      //   numUnanswered: numUnanswered,
+      // };
+
+      const res = await axios.post(
+        `/api/quizzes/results/createResult/${quizId}`,
+        { report, score, numCorrect, numWrong, numUnanswered },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { success, message, data } = res.data;
+
+      if (success) {
+        console.log("Exam result successfully submitted");
+        console.log("Result data: ", data);
+      } else {
+        console.log("Failed to submit exam result");
+        console.log("Error message: ", message);
+      }
+    } catch (error) {
+      console.log("Failed to submit exam result");
+      console.log("Error: ", error.message);
+    }
   };
+
+  
 
   return (
     <div className="exam-session">
@@ -214,13 +258,22 @@ const ExamSession = () => {
               </div>
               <hr className="result-line" />
               <div>
-                <p>Number of correct answers: {numCorrect}</p>
-                <p>Number of wrong answers: {numWrong}</p>
-                <p>Not Answered: {numUnanswered}</p>
+                <p>
+                  <span className="mdi mdi-check-circle correct"></span> Number
+                  of correct answers: {numCorrect}
+                </p>
+                <p>
+                  <span className="mdi mdi-close-circle wrong"></span> Number of
+                  wrong answers: {numWrong}
+                </p>
+                <p>
+                  <span className="mdi mdi-help-circle unanswered"></span> Not
+                  Answered: {numUnanswered}
+                </p>
               </div>
             </div>
             <div className="exam-session__result-footer">
-              <Button colorScheme="teal" borderRadius="10px">
+              <Button colorScheme="teal" borderRadius="10px" onClick={onClick}>
                 Go Home
               </Button>
               <Button colorScheme="teal" borderRadius="10px">

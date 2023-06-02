@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Exam = require("../models/examsModel");
+const Result = require("../models/resultsModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -41,7 +42,7 @@ router.get("/getQuizzes", async (req, res) => {
     teacherId = decoded.id;
     req.body.userId = decoded.id;
 
-    const examData = await Exam.find({teacher: teacherId});
+    const examData = await Exam.find({ teacher: teacherId });
 
     if (examData.length > 0) {
       res.status(200).send({
@@ -261,6 +262,53 @@ router.delete("/delete-question/:quizId/:questionId", async (req, res) => {
     });
   } catch (error) {
     res.status(500).send({ message: error.message, success: false });
+  }
+});
+
+///// exam results handling starts here
+
+router.post("/results/createResult/:quizId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded.id;
+
+    const { quizId } = req.params;
+    const { report, score, numCorrect, numWrong, numUnanswered } = req.body;
+
+    const exam = await Exam.findById(quizId);
+
+    if (!exam) {
+      return res.status(404).send({
+        success: false,
+        message: "No such exam found in the database",
+      });
+    }
+
+    const resultData = new Result({
+      report: report,
+      score: score,
+      numCorrect: numCorrect,
+      numWrong: numWrong,
+      numUnanswered: numUnanswered,
+      exam: quizId,
+      user: userId,
+    });
+
+    await resultData.save();
+
+    res.status(201).send({
+      success: true,
+      message: "Exam result created successfully",
+    });
+  } catch (error) {
+    console.log("Error creating exam result:", error);
+    res.status(500).send({
+      success: false,
+      message: "Failed to create exam result",
+      error: error.message,
+    });
   }
 });
 

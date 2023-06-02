@@ -71,7 +71,7 @@
   width: 1.5px;
   height: 100%;
   background-color: #959db6;
-  margin: 0 2rem;
+  margin: 0 1.5rem;
   border: none;
 }
 
@@ -95,4 +95,16 @@
   display: flex;
   width: 40%;
   justify-content: space-evenly;
+}
+
+.correct {
+  color: #28a745; /* Bright green color */
+}
+
+.wrong {
+  color: #dc3545; /* Bright red color */
+}
+
+.unanswered {
+  color: #ff9933; /* Bright orange color */
 }
