@@ -91,20 +91,14 @@
   color: #1d7c50;
 }
 
-.exam-session__result-footer {
-  display: flex;
-  width: 40%;
-  justify-content: space-evenly;
-}
-
 .correct {
-  color: #28a745; /* Bright green color */
+  color: #28a745; 
 }
 
 .wrong {
-  color: #dc3545; /* Bright red color */
+  color: #dc3545; 
 }
 
 .unanswered {
-  color: #ff9933; /* Bright orange color */
+  color: #ff9933; 
 }

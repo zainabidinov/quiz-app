@@ -106,79 +106,78 @@ const ExamSession = () => {
     if (!quiz.questions) {
       return;
     }
-
-    const newReport = {};
+  
     const qIds = quiz.questions.map((question) => question._id);
-
     let correct = 0;
     let wrong = 0;
     let unanswered = 0;
-
-    quiz.questions.forEach((question) => {
-      const qId = question._id;
+  
+    const newReport = qIds.reduce((report, qId) => {
+      const question = quiz.questions.find((q) => q._id === qId);
       const correctAnswer = question.correctOption;
       const userAnswer = chosenData[qId];
-
+  
       if (!userAnswer) {
-        newReport[qId] = "Not answered";
+        report[qId] = "Not answered";
         unanswered++;
       } else if (
         userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
       ) {
-        newReport[qId] = "Correct";
+        report[qId] = "Correct";
         correct++;
       } else {
-        newReport[qId] = "Wrong";
+        report[qId] = "Wrong";
         wrong++;
       }
-    });
-
+  
+      return report;
+    }, {});
+  
     qIds.forEach((qId) => {
       if (!newReport.hasOwnProperty(qId)) {
         newReport[qId] = "Not answered";
         unanswered++;
       }
     });
-
+  
     setReport(newReport);
-
-    setNumUnanswered(unanswered);
-    setNumCorrect(correct);
-    setNumWrong(wrong);
-
+  
     const totalQuestions = quiz.questions.length;
     const examScore = (correct / totalQuestions) * 100;
+    setNumCorrect(correct);
+    setNumWrong(wrong);
+    setNumUnanswered(unanswered);
     setScore(examScore);
     setTimeLeft(0);
     setIsExamFinished(true);
-
+  
     console.log("Data on submission: ", chosenData);
-    console.log("Report on submission: ", report);
-
+    console.log("Report on submission: ", newReport);
+  
     try {
       const token = localStorage.getItem("token");
       const { id: quizId } = params;
-
-      // const resultData = {
-      //   report: report,
-      //   score: score,
-      //   numCorrect: numCorrect,
-      //   numWrong: numWrong,
-      //   numUnanswered: numUnanswered,
-      // };
-
+  
+      const resultData = {
+        report: newReport,
+        score: examScore,
+        numCorrect: correct,
+        numWrong: wrong,
+        numUnanswered: unanswered,
+      };
+  
       const res = await axios.post(
         `/api/quizzes/results/createResult/${quizId}`,
-        { report, score, numCorrect, numWrong, numUnanswered },
+        resultData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
+  
       const { success, message, data } = res.data;
-
+  
       if (success) {
         console.log("Exam result successfully submitted");
         console.log("Result data: ", data);
@@ -191,7 +190,6 @@ const ExamSession = () => {
       console.log("Error: ", error.message);
     }
   };
-
   
 
   return (
@@ -272,12 +270,9 @@ const ExamSession = () => {
                 </p>
               </div>
             </div>
-            <div className="exam-session__result-footer">
-              <Button colorScheme="teal" borderRadius="10px" onClick={onClick}>
+            <div>
+              <Button colorScheme="teal" borderRadius="12px" onClick={onClick}>
                 Go Home
-              </Button>
-              <Button colorScheme="teal" borderRadius="10px">
-                View Feedback
               </Button>
             </div>
           </div>

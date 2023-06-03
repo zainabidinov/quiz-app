@@ -292,6 +292,8 @@ router.post("/results/createResult/:quizId", async (req, res) => {
       numCorrect: numCorrect,
       numWrong: numWrong,
       numUnanswered: numUnanswered,
+      examName: exam.name,
+      examSubject: exam.subject,
       exam: quizId,
       user: userId,
     });
@@ -309,6 +311,31 @@ router.post("/results/createResult/:quizId", async (req, res) => {
       message: "Failed to create exam result",
       error: error.message,
     });
+  }
+});
+
+router.get("/results/getMyResults", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded.id;
+
+    const records = await Result.find({user: userId});
+
+    if (!records) {
+      return res.status(404).send({
+        success: false,
+        message: "No such records found in the database",
+      });
+    }
+
+    res.status(200).send({ success: true, data: records });
+  } catch (error) {
+    console.log(
+      "Error has been caught while fetching student's result",
+      error.message
+    );
   }
 });
 

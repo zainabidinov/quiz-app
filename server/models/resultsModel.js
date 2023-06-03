@@ -22,6 +22,14 @@ const resultSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    examName: {
+      type: String,
+      required: true,
+    },
+    examSubject: {
+      type: String,
+      required: true,
+    },
     exam: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Exam",
