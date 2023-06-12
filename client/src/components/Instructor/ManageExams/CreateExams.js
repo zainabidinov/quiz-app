@@ -26,6 +26,9 @@ const CreateExams = () => {
       status: status,
       duration: 3000,
       isClosable: true,
+      onCloseComplete: () => {
+        window.location.href = "/home";
+      },
     });
   };
 
@@ -52,7 +55,6 @@ const CreateExams = () => {
 
       if (response.data.success) {
         displayNotification(response.data.message, "success");
-        window.location.href = "/home";
       } else {
         displayNotification(response.data.message, "error");
       }

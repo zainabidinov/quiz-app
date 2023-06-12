@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./MyResults.css";
 import { Button } from "@chakra-ui/react";
 import axios from "axios";
+import { InfoIcon } from "@chakra-ui/icons";
+import { Pagination } from "@mantine/core";
 
-const MyResults = () => {
+const MyResults = ({ activeNavItem, onNavItemClick }) => {
   const [myResults, setMyResults] = useState([]);
-  console.log("myResults content", myResults);
+  const [pageFocus, setPageFocus] = useState(1);
+  const reportsPerPage = 8;
+
   useEffect(() => {
     const fetchTheStudentResult = async () => {
       try {
@@ -26,6 +30,20 @@ const MyResults = () => {
     fetchTheStudentResult();
   }, []);
 
+  const onClick = (id) => {
+    const navItem = `exam-feedback/${id}`;
+    onNavItemClick(navItem);
+  };
+
+  const pageSwitchHandler = (value) => {
+    setPageFocus(value);
+  };
+
+  const lastIndex = pageFocus * reportsPerPage;
+  const firstIndex = lastIndex - reportsPerPage;
+  const currentReports = myResults.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(myResults.length / reportsPerPage);
+
   return (
     <div className="results--container">
       <div className="results--content">
@@ -42,7 +60,7 @@ const MyResults = () => {
             </tr>
           </thead>
           <tbody>
-            {myResults.map((exam, index) => (
+            {currentReports.map((exam, index) => (
               <tr key={index}>
                 <td>{exam.examName}</td>
                 <td>{exam.examSubject}</td>
@@ -51,12 +69,37 @@ const MyResults = () => {
                   {exam.numCorrect}/{Object.keys(exam.report).length}
                 </td>
                 <td>
-                  <Button>View Feedback</Button>
+                  <Button
+                    leftIcon={<InfoIcon size="sm" />}
+                    colorScheme="teal"
+                    borderRadius="20px"
+                    size="sm"
+                    className={
+                      activeNavItem === "exam-feedback/:id" ? "active" : ""
+                    }
+                    onClick={() => onClick(exam._id)}
+                  >
+                    View Feedback
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="paginationContainer">
+          <Pagination
+            style={{ marginTop: "16px" }}
+            size="sm"
+            total={totalPages}
+            perPage={1}
+            value={pageFocus}
+            onChange={pageSwitchHandler}
+            nextLabel={pageFocus === totalPages ? null : "Next"}
+            prevLabel={pageFocus === 1 ? null : "Previous"}
+            nextDisabled={pageFocus === totalPages}
+            prevDisabled={pageFocus === 1}
+          />
+        </div>
       </div>
     </div>
   );

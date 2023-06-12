@@ -6,16 +6,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../../redux/userSlice";
 import { useEffect, useState } from "react";
 import ManageExams from "../../Instructor/ManageExams/ManageExams";
-import Students from "../../Instructor/StudentsInfo/Students";
 import StudentResults from "../../Instructor/StudentResults/StudentResults";
 import MyProfile from "../MyProfile/MyProfile";
 import MyResults from "../../Student/MyResults/MyResults";
 import CreateExams from "../../Instructor/ManageExams/CreateExams";
-import { useParams } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import EditExam from "../../Instructor/ManageExams/EditExam";
 import TestBank from "../../Student/TestBank/TestBank";
 import ExamSession from "../../Student/ExamSession/ExamSession";
+import ExamFeedback from "../ExamFeedback/ExamFeedback";
+import Users from "../../Admin/UsersInfo/Users";
 
 const Home = () => {
   const toast = useToast();
@@ -28,6 +28,9 @@ const Home = () => {
     if (navItem !== "home") {
       if (navItem.startsWith("quizzes/edit-exam")) {
         setActiveNavItem("quizzes/edit-exam/:id");
+        navigate(`/home/${navItem}`);
+      } else if (navItem.startsWith("exam-feedback")) {
+        setActiveNavItem("exam-feedback/:id");
         navigate(`/home/${navItem}`);
       } else if (navItem.startsWith("exam-session")) {
         setActiveNavItem("exam-session/:id");
@@ -43,37 +46,67 @@ const Home = () => {
   };
 
   const renderContent = () => {
-    if (currentUser && currentUser.userType === "student") {
+    if (currentUser && currentUser.admin === true) {
       return (
         <div>
           {activeNavItem === "home" && (
-            <TestBank
+            <Users
               activeNavItem={activeNavItem}
               onNavItemClick={handleNavItemClick}
             />
           )}
-          {activeNavItem === "student-results" && <MyResults />}
-          {activeNavItem === "profile" && <MyProfile />}
-          {activeNavItem === "exam-session/:id" && <ExamSession />}
-        </div>
-      );
-    } else if (currentUser && currentUser.userType === "teacher") {
-      return (
-        <div>
-          {activeNavItem === "home" && <h2>Home Page Content for Teacher</h2>}
-          {activeNavItem === "student-info" && <Students />}
           {activeNavItem === "quizzes" && (
             <ManageExams
               activeNavItem={activeNavItem}
               onNavItemClick={handleNavItemClick}
             />
           )}
-          {activeNavItem === "quizzes/create" && <CreateExams />}
-          {activeNavItem === "exam-results" && <StudentResults />}
-          {activeNavItem === "profile" && <MyProfile />}
-          {activeNavItem === "quizzes/edit-exam/:id" && <EditExam />}
         </div>
       );
+    } else {
+      if (currentUser && currentUser.userType === "student") {
+        return (
+          <div>
+            {activeNavItem === "home" && (
+              <TestBank
+                activeNavItem={activeNavItem}
+                onNavItemClick={handleNavItemClick}
+              />
+            )}
+            {activeNavItem === "student-results" && (
+              <MyResults
+                activeNavItem={activeNavItem}
+                onNavItemClick={handleNavItemClick}
+              />
+            )}
+            {activeNavItem === "profile" && <MyProfile />}
+            {activeNavItem === "exam-session/:id" && <ExamSession />}
+            {activeNavItem === "exam-feedback/:id" && <ExamFeedback />}
+          </div>
+        );
+      } else if (currentUser && currentUser.userType === "teacher") {
+        return (
+          <div>
+            {activeNavItem === "home" && (
+              <ManageExams
+                activeNavItem={activeNavItem}
+                onNavItemClick={handleNavItemClick}
+              />
+            )}
+
+            {activeNavItem === "quizzes/create" && <CreateExams />}
+            {activeNavItem === "exam-results" && (
+              <StudentResults
+                activeNavItem={activeNavItem}
+                onNavItemClick={handleNavItemClick}
+              />
+            )}
+            {activeNavItem === "profile" && <MyProfile />}
+            {activeNavItem === "quizzes/edit-exam/:id" && <EditExam />}
+            {activeNavItem === "exam-feedback/:id" && <ExamFeedback />}
+          </div>
+        );
+      }
     }
   };
 
@@ -130,7 +163,7 @@ const Home = () => {
           className="logout-btn"
           onClick={() => {
             localStorage.removeItem("token");
-            navigate("/login");
+            navigate("/");
           }}
         >
           Log out
@@ -142,7 +175,7 @@ const Home = () => {
             {currentUser
               ? `${currentUser.firstName}  ${currentUser.lastName}`
               : "Not Found"}
-            {"\n"}
+            {" | "}
             {currentUser
               ? `${currentUser.userType[0].toUpperCase()}${currentUser.userType.slice(
                   1

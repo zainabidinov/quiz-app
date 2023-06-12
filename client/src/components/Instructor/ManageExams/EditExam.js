@@ -58,8 +58,6 @@ const EditExam = () => {
   const [pageFocus, setPageFocus] = useState(1);
   const questionsPerPage = 4;
 
-  console.log("Current Redux: ", currentExam);
-
   const displayNotification = (message, status) => {
     toast({
       description: message,
@@ -154,10 +152,7 @@ const EditExam = () => {
 
   const onQuestionFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(
-      "This is the object newQuestion after submit button triggered",
-      newQuestion
-    );
+    
 
     try {
       const token = localStorage.getItem("token");
@@ -178,7 +173,6 @@ const EditExam = () => {
       if (response.data.success) {
         displayNotification(response.data.message, "success");
         dispatch(setExam(response.data.data));
-        console.log("The redux after update", currentExam.exam);
         setNewQuestion({
           questionName: "",
           questionType: "",
@@ -196,7 +190,6 @@ const EditExam = () => {
 
   const handleDeleteQuestion = async (questionId) => {
     try {
-      // console.log("sent question _id", questionId);
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No token found");
@@ -216,7 +209,6 @@ const EditExam = () => {
       if (response.data.success) {
         displayNotification(response.data.message, "success");
         dispatch(setExam(response.data.data));
-        console.log("The redux after update", currentExam.exam);
       } else {
         displayNotification(response.data.message, "error");
       }
@@ -234,6 +226,9 @@ const EditExam = () => {
   const currentQuestions = currentExam.exam.questions.slice(
     firstIndex,
     lastIndex
+  );
+  const totalPages = Math.ceil(
+    currentExam.exam.questions.length / questionsPerPage
   );
 
   return (
@@ -396,29 +391,42 @@ const EditExam = () => {
             </div>
           </div>
         )}
-        <Pagination
-          style={{ marginTop: "16px" }}
-          size="sm"
-          total={currentExam.exam.questions.length}
-          perPage={questionsPerPage}
-          value={pageFocus}
-          onChange={pageSwitchHandler}
-        />
+        <div className="paginationContainer">
+          <Pagination
+            style={{ marginTop: "16px" }}
+            size="sm"
+            total={totalPages}
+            perPage={1}
+            value={pageFocus}
+            onChange={pageSwitchHandler}
+            nextLabel={pageFocus === totalPages ? null : "Next"}
+            prevLabel={pageFocus === 1 ? null : "Previous"}
+            nextDisabled={pageFocus === totalPages}
+            prevDisabled={pageFocus === 1}
+          />
+        </div>
       </div>
 
       <div className="EditExamFormFooter">
-        {isLimitReached === numberOfQuestions ? (
-          ""
+        {currentQuestions.length > 0 ? (
+          <div>
+            {isLimitReached === numberOfQuestions ? (
+              ""
+            ) : (
+              <Button
+                colorScheme="teal"
+                mt={3}
+                ml={5}
+                type="submit"
+                size="sm"
+                onClick={handleQuestionOpenModal}
+              >
+                Add Question
+              </Button>
+            )}
+          </div>
         ) : (
-          <Button
-            colorScheme="teal"
-            mr={3}
-            type="submit"
-            size="sm"
-            onClick={handleQuestionOpenModal}
-          >
-            Add Question
-          </Button>
+          <div>{""}</div>
         )}
       </div>
 

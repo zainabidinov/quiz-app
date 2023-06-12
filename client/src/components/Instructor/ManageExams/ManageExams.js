@@ -11,12 +11,11 @@ import { setExam } from "../../../redux/examSlice";
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const BASE_API_URL = "/api/quizzes";
   const [examData, setExamData] = useState([]);
-  // const [quizData, setQuizData] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
   const dispatch = useDispatch();
   const [pageFocus, setPageFocus] = useState(1);
-  const examsPerPage = 6;
+  const examsPerPage = 5;
 
   const displayNotification = (message, status) => {
     toast({
@@ -41,14 +40,9 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           },
         });
 
-        const { success, message, data } = response.data;
+        const { data } = response.data;
 
-        if (success) {
-          displayNotification(message, "success");
-          setExamData(data);
-        } else {
-          displayNotification(message, "error");
-        }
+        setExamData(data);
       } catch (error) {
         displayNotification(error.message, "error");
       }
@@ -77,14 +71,9 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       const { success, message, data } = response.data;
 
       if (success) {
-        displayNotification(message, "success");
         dispatch(setExam(data));
-        // setQuizData(data);
         onNavItemClick(`quizzes/edit-exam/${data._id}`);
-
-        console.log("this is a specific exam", data);
       } else {
-        displayNotification(message, "error");
       }
     } catch (error) {
       displayNotification(error.message, "error");
@@ -117,9 +106,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         setExamData((prevExamData) =>
           prevExamData.filter((exam) => exam._id !== quizId)
         );
-        console.log("The redux after update", examData);
 
-        console.log("this is a specific exam", data);
       } else {
         displayNotification(message, "error");
       }
@@ -131,6 +118,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const lastIndex = pageFocus * examsPerPage;
   const firstIndex = lastIndex - examsPerPage;
   const currentExams = examData.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(examData.length / examsPerPage);
 
   return (
     <>
@@ -177,17 +165,24 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
               colorScheme="teal"
               size="sm"
               onClick={() => onNavItemClick("quizzes/create")}
+              ml={2}
             >
               Add Exam
             </Button>
-            <Pagination
-              style={{ marginTop: "16px" }}
-              size="sm"
-              total={examData.length}
-              perPage={examsPerPage}
-              value={pageFocus}
-              onChange={pageSwitchHandler}
-            />
+            <div className="paginationContainer">
+              <Pagination
+                style={{ marginTop: "16px" }}
+                size="sm"
+                total={totalPages}
+                perPage={1}
+                value={pageFocus}
+                onChange={pageSwitchHandler}
+                nextLabel={pageFocus === totalPages ? null : "Next"}
+                prevLabel={pageFocus === 1 ? null : "Previous"}
+                nextDisabled={pageFocus === totalPages}
+                prevDisabled={pageFocus === 1}
+              />
+            </div>
           </div>
         ) : (
           <div>
@@ -200,14 +195,20 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
             >
               Add Exam
             </Button>
-            <Pagination
-              style={{ marginTop: "16px" }}
-              size="sm"
-              total={examData.length}
-              perPage={examsPerPage}
-              value={pageFocus}
-              onChange={pageSwitchHandler}
-            />
+            <div className="paginationContainer">
+              <Pagination
+                style={{ marginTop: "16px" }}
+                size="sm"
+                total={totalPages}
+                perPage={1}
+                value={pageFocus}
+                onChange={pageSwitchHandler}
+                nextLabel={pageFocus === totalPages ? null : "Next"}
+                prevLabel={pageFocus === 1 ? null : "Previous"}
+                nextDisabled={pageFocus === totalPages}
+                prevDisabled={pageFocus === 1}
+              />
+            </div>
           </div>
         )}
       </div>

@@ -17,11 +17,9 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
   const [pageFocus, setPageFocus] = useState(1);
   const examsPerPage = 6;
   const [isInfoOpen, setIsInfoOpen] = useState(false);
-  // console.log("Local state: ", examData);
 
   const handleInfoOpenModal = (quizId) => {
     setSelectedExam(examData.filter((e) => e._id === quizId));
-    console.log("Filtered exam", selectedExam);
     setIsInfoOpen(true);
   };
 
@@ -52,14 +50,9 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
           },
         });
 
-        const { success, message, data } = response.data;
+        const { data } = response.data;
 
-        if (success) {
-          displayNotification(message, "success");
-          setExamData(data);
-        } else {
-          displayNotification(message, "error");
-        }
+        setExamData(data);
       } catch (error) {
         displayNotification(error.message, "error");
       }
@@ -79,6 +72,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
   const lastIndex = pageFocus * examsPerPage;
   const firstIndex = lastIndex - examsPerPage;
   const currentExams = examData.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(examData.length / examsPerPage);
 
   return (
     <div className="examMainContaioner">
@@ -115,10 +109,14 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
           <Pagination
             style={{ marginTop: "16px" }}
             size="sm"
-            total={examData.length}
-            perPage={examsPerPage}
+            total={totalPages}
+            perPage={1}
             value={pageFocus}
             onChange={pageSwitchHandler}
+            nextLabel={pageFocus === totalPages ? null : "Next"}
+            prevLabel={pageFocus === 1 ? null : "Previous"}
+            nextDisabled={pageFocus === totalPages}
+            prevDisabled={pageFocus === 1}
           />
         </div>
       </div>
@@ -135,12 +133,12 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                 {selectedExam[0]?.subject}
               </p>
               <p>
-                You have {selectedExam[0]?.duration} minutes to
-                complete this exam
+                You have {selectedExam[0]?.duration} minutes to complete this
+                exam
               </p>
               <p>
-                There are {selectedExam[0]?.numberOfQuestions}{" "}
-                questions in this exam
+                There are {selectedExam[0]?.numberOfQuestions} questions in this
+                exam
               </p>
             </Stack>
           </ModalBody>

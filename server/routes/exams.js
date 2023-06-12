@@ -46,14 +46,12 @@ router.get("/getQuizzes", async (req, res) => {
 
     if (examData.length > 0) {
       res.status(200).send({
-        message: "Exams successfully retrieved",
         success: true,
         data: examData,
         user: req.body.userId,
       });
     } else {
       res.status(400).send({
-        message: "No exams found in the database",
         success: false,
       });
     }
@@ -67,20 +65,25 @@ router.get("/getStudentQuizzes", async (req, res) => {
     const tokenHeader = req.headers.authorization;
     const token = tokenHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded.id;
     req.body.userId = decoded.id;
 
-    const examData = await Exam.find();
+    const exams = await Exam.find();
 
-    if (examData.length > 0) {
+    const results = await Result.find({ user: userId });
+
+    const availableExams = exams.filter((exam) => {
+      return !results.some((result) => result.exam.equals(exam._id));
+    });
+
+    if (availableExams.length > 0) {
       res.status(200).send({
-        message: "Exams successfully retrieved",
         success: true,
-        data: examData,
+        data: availableExams,
         user: req.body.userId,
       });
     } else {
       res.status(400).send({
-        message: "No exams found in the database",
         success: false,
       });
     }
@@ -321,7 +324,7 @@ router.get("/results/getMyResults", async (req, res) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const userId = decoded.id;
 
-    const records = await Result.find({user: userId});
+    const records = await Result.find({ user: userId });
 
     if (!records) {
       return res.status(404).send({
@@ -336,6 +339,59 @@ router.get("/results/getMyResults", async (req, res) => {
       "Error has been caught while fetching student's result",
       error.message
     );
+  }
+});
+
+router.get("/results/getAllExamResults", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const teacherId = decoded.id;
+
+    const examIds = await Exam.find({ teacher: teacherId }, "_id");
+
+    const records = await Result.find({ exam: { $in: examIds } }).populate(
+      "user"
+    );
+
+    if (!records) {
+      return res.status(404).send({
+        success: false,
+        message: "No such records found in the database",
+      });
+    }
+
+    res.status(200).send({ success: true, data: records });
+  } catch (error) {
+    console.log(
+      "Error has been caught while fetching teacher's exam results",
+      error.message
+    );
+    res.status(500).send({ success: false, message: error.message });
+  }
+});
+
+router.get("/results/getExamEvaluation/:recordId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.body.userId = decoded.id;
+
+    const { recordId } = req.params;
+
+    const record = await Result.findById(recordId).populate("exam");
+
+    if (!record) {
+      return res
+        .status(404)
+        .send({ message: "No such record found in database", success: false });
+    }
+
+    res.status(200).send({ success: true, data: record });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
   }
 });
 

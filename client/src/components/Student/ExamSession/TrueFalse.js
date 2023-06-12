@@ -16,16 +16,16 @@ const TrueFalse = ({ handleUserAnswers, selectedAnswer }) => {
           <Radio
             size="lg"
             colorScheme="green"
-            value="true"
-            onChange={() => userAnswerChange("true")}
+            value="True"
+            onChange={() => userAnswerChange("True")}
           >
             True
           </Radio>
           <Radio
             size="lg"
             colorScheme="green"
-            value="false"
-            onChange={() => userAnswerChange("false")}
+            value="False"
+            onChange={() => userAnswerChange("False")}
           >
             False
           </Radio>

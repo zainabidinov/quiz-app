@@ -38,9 +38,11 @@
 }
 
 .home-content {
-  height: 91vh;
+  min-height: 0;
+  height: calc(100vh - 9vh);
   width: 83vw;
   background-color: #edf1f5;
+  overflow-y: auto;
 }
 
 .home-content__content {

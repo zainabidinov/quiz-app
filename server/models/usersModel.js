@@ -27,7 +27,11 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ["student", "teacher"],
       default: "student",
-    }
+    },
+    userPic: {
+      type: String,
+      default: "", 
+    },
   },
   {
     timestamps: true,
