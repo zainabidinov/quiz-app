@@ -2,8 +2,8 @@ const colors = require("colors");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const fileUpload = require('express-fileupload');
-const cloudinary = require('cloudinary').v2;
+const fileUpload = require("express-fileupload");
+const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 app.use(fileUpload());
 app.use(express.json());
@@ -18,6 +18,12 @@ const dbConnect = require("./config/db");
 dbConnect();
 
 app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://quiz-app-client-nine.vercel.app",
+  })
+);
 
 app.use(express.urlencoded({ extended: false }));
 
