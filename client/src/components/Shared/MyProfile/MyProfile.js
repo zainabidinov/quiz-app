@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../../redux/userSlice";
 import { Button, useToast } from "@chakra-ui/react";
+import defaultProfilePic from "../../../assets/images/default-profile-pic.png";
 import "./MyProfile.css";
 
 const MyProfile = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const toast = useToast();
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
     const retrieveUser = async () => {
@@ -49,29 +51,99 @@ const MyProfile = () => {
     retrieveUser();
   }, [dispatch, toast]);
 
+  const getAltText = () => {
+    if (profilePic) {
+      return "Profile Picture";
+    }
+    return "Default Profile Picture";
+  };
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("profilePic", file);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await fetch("/api/account/uploadProfilePic", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.status === 200 && data.success) {
+        setProfilePic(data.imageUrl);
+        toast({
+          title: "Profile Picture Updated",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          description: data.message,
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        description: error.message,
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <div className="container">
-      <div className="profile-pic">
-        <img src={user.profilePic} alt="Profile Picture" />
-
-        <Button mt={4} colorScheme="teal" size="sm" onClick={() => {}}>
-          Change Profile Picture
-        </Button>
-      </div>
-      <div className="user-details">
-        <h1>My Info</h1>
-        <p>
-          <strong>First Name:</strong> {user.firstName}
-        </p>
-        <p>
-          <strong>Last Name:</strong> {user.lastName}
-        </p>
-        <p>
-          <strong>User Role:</strong> {user.userType}
-        </p>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
+      <div className="box">
+        <div className="profile-pic">
+          <img
+            src={profilePic || user.profilePic || defaultProfilePic}
+            alt={getAltText()}
+          />
+        </div>
+        <label htmlFor="profilePicUpload" className="profile-pic-label">
+          <Button mt={4} colorScheme="teal" size="sm" as="span">
+            Change Profile Picture
+          </Button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            style={{ display: "none" }}
+            id="profilePicUpload"
+          />
+        </label>
+        <div className="user-details">
+          <h1>
+            <strong>About Me</strong>
+          </h1>
+          <div className="user-details__contents">
+            <p>
+              <strong>First Name:</strong> {user.firstName}
+            </p>
+            <p>
+              <strong>Last Name:</strong> {user.lastName}
+            </p>
+            <p>
+              <strong>User Role:</strong> {user.userType}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

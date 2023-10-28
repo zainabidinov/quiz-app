@@ -2,26 +2,46 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
+}
+
+.box {
+  margin-top: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 475px; 
+  height: 500px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around; 
+  align-items: center;
 }
 
 .profile-pic {
-  background-color: #fff;
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
+  width: 175px; 
+  height: 175px; 
   margin-bottom: 30px;
-  margin-right: 30px;
-  color: #000;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-pic img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  color: #000;
 }
 
 .user-details {
   text-align: center;
+  margin-top: 20px; 
+}
+
+.user-details__contents {
+  display: flex;
+  flex-direction: column;
 }

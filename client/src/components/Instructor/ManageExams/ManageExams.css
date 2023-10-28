@@ -7,6 +7,11 @@
   padding-top: 20px;
 }
 
+.examContent-block {
+  display: flex;
+  flex-direction: column;
+}
+
 .examContent {
   display: flex;
   border: 2px solid #2e7d9c;

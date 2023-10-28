@@ -10,6 +10,12 @@ const generateToken = (id) => {
   });
 };
 
+cloudinary.config({
+  cloud_name: "dyb0ghwuz",
+  api_key: "859293259884789",
+  api_secret: "I7cqC9tqrrxbhD6cYsUJ_A2bvt8",
+});
+
 router.post("/register", async (req, res) => {
   try {
     const userExists = await User.findOne({ email: req.body.email });
@@ -169,6 +175,35 @@ router.post("/uploadProfilePic", async (req, res) => {
     console.error("Error uploading profile picture:", error);
     res.status(500).send({
       message: "Profile picture upload failed",
+      success: false,
+    });
+  }
+});
+
+router.delete("/deleteUser/:userId", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    const token = tokenHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded.id;
+
+    const user = await User.findByIdAndDelete(req.params.userId);
+
+    if (user) {
+      res.status(200).send({
+        success: true,
+        message: "User has been deleted successfully",
+      });
+    } else {
+      res.status(404).send({
+        message: "User not found",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
       success: false,
     });
   }

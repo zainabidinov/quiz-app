@@ -58,6 +58,17 @@ const EditExam = () => {
   const [pageFocus, setPageFocus] = useState(1);
   const questionsPerPage = 4;
 
+  const [totalSeconds, setTotalSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+
+  useEffect(() => {
+    const hours = Math.floor(currentExam.exam.duration / 3600);
+    const minutes = Math.floor((currentExam.exam.duration % 3600) / 60);
+    setHours(hours);
+    setMinutes(minutes);
+  }, [currentExam.exam.duration]);
+
   const displayNotification = (message, status) => {
     toast({
       description: message,
@@ -99,6 +110,14 @@ const EditExam = () => {
         throw new Error("No token found");
       }
 
+      const totalSeconds = hours * 3600 + minutes * 60;
+
+      const updatedExamData = {
+        name: updatedExam.name,
+        numberOfQuestions: updatedExam.numberOfQuestions,
+        duration: totalSeconds,
+      };
+
       dispatch(
         setExamProperty({
           type: "SET_EXAM_NAME",
@@ -114,7 +133,7 @@ const EditExam = () => {
       dispatch(
         setExamProperty({
           type: "SET_EXAM_DURATION",
-          value: updatedExam.duration,
+          value: totalSeconds,
         })
       );
 
@@ -122,7 +141,7 @@ const EditExam = () => {
 
       const response = await axios.put(
         `${API_URL}/update-quiz/${quizId}`,
-        updatedExam,
+        updatedExamData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -152,7 +171,6 @@ const EditExam = () => {
 
   const onQuestionFormSubmit = async (e) => {
     e.preventDefault();
-    
 
     try {
       const token = localStorage.getItem("token");
@@ -254,7 +272,8 @@ const EditExam = () => {
             <FormControl>
               <FormLabel>Duration of Exam</FormLabel>
               <Text as="em" textDecoration="underline">
-                {duration}
+                {hours > 0 && `${hours} hour${hours > 1 ? "s" : ""} `}
+                {minutes} minute{minutes !== 1 ? "s" : ""}
               </Text>
             </FormControl>
 
@@ -315,21 +334,28 @@ const EditExam = () => {
 
                 <FormControl>
                   <FormLabel>Duration of Exam</FormLabel>
-                  <NumberInput min={1}>
-                    <NumberInputField
-                      name="examDuration"
-                      _focus={{ boxShadow: "none" }}
-                      bg="white"
-                      placeholder={duration}
-                      value={updatedExam.duration}
-                      onChange={(e) =>
-                        setUpdatedExam({
-                          ...updatedExam,
-                          duration: parseInt(e.target.value),
-                        })
-                      }
-                    />
-                  </NumberInput>
+                  <Stack direction="row">
+                    <NumberInput min={0}>
+                      <NumberInputField
+                        name="hours"
+                        _focus={{ boxShadow: "none" }}
+                        bg="white"
+                        placeholder="Hours"
+                        value={hours}
+                        onChange={(e) => setHours(parseInt(e.target.value))}
+                      />
+                    </NumberInput>
+                    <NumberInput min={0}>
+                      <NumberInputField
+                        name="minutes"
+                        _focus={{ boxShadow: "none" }}
+                        bg="white"
+                        placeholder="Minutes"
+                        value={minutes}
+                        onChange={(e) => setMinutes(parseInt(e.target.value))}
+                      />
+                    </NumberInput>
+                  </Stack>
                 </FormControl>
               </Stack>
             </ModalBody>

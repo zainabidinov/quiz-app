@@ -69,6 +69,21 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
     setPageFocus(value);
   };
 
+  const convertSecondsToTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return { hours, minutes };
+  };
+
+  const formatTime = (time) => {
+    const hoursText = time.hours > 0 ? `${time.hours} hour${time.hours !== 1 ? "s" : ""}` : "";
+    const minutesText = time.minutes > 0 ? `${time.minutes} minute${time.minutes !== 1 ? "s" : ""}` : "";
+  
+    return `${hoursText} ${minutesText}`.trim();
+  };
+
+  
+
   const lastIndex = pageFocus * examsPerPage;
   const firstIndex = lastIndex - examsPerPage;
   const currentExams = examData.slice(firstIndex, lastIndex);
@@ -88,7 +103,10 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                 <h1>{exam.name}</h1>
                 <p>Subject: {exam.subject}</p>
                 <p>Number of Questions: {exam.numberOfQuestions}</p>
-                <p>Duration of Exam: {exam.duration}</p>
+                <p>
+                  Duration of Exam:{" "}
+                  {formatTime(convertSecondsToTime(exam.duration))}
+                </p>
                 <Button
                   style={{ width: "125px", height: "30px", fontSize: "15px" }}
                   colorScheme="teal"
@@ -133,8 +151,11 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                 {selectedExam[0]?.subject}
               </p>
               <p>
-                You have {selectedExam[0]?.duration} minutes to complete this
-                exam
+                You have{" "}
+                {formatTime(
+                  convertSecondsToTime(selectedExam[0]?.duration)
+                )}{" "}
+                to complete this exam
               </p>
               <p>
                 There are {selectedExam[0]?.numberOfQuestions} questions in this

@@ -15,7 +15,8 @@ const CreateExams = () => {
   const [subject, setSubject] = useState("");
   const [examName, setExamName] = useState("");
   const [examQuestions, setExamQuestions] = useState("");
-  const [examDuration, setExamDuration] = useState("");
+  const [examDurationHours, setExamDurationHours] = useState("");
+  const [examDurationMinutes, setExamDurationMinutes] = useState("");
   const BASE_API_URL = "/api/quizzes";
   const toast = useToast();
   const navigate = useNavigate();
@@ -35,11 +36,14 @@ const CreateExams = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    const durationInSeconds =
+      (parseInt(examDurationHours) * 60 + parseInt(examDurationMinutes)) * 60;
+
     const formValues = {
       subject: subject,
       examName: examName,
       numberOfQuestions: examQuestions,
-      examDuration: examDuration,
+      examDuration: durationInSeconds,
     };
     try {
       const token = localStorage.getItem("token");
@@ -108,15 +112,38 @@ const CreateExams = () => {
 
           <FormControl>
             <FormLabel>Duration of Exam</FormLabel>
-            <NumberInput min={1}>
-              <NumberInputField
-                name="examDuration"
-                _focus={{ boxShadow: "none" }}
-                bg="white"
-                value={examDuration}
-                onChange={(e) => setExamDuration(e.target.value)}
-              />
-            </NumberInput>
+            <Stack direction="row">
+              <NumberInput
+                min={0}
+                max={23}
+                defaultValue={0}
+                value={examDurationHours}
+                onChange={(value) => setExamDurationHours(value)}
+              >
+                <NumberInputField
+                  name="examDurationHours"
+                  _focus={{ boxShadow: "none" }}
+                  placeholder="Hours"
+                  bg="white"
+                />
+              </NumberInput>
+
+              <span style={{ margin: "0 4px" }}>:</span>
+              <NumberInput
+                min={0}
+                max={59}
+                defaultValue={0}
+                value={examDurationMinutes}
+                onChange={(value) => setExamDurationMinutes(value)}
+              >
+                <NumberInputField
+                  name="examDurationMinutes"
+                  _focus={{ boxShadow: "none" }}
+                  placeholder="Minutes"
+                  bg="white"
+                />
+              </NumberInput>
+            </Stack>
           </FormControl>
 
           <Button type="submit" colorScheme="teal" size="md" mt={8}>

@@ -124,7 +124,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
     <>
       <div className="manage-exams">
         {currentExams.length > 0 ? (
-          <div>
+          <div className="examContent-block">
             {currentExams.map((exam) => (
               <div className="examContent">
                 <div key={exam._id}>

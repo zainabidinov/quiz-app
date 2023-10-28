@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../Auth/userAuth";
 import { useToast } from "@chakra-ui/react";
+import myImg from "../../../assets/images/woman_working.jpg";
 
 const Signup = () => {
 
@@ -90,7 +91,7 @@ const Signup = () => {
       <div className="signup-form">
         <form onSubmit={onSubmit}>
           <span>
-            <h1 className="signup-header">Welcome, admin!</h1>
+            <h1 className="signup-header">Welcome to OneQuiz!</h1>
           </span>
           <label htmlFor="firstName">First Name</label>
           <input
@@ -156,6 +157,14 @@ const Signup = () => {
             <button type="submit">Create Account</button>
           </div>
         </form>
+      </div>
+
+      <div>
+        <img
+          className="signup-pic"
+          src={myImg}
+          alt="Woman working on computer"
+        />
       </div>
     </div>
   );

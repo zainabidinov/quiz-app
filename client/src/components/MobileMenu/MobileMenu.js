@@ -1,23 +1,27 @@
 import React from "react";
-import "./Navigation.css";
+import "./MobileMenu.css";
+import { useNavigate } from "react-router-dom";
 
-const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
+const MobileMenu = ({ currentUser, activeNavItem, onNavItemClick }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="sidebar-navigation">
-      <nav>
+    <div className="mobileMenu">
+      <h1>ONEQUIZ </h1>
+      <nav className="mobileMenu-nav">
         {currentUser && currentUser.admin === true ? (
           <ul>
             <li
               className={activeNavItem === "home" ? "active" : ""}
               onClick={() => onNavItemClick("home")}
             >
-              <span className="mdi mdi-account-multiple-outline"></span> Users
+              Users
             </li>
             <li
               className={activeNavItem === "quizzes" ? "active" : ""}
               onClick={() => onNavItemClick("quizzes")}
             >
-              <span className="mdi mdi-account-circle"></span> Exams
+              Exams
             </li>
           </ul>
         ) : (
@@ -28,7 +32,7 @@ const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
                   className={activeNavItem === "home" ? "active" : ""}
                   onClick={() => onNavItemClick("home")}
                 >
-                  <span className="mdi mdi-home"></span> Home
+                  Home
                 </li>
 
                 <li
@@ -37,13 +41,13 @@ const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
                   }
                   onClick={() => onNavItemClick("student-results")}
                 >
-                  <span className="mdi mdi-list-status"></span> My Results
+                  My Results
                 </li>
                 <li
                   className={activeNavItem === "profile" ? "active" : ""}
                   onClick={() => onNavItemClick("profile")}
                 >
-                  <span className="mdi mdi-account-circle"></span> My Profile
+                  My Profile
                 </li>
               </ul>
             )}
@@ -53,29 +57,37 @@ const Navigation = ({ currentUser, activeNavItem, onNavItemClick }) => {
                   className={activeNavItem === "quizzes" ? "active" : ""}
                   onClick={() => onNavItemClick("home")}
                 >
-                  <span className="mdi mdi-home"></span> Manage Exams
+                  Manage Exams
                 </li>
                 <li
                   className={activeNavItem === "exam-results" ? "active" : ""}
                   onClick={() => onNavItemClick("exam-results")}
                 >
-                  <span className="mdi mdi-monitor-multiple"></span> Student
-                  Results
+                  Student Results
                 </li>
                 <li
                   className={activeNavItem === "profile" ? "active" : ""}
                   onClick={() => onNavItemClick("profile")}
                 >
-                  <span className="mdi mdi-account-circle"></span> My Profile
+                  My Profile
                 </li>
               </ul>
             )}
           </>
         )}
+
+        <button
+          className="logout-btn"
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/");
+          }}
+        >
+          Log out
+        </button>
       </nav>
     </div>
   );
 };
 
-export default Navigation;
-
+export default MobileMenu;

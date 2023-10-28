@@ -1,6 +1,6 @@
 import React from "react";
 import "./Home.css";
-import Navigation from "../../Navigation/Navigation";
+import Sidebar from "../../Sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../../redux/userSlice";
@@ -10,12 +10,13 @@ import StudentResults from "../../Instructor/StudentResults/StudentResults";
 import MyProfile from "../MyProfile/MyProfile";
 import MyResults from "../../Student/MyResults/MyResults";
 import CreateExams from "../../Instructor/ManageExams/CreateExams";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner } from "@chakra-ui/react";
 import EditExam from "../../Instructor/ManageExams/EditExam";
 import TestBank from "../../Student/TestBank/TestBank";
 import ExamSession from "../../Student/ExamSession/ExamSession";
 import ExamFeedback from "../ExamFeedback/ExamFeedback";
 import Users from "../../Admin/UsersInfo/Users";
+import MobileMenu from "../../MobileMenu/MobileMenu";
 
 const Home = () => {
   const toast = useToast();
@@ -23,6 +24,12 @@ const Home = () => {
   const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [activeNavItem, setActiveNavItem] = useState("home");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const handleNavItemClick = (navItem) => {
     if (navItem !== "home") {
@@ -113,6 +120,8 @@ const Home = () => {
   useEffect(() => {
     const retrieveUser = async () => {
       try {
+        setIsLoading(true);
+
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No token found");
@@ -144,6 +153,8 @@ const Home = () => {
           isClosable: true,
         });
         alert("No user found");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -152,9 +163,14 @@ const Home = () => {
 
   return (
     <div className="home">
+      {isLoading && (
+        <div className="loading--container">
+          <Spinner size="xl" color="teal.500" />
+        </div>
+      )}
       <div className="home-sidebar">
         <h1>ONEQUIZ</h1>
-        <Navigation
+        <Sidebar
           currentUser={currentUser}
           activeNavItem={activeNavItem}
           onNavItemClick={handleNavItemClick}
@@ -169,18 +185,32 @@ const Home = () => {
           Log out
         </button>
       </div>
+
       <div className="main-content">
         <div className="home-header-content">
+          {!isMenuOpen ? (
+            <div className="mobile-menu-closed"></div>
+          ) : (
+            <div className="mobile-menu-open mobile-sidebar">
+              <span class="mdi mdi-menu menu-icon " onClick={toggleMenu}></span>
+              
+              <MobileMenu
+                currentUser={currentUser}
+                activeNavItem={activeNavItem}
+                onNavItemClick={handleNavItemClick}
+              />
+            </div>
+          )}
+
+          <span class="mdi mdi-menu header-icon" onClick={toggleMenu}></span>
           <p>
-            {currentUser
-              ? `${currentUser.firstName}  ${currentUser.lastName}`
-              : "Not Found"}
-            {" | "}
-            {currentUser
-              ? `${currentUser.userType[0].toUpperCase()}${currentUser.userType.slice(
-                  1
-                )}`
-              : "Not Found"}
+            {currentUser && !currentUser.admin && (
+              <p>
+                {currentUser.firstName} {currentUser.lastName} |{" "}
+                {currentUser.userType[0].toUpperCase() +
+                  currentUser.userType.slice(1)}
+              </p>
+            )}
           </p>
         </div>
         <div className="home-content">{renderContent()}</div>

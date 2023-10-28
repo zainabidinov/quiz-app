@@ -1,11 +1,13 @@
 import React from "react";
-import loginImg from "../../../assets/images/login-man.jpg";
+import loginImg from "../../../assets/images/man.svg";
 import "./Login.css";
 import { useState } from "react";
 import { logIn } from "../../Auth/userAuth";
 import { useToast } from "@chakra-ui/react";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const toast = useToast();
 
   const [formValues, setFormValues] = useState({
@@ -57,7 +59,7 @@ const Login = () => {
       <div className="login-form">
         <form onSubmit={onSubmit}>
           <span>
-            <h1 className="login-header">Welcome to our platform!</h1>
+            <h1 className="login-header">Welcome back to OneQuiz!</h1>
           </span>
 
           <label htmlFor="email">Email</label>
@@ -82,11 +84,17 @@ const Login = () => {
           ></input>
           <div className="login-from__btn">
             <button type="submit">Log in</button>
+            <span>
+              Don't have an account yet?{" "}
+              <Link className="login-link" to="/signup">
+                Sign Up
+              </Link>
+            </span>
           </div>
         </form>
       </div>
 
-      <div>
+      <div className="login-pic-container">
         <img
           className="login-pic"
           src={loginImg}
