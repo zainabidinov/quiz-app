@@ -21,9 +21,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: ["https://quiz-app-lake-gamma.vercel.app"],
-    methods: ["POST", "GET"],
-    credentials: true
+    origin: "https://quiz-app-client-nine.vercel.app",
   })
 );
 
