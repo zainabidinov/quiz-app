@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://techquiz.onrender.com/api",
+  baseURL: "https://techquiz-api.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
