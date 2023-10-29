@@ -8,22 +8,20 @@ require("dotenv").config();
 app.use(fileUpload());
 app.use(express.json());
 
-cloudinary.config({
-  cloud_name: "dyb0ghwuz",
-  api_key: "859293259884789",
-  api_secret: "I7cqC9tqrrxbhD6cYsUJ_A2bvt8",
-});
+// cloudinary.config({
+//   cloud_name: "dyb0ghwuz",
+//   api_key: "859293259884789",
+//   api_secret: "I7cqC9tqrrxbhD6cYsUJ_A2bvt8",
+// });
 
 const dbConnect = require("./config/db");
 dbConnect();
 
-app.use(cors());
-
-app.use(
-  cors({
-    origin: "https://quiz-app-client-nine.vercel.app",
-  })
-);
+app.use(cors(
+  {
+    origin: ["https://techquiz.onrender.com"]
+  }
+));
 
 app.use(express.urlencoded({ extended: false }));
 
