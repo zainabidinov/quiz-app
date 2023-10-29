@@ -21,7 +21,9 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "https://quiz-app-client-nine.vercel.app",
+    origin: "",
+    methods: ["POST", "GET"],
+    credentials: true
   })
 );
 
