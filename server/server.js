@@ -19,7 +19,7 @@ dbConnect();
 
 app.use(cors(
   {
-    origin: ["https://techquiz.onrender.com"]
+    origin: ["https://techquiz-api.onrender.com"]
   }
 ));
 
