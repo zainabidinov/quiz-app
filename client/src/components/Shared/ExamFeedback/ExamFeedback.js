@@ -14,7 +14,7 @@ const ExamFeedback = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `/api/quizzes/results/getExamEvaluation/${recordId}`,
+        `https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/results/getExamEvaluation/${recordId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

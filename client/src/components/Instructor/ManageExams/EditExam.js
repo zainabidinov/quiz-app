@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 
 const EditExam = () => {
-  const API_URL = "https://techquiz-api.onrender.com/api/quizzes";
+  const API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
   const params = useParams();
   const toast = useToast();
   const dispatch = useDispatch();

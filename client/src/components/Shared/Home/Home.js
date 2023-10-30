@@ -127,7 +127,7 @@ const Home = () => {
           throw new Error("No token found");
         }
 
-        const response = await fetch("https://techquiz-api.onrender.com/api/account/accountInfo", {
+        const response = await fetch("https://quiz-app-zainabidinov-api.onrender.com/api/account/accountInfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

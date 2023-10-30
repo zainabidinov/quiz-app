@@ -19,11 +19,14 @@ const MyProfile = () => {
           throw new Error("No token found");
         }
 
-        const response = await fetch("/api/account/accountInfo", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://quiz-app-zainabidinov-api.onrender.com/api/account/accountInfo",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const data = await response.json();
         if (response.status === 200 && data.success) {
@@ -69,13 +72,16 @@ const MyProfile = () => {
         throw new Error("No token found");
       }
 
-      const response = await fetch("/api/account/uploadProfilePic", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://quiz-app-zainabidinov-api.onrender.com/api/account/uploadProfilePic",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       if (response.status === 200 && data.success) {

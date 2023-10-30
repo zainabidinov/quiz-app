@@ -17,7 +17,7 @@ const CreateExams = () => {
   const [examQuestions, setExamQuestions] = useState("");
   const [examDurationHours, setExamDurationHours] = useState("");
   const [examDurationMinutes, setExamDurationMinutes] = useState("");
-  const BASE_API_URL = "https://techquiz-api.onrender.com/api/quizzes";
+  const BASE_API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
   const toast = useToast();
   const navigate = useNavigate();
 

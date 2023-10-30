@@ -14,7 +14,7 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("https://techquiz-api.onrender.com/api/quizzes/results/getAllExamResults", {
+      const res = await axios.get("https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/results/getAllExamResults", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

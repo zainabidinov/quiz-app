@@ -1,4 +1,4 @@
-  import React from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -14,7 +14,6 @@ import EditExam from "./components/Instructor/ManageExams/EditExam";
 import ExamSession from "./components/Student/ExamSession/ExamSession";
 import ExamFeedback from "./components/Shared/ExamFeedback/ExamFeedback";
 import Users from "./components/Admin/UsersInfo/Users";
-
 
 function App() {
   return (
@@ -32,7 +31,7 @@ function App() {
               <Route path="student-results" element={<StudentResults />} />
               <Route path="exam-results" element={<MyResults />} />
               <Route path="quizzes/edit-exam/:id" element={<EditExam />} />
-              <Route path="exam-feedback/:id" element={<ExamFeedback />}/>
+              <Route path="exam-feedback/:id" element={<ExamFeedback />} />
               <Route path="users-info" element={<Users />} />
             </Route>
           </Routes>

@@ -15,11 +15,14 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get("/api/quizzes/results/getMyResults", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/results/getMyResults",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         setMyResults(res.data.data);
       } catch (error) {

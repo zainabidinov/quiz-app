@@ -17,7 +17,7 @@ const Users = () => {
       setIsLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("https://techquiz-api.onrender.com/api/account/getUsers", {
+      const res = await axios.get("https://quiz-app-zainabidinov-api.onrender.com/api/account/getUsers", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,7 +46,7 @@ const Users = () => {
         throw new Error("No token found");
       }
       setIsLoading(true);
-      const res = await axios.delete(`https://techquiz-api.onrender.com/api/account/deleteUser/${userId}`, {
+      const res = await axios.delete(`https://quiz-app-zainabidinov-api.onrender.com/api/account/deleteUser/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

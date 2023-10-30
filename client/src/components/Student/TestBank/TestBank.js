@@ -44,11 +44,14 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
           throw new Error("No token found");
         }
 
-        const response = await axios.get("/api/quizzes/getStudentQuizzes", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getStudentQuizzes",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const { data } = response.data;
 
@@ -76,13 +79,15 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
   };
 
   const formatTime = (time) => {
-    const hoursText = time.hours > 0 ? `${time.hours} hour${time.hours !== 1 ? "s" : ""}` : "";
-    const minutesText = time.minutes > 0 ? `${time.minutes} minute${time.minutes !== 1 ? "s" : ""}` : "";
-  
+    const hoursText =
+      time.hours > 0 ? `${time.hours} hour${time.hours !== 1 ? "s" : ""}` : "";
+    const minutesText =
+      time.minutes > 0
+        ? `${time.minutes} minute${time.minutes !== 1 ? "s" : ""}`
+        : "";
+
     return `${hoursText} ${minutesText}`.trim();
   };
-
-  
 
   const lastIndex = pageFocus * examsPerPage;
   const firstIndex = lastIndex - examsPerPage;
@@ -152,10 +157,8 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
               </p>
               <p>
                 You have{" "}
-                {formatTime(
-                  convertSecondsToTime(selectedExam[0]?.duration)
-                )}{" "}
-                to complete this exam
+                {formatTime(convertSecondsToTime(selectedExam[0]?.duration))} to
+                complete this exam
               </p>
               <p>
                 There are {selectedExam[0]?.numberOfQuestions} questions in this
