@@ -9,7 +9,8 @@ import { useDispatch } from "react-redux";
 import { setExam } from "../../../redux/examSlice";
 
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
-  const BASE_API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
+  const BASE_API_URL =
+    "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
   const [examData, setExamData] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
@@ -34,11 +35,14 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           throw new Error("No token found");
         }
 
-        const response = await axios.get("https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getQuizzes", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getQuizzes",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const { data } = response.data;
 
@@ -62,11 +66,14 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         throw new Error("No token found");
       }
 
-      const response = await axios.get(`https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getQuiz/${quizId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getQuiz/${quizId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const { success, message, data } = response.data;
 
@@ -91,11 +98,14 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         throw new Error("No token found");
       }
 
-      const response = await axios.delete(`https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/deleteQuiz/${quizId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.delete(
+        `https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/deleteQuiz/${quizId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const { success, message, data } = response.data;
 
@@ -106,7 +116,6 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         setExamData((prevExamData) =>
           prevExamData.filter((exam) => exam._id !== quizId)
         );
-
       } else {
         displayNotification(message, "error");
       }
@@ -124,9 +133,9 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
     <>
       <div className="manage-exams">
         {currentExams.length > 0 ? (
-          <div className="examContent-block">
+          <div className="examContent">
             {currentExams.map((exam) => (
-              <div className="examContent">
+              <div className="examContent-item">
                 <div key={exam._id}>
                   <span className="examSubject">{exam.subject}</span>
                   <br />
@@ -166,6 +175,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
               size="sm"
               onClick={() => onNavItemClick("quizzes/create")}
               ml={2}
+              style={{width: "100%", margin: "0 auto"}}
             >
               Add Exam
             </Button>

@@ -1,22 +1,23 @@
 .manage-exams {
   display: flex;
   align-items: flex-start;
-  height: 91vh;
+  height: 100%;
   flex-wrap: wrap;
   justify-content: center;
-  padding-top: 20px;
-}
-
-.examContent-block {
-  display: flex;
-  flex-direction: column;
 }
 
 .examContent {
   display: flex;
+  flex-direction: column;
+  margin: 20px 10px;
+  
+}
+
+.examContent-item {
+  display: flex;
   border: 2px solid #2e7d9c;
   padding: 5px 18px;
-  margin: 5px;
+  margin-bottom: 4px;
   border-radius: 5px;
   align-items: center;
   flex-direction: row;
@@ -27,7 +28,7 @@
 }
 
 .edit-exam__button {
-  margin-left: 20px;
+  margin: 20px;
 }
 
 .examSubject {
@@ -44,5 +45,5 @@
 .examContent__buttons {
   display: flex;
   flex-direction: row;
-  
 }
+
