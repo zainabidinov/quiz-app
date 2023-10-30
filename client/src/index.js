@@ -18,4 +18,3 @@ root.render(
   </React.StrictMode>
 );
 
- // https://techQuiz-api.onrender.com
