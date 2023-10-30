@@ -17,11 +17,7 @@ app.use(express.json());
 const dbConnect = require("./config/db");
 dbConnect();
 
-app.use(cors(
-  {
-    origin: ["https://techquiz-api.onrender.com"]
-  }
-));
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 
