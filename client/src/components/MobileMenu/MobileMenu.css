@@ -13,5 +13,13 @@
   padding: 15px;
   font-size: 28px;
 }
+.menu-icon-wrapper {
+  display: flex;
+  justify-content: end;
+  padding-right: 10px;
 
-
+}
+.menu-icon {
+  color: black;
+  font-size: 30px;
+}

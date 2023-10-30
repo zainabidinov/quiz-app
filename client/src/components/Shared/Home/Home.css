@@ -102,13 +102,20 @@
 
 
 /* Smaller Screens */
+
+.header-icon {
+  color: white;
+  padding: 10px;
+  font-size: 30px;
+}
+
 .mobile-menu-closed {
   transform: translateX(-100%);
   transition-timing-function: ease-in-out;
   transition-duration: 0.5s; /* Adjust the duration as needed */
   position: fixed;
   top: 0;
-  width: 70%;
+  width: 75%;
   height: 100%;
   border-right: 1px solid #0f1623;
   background-color: #fff;
@@ -153,17 +160,7 @@
   }
 }
 
-.menu-icon {
-  color: black;
-  padding: 40px 10px;
-  font-size: 30px;
-}
 
-.header-icon {
-  color: white;
-  padding: 10px;
-  font-size: 30px;
-}
 
 
 

@@ -127,11 +127,14 @@ const Home = () => {
           throw new Error("No token found");
         }
 
-        const response = await fetch("https://quiz-app-zainabidinov-api.onrender.com/api/account/accountInfo", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://quiz-app-zainabidinov-api.onrender.com/api/account/accountInfo",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const data = await response.json();
         if (response.status === 200 && data.success) {
@@ -192,12 +195,13 @@ const Home = () => {
             <div className="mobile-menu-closed"></div>
           ) : (
             <div className="mobile-menu-open mobile-sidebar">
-              <span class="mdi mdi-menu menu-icon " onClick={toggleMenu}></span>
               
+
               <MobileMenu
                 currentUser={currentUser}
                 activeNavItem={activeNavItem}
                 onNavItemClick={handleNavItemClick}
+                onToggleMenu={toggleMenu}
               />
             </div>
           )}
