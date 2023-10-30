@@ -34,7 +34,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
           throw new Error("No token found");
         }
 
-        const response = await axios.get("/api/quizzes/getQuizzes", {
+        const response = await axios.get("https://techquiz-api.onrender.com/api/quizzes/getQuizzes", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -62,7 +62,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         throw new Error("No token found");
       }
 
-      const response = await axios.get(`/api/quizzes/getQuiz/${quizId}`, {
+      const response = await axios.get(`https://techquiz-api.onrender.com/api/quizzes/getQuiz/${quizId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,7 +91,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
         throw new Error("No token found");
       }
 
-      const response = await axios.delete(`/api/quizzes/deleteQuiz/${quizId}`, {
+      const response = await axios.delete(`https://techquiz-api.onrender.com/api/quizzes/deleteQuiz/${quizId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
