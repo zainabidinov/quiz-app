@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setExam } from "../../../redux/examSlice";
 
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
-  const BASE_API_URL = "/api/quizzes";
+  const BASE_API_URL = "https://techquiz-api.onrender.com/api/quizzes";
   const [examData, setExamData] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
