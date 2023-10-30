@@ -2,7 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* margin-top: 50px; */
   margin-top: 50px;
+  margin-bottom: auto;
+  margin-right: 15px;
+  margin-left: 15px;
+  height: 100%;
 }
 
 .createExamForm {

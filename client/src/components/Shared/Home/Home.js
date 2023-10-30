@@ -195,7 +195,9 @@ const Home = () => {
             <div className="mobile-menu-closed"></div>
           ) : (
             <div className="mobile-menu-open mobile-sidebar">
-              
+              {/* <div className="menu-icon-wrapper">
+                <span class="mdi mdi-window-close menu-icon"></span>
+              </div> */}
 
               <MobileMenu
                 currentUser={currentUser}
