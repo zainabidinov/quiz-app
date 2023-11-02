@@ -1,28 +1,51 @@
 .manage-exams {
   display: flex;
-  align-items: flex-start;
-  height: 100%;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+  height: 100vh;
+}
+
+.manage-exams__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 20px;
+  height: 10px;
+  font-size: 20px;
+  color: #fff;
+  background-image: linear-gradient(
+    45deg,
+    rgb(48, 126, 214) 0%,
+    rgb(54, 184, 207) 100%
+  );
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 98%;
+  margin-top: 15px;
 }
 
 .examContent {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px;
+  width: 95%;
+  margin: 8px 15px !important;
 }
 
 .examContent-item {
   display: flex;
+  flex-direction: column;
   border: 2px solid #2e7d9c;
   padding: 5px 10px;
-  margin-bottom: 4px;
   border-radius: 5px;
-  align-items: center;
-  justify-content: space-between;
-  width: 90vw;
-  max-width: 625px;
+  /* width: 90vw; */
   background-color: #fff;
+}
+
+.examContent-item p {
+  font-weight: 600;
 }
 
 .edit-exam__button {
@@ -32,17 +55,46 @@
 .examSubject {
   color: #000;
   font-size: 22px;
-  text-decoration: underline;
+  font-weight: normal;
 }
 
 .examName {
   font-size: 17px;
   color: #000;
+  font-weight: normal;
 }
 
 .examContent__buttons {
   display: flex;
-  flex-direction: row;
+  margin-top: 15px;
+}
+
+.btn-addExam {
+  align-self: center;
+  width: 10rem;
+  border-radius: 5px;
+  padding: 5px;
+  /* margin-left: 35px !important; */
+}
+
+@media (max-width: 1080px) {
+  .examContent {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .examSubject {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 598px) {
+  .examContent {
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 450px));
+    margin: 8px 5px !important;
+  }
 }
 
 @media (max-width: 420px) {

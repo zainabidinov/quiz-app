@@ -1,10 +1,15 @@
 import React from "react";
 import "./Sidebar.css";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ currentUser, activeNavItem, onNavItemClick }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="sidebar-navigation">
+    <div className="sidebar-nav">
       <nav>
+      <h1>ONEQUIZ</h1>
+
         {currentUser && currentUser.admin === true ? (
           <ul>
             <li
@@ -70,6 +75,15 @@ const Sidebar = ({ currentUser, activeNavItem, onNavItemClick }) => {
                 </li>
               </ul>
             )}
+            <button
+              className="logout-btn"
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/");
+              }}
+            >
+              Log out
+            </button>
           </>
         )}
       </nav>
@@ -78,4 +92,3 @@ const Sidebar = ({ currentUser, activeNavItem, onNavItemClick }) => {
 };
 
 export default Sidebar;
-

@@ -1,38 +1,20 @@
-.sidebar-navigation {
+/* .sidebar-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-}
+  width: 220px;
+  background-color: #fff;
+  height: 100%;
+  margin-top: 8px;
+} */
 
-ul {
-  color: #54667a;
-  width: 100%;
-}
-
-li {
-  font-size: 18px;
-  font-weight: 300;
-  list-style-type: none;
-  padding: 15px;
-  cursor: pointer;
-  width: 100%;
-}
-
-li:hover {
-  background-color: #edf1f5;
-}
-
-span {
-  font-size: 20px;
-}
 
 @media (max-width: 768px) {
-  .sidebar-navigation span {
+  .sidebar-nav span {
     display: none;
   }
 
-  .sidebar-navigation {
+  .sidebar-nav {
     align-items: stretch;
   }
 

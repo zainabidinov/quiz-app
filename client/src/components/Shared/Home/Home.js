@@ -166,18 +166,90 @@ const Home = () => {
 
   return (
     <div className="home">
+      {/* Loading Spinner */}
       {isLoading && (
         <div className="loading--container">
           <Spinner size="xl" color="teal.500" />
         </div>
       )}
-      <div className="home-sidebar">
-        <h1>ONEQUIZ</h1>
-        <Sidebar
+
+      {/* Sidebar */}
+      <div className="sidebar">
+        {/* <Sidebar
           currentUser={currentUser}
           activeNavItem={activeNavItem}
           onNavItemClick={handleNavItemClick}
-        />
+        /> */}
+        <nav>
+          <h1>ONEQUIZ</h1>
+          {currentUser && currentUser.admin === true ? (
+            <ul>
+              <li
+                className={activeNavItem === "home" ? "active" : ""}
+                onClick={() => handleNavItemClick("home")}
+              >
+                <span className="mdi mdi-account-multiple-outline"></span> Users
+              </li>
+              <li
+                className={activeNavItem === "quizzes" ? "active" : ""}
+                onClick={() => handleNavItemClick("quizzes")}
+              >
+                <span className="mdi mdi-account-circle"></span> Exams
+              </li>
+            </ul>
+          ) : (
+            <>
+              {currentUser && currentUser.userType === "student" && (
+                <ul>
+                  <li
+                    className={activeNavItem === "home" ? "active" : ""}
+                    onClick={() => handleNavItemClick("home")}
+                  >
+                    <span className="mdi mdi-home"></span> Home
+                  </li>
+
+                  <li
+                    className={
+                      activeNavItem === "student-results" ? "active" : ""
+                    }
+                    onClick={() => handleNavItemClick("student-results")}
+                  >
+                    <span className="mdi mdi-list-status"></span> My Results
+                  </li>
+                  <li
+                    className={activeNavItem === "profile" ? "active" : ""}
+                    onClick={() => handleNavItemClick("profile")}
+                  >
+                    <span className="mdi mdi-account-circle"></span> My Profile
+                  </li>
+                </ul>
+              )}
+              {currentUser && currentUser.userType === "teacher" && (
+                <ul>
+                  <li
+                    className={activeNavItem === "quizzes" ? "active" : ""}
+                    onClick={() => handleNavItemClick("home")}
+                  >
+                    <span className="mdi mdi-home"></span> Manage Exams
+                  </li>
+                  <li
+                    className={activeNavItem === "exam-results" ? "active" : ""}
+                    onClick={() => handleNavItemClick("exam-results")}
+                  >
+                    <span className="mdi mdi-monitor-multiple"></span> Student
+                    Results
+                  </li>
+                  <li
+                    className={activeNavItem === "profile" ? "active" : ""}
+                    onClick={() => handleNavItemClick("profile")}
+                  >
+                    <span className="mdi mdi-account-circle"></span> My Profile
+                  </li>
+                </ul>
+              )}
+            </>
+          )}
+        </nav>
         <button
           className="logout-btn"
           onClick={() => {
@@ -189,16 +261,13 @@ const Home = () => {
         </button>
       </div>
 
-      <div className="main-content">
-        <div className="home-header-content">
+      <div className="hero-section">
+        {/* Header */}
+        <div className="header">
           {!isMenuOpen ? (
             <div className="mobile-menu-closed"></div>
           ) : (
             <div className="mobile-menu-open mobile-sidebar">
-              {/* <div className="menu-icon-wrapper">
-                <span class="mdi mdi-window-close menu-icon"></span>
-              </div> */}
-
               <MobileMenu
                 currentUser={currentUser}
                 activeNavItem={activeNavItem}
@@ -209,6 +278,7 @@ const Home = () => {
           )}
 
           <span class="mdi mdi-menu header-icon" onClick={toggleMenu}></span>
+          {/* <h1>ONEQUIZ</h1> */}
           <p>
             {currentUser && !currentUser.admin && (
               <p>
@@ -219,7 +289,8 @@ const Home = () => {
             )}
           </p>
         </div>
-        <div className="home-content">{renderContent()}</div>
+
+        <div className="hero">{renderContent()}</div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import { setExam } from "../../../redux/examSlice";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const BASE_API_URL =
@@ -132,15 +133,24 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   return (
     <>
       <div className="manage-exams">
+        <div className="manage-exams__header">Available Exams</div>
         {currentExams.length > 0 ? (
           <div className="examContent">
             {currentExams.map((exam) => (
               <div className="examContent-item">
                 <div key={exam._id}>
-                  <span className="examSubject">{exam.subject}</span>
-                  <br />
-                  <span className="examName">{exam.name}</span>
+                  <p>
+                    Subject: <span className="examSubject">{exam.subject}</span>
+                  </p>
+                  <p>
+                    Exam Name: <span className="examName">{exam.name}</span>
+                  </p>
+                  <p>
+                    Total Questions:{" "}
+                    <span className="examName">{exam.numberOfQuestions}</span>
+                  </p>
                 </div>
+
                 <div className="examContent__buttons">
                   <Button
                     className={
@@ -148,8 +158,9 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                     }
                     margin={1}
                     size="sm"
-                    colorScheme="teal"
-                    variant="outline"
+                    colorScheme="blue"
+                    variant="solid"
+                    leftIcon={<EditIcon boxSize={4} />}
                     onClick={() => handleEditExamButton(exam._id)}
                   >
                     Edit Exam
@@ -161,7 +172,8 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                     margin={1}
                     size="sm"
                     colorScheme="red"
-                    variant="outline"
+                    variant="solid"
+                    leftIcon={<DeleteIcon boxSize={4} />}
                     onClick={() => handleDeleteExamButton(exam._id)}
                   >
                     Delete Exam
@@ -169,17 +181,8 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                 </div>
               </div>
             ))}
-            <Button
-              className={activeNavItem === "quizzes/create" ? "active" : ""}
-              colorScheme="teal"
-              size="sm"
-              onClick={() => onNavItemClick("quizzes/create")}
-              ml={2}
-              style={{width: "100%", margin: "0 auto"}}
-            >
-              Add Exam
-            </Button>
-            <div className="paginationContainer">
+
+            {/* <div className="paginationContainer">
               <Pagination
                 style={{ marginTop: "16px" }}
                 size="sm"
@@ -192,20 +195,34 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                 nextDisabled={pageFocus === totalPages}
                 prevDisabled={pageFocus === 1}
               />
-            </div>
+            </div> */}
           </div>
         ) : (
           <div>
             <h1>No exams to show</h1>
-            <Button
+            {/* <Button
               className={activeNavItem === "quizzes/create" ? "active" : ""}
               colorScheme="teal"
               size="sm"
               onClick={() => onNavItemClick("quizzes/create")}
             >
               Add Exam
-            </Button>
-            <div className="paginationContainer">
+            </Button> */}
+            
+          </div>
+        )}
+        <Button
+          className={`btn-addExam ${
+            activeNavItem === "quizzes/create" ? "active" : ""
+          }`}
+          colorScheme="teal"
+          size="sm"
+          onClick={() => onNavItemClick("quizzes/create")}
+          ml={2}
+        >
+          Add Exam
+        </Button>
+        <div className="paginationContainer">
               <Pagination
                 style={{ marginTop: "16px" }}
                 size="sm"
@@ -219,8 +236,6 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                 prevDisabled={pageFocus === 1}
               />
             </div>
-          </div>
-        )}
       </div>
     </>
   );
