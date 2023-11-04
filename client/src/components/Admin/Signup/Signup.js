@@ -153,11 +153,11 @@ const Signup = () => {
               </select>
             </div>
             <div className="signup-form__btn">
-              <button type="submit">Create Account</button>
+              <button type="submit">Sign up</button>
               <span className="login-link__content">
                 Already have an account?{" "}
                 <Link className="login-link" to="/">
-                  Log In
+                  Sign In
                 </Link>
               </span>
             </div>

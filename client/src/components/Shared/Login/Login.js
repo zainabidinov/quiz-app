@@ -35,7 +35,7 @@ const Login = () => {
           isClosable: true,
         });
         localStorage.setItem("token", response.data);
-        window.location.href = "/home";
+        navigate("/home");
       } else {
         toast({
           description: response.message,
@@ -56,50 +56,52 @@ const Login = () => {
 
   return (
     <div className="login">
-      <div className="login-form">
-        <form onSubmit={onSubmit}>
-          <span>
-            <h1 className="login-header">Welcome back to OneQuiz!</h1>
-          </span>
-
-          <label htmlFor="email">Email</label>
-          <input
-            autocomplete="off"
-            type="email"
-            id="email"
-            placeholder="Enter your Email here"
-            required
-            value={formValues.email}
-            onChange={(e) => updateForm({ email: e.target.value })}
-          ></input>
-          <label htmlFor="password">Password</label>
-          <input
-            autocomplete="off"
-            type="password"
-            id="password"
-            placeholder="Enter your Password"
-            onChange={(e) => updateForm({ password: e.target.value })}
-            value={formValues.password}
-            required
-          ></input>
-          <div className="login-from__btn">
-            <button type="submit">Log in</button>
-            <span className="login-link__content">
-              Don't have an account yet?{" "}
-              <Link className="login-link" to="/signup">
-                Sign Up
-              </Link>
+      <div className="login-container">
+        <div className="login-form">
+          <form onSubmit={onSubmit}>
+            <span>
+              <h1 className="login-header">Welcome back to OneQuiz!</h1>
             </span>
-          </div>
-        </form>
-      </div>
 
-      <div className="login-pic-container">
-        <img
-          className="login-pic"
-          src={loginPic}
-          alt="Man working on computer"
-        />
+            <label htmlFor="email">Email</label>
+            <input
+              autoComplete="off"
+              type="email"
+              id="email"
+              placeholder="Enter your Email here"
+              required
+              value={formValues.email}
+              onChange={(e) => updateForm({ email: e.target.value })}
+            ></input>
+            <label htmlFor="password">Password</label>
+            <input
+              autoComplete="off"
+              type="password"
+              id="password"
+              placeholder="Enter your Password"
+              onChange={(e) => updateForm({ password: e.target.value })}
+              value={formValues.password}
+              required
+            ></input>
+            <div className="login-form__btn">
+              <button type="submit">Sign in</button>
+              <span className="login-link__content">
+                Don't have an account yet?{" "}
+                <Link className="login-link" to="/signup">
+                  Sign Up
+                </Link>
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <div className="login-pic-container">
+          <img
+            className="login-pic"
+            src={loginPic}
+            alt="Man working on computer"
+          />
+        </div>
       </div>
     </div>
   );
