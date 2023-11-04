@@ -83,12 +83,10 @@
 
 .login-link {
   color: #007074;
-  /* color: white; */
   text-decoration: none;
 }
 
 .login-link:hover {
   color: #007074;
-  /* color: white; */
   text-decoration: underline;
 }

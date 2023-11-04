@@ -1,5 +1,5 @@
 import React from "react";
-import loginImg from "../../../assets/images/man.svg";
+import loginPic from "../../../assets/images/login.svg";
 import "./Login.css";
 import { useState } from "react";
 import { logIn } from "../../Auth/userAuth";
@@ -84,7 +84,7 @@ const Login = () => {
           ></input>
           <div className="login-from__btn">
             <button type="submit">Log in</button>
-            <span>
+            <span className="login-link__content">
               Don't have an account yet?{" "}
               <Link className="login-link" to="/signup">
                 Sign Up
@@ -97,7 +97,7 @@ const Login = () => {
       <div className="login-pic-container">
         <img
           className="login-pic"
-          src={loginImg}
+          src={loginPic}
           alt="Man working on computer"
         />
       </div>
