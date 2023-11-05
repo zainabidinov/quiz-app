@@ -5,7 +5,7 @@
   height: 100%;
   width: 100%;
   background-color: #edf1f5;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .signup-container {
@@ -17,7 +17,7 @@
   background-color: #fff;
   max-width: 950px;
   width: 100%;
-  margin: 1.2rem;
+  margin-inline: 1.2rem;
 }
 
 .signup-header {
@@ -32,6 +32,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 }
 
 .signup-form form {
