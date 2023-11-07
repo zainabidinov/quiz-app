@@ -8,7 +8,8 @@ import { Pagination } from "@mantine/core";
 const MyResults = ({ activeNavItem, onNavItemClick }) => {
   const [myResults, setMyResults] = useState([]);
   const [pageFocus, setPageFocus] = useState(1);
-  const reportsPerPage = 8;
+  var reportsPerPage = 8;
+  const [isTwoColumnLayout, setIsTwoColumnLayout] = useState(false);
 
   useEffect(() => {
     const fetchTheStudentResult = async () => {
@@ -42,67 +43,142 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
     setPageFocus(value);
   };
 
+  if (isTwoColumnLayout) {
+    reportsPerPage = 2;
+  }
+
   const lastIndex = pageFocus * reportsPerPage;
   const firstIndex = lastIndex - reportsPerPage;
   const currentReports = myResults.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(myResults.length / reportsPerPage);
+
+  const checkTwoColumnLayout = () => {
+    setIsTwoColumnLayout(window.innerWidth <= 598);
+  };
+
+  useEffect(() => {
+    checkTwoColumnLayout(); 
+    window.addEventListener("resize", checkTwoColumnLayout); 
+
+    return () => {
+      window.removeEventListener("resize", checkTwoColumnLayout); 
+    };
+  }, []);
 
   return (
     <div className="results--container">
       <div className="results--content">
         <div className="results--content__header">My Results</div>
 
-        <table className="results--table">
-          <thead>
-            <tr>
-              <th>Exam</th>
-              <th>Subject</th>
-              <th>Score</th>
-              <th>Correct Answers</th>
-              <th>View Feedback</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentReports.map((exam, index) => (
-              <tr key={index}>
-                <td>{exam.examName}</td>
-                <td>{exam.examSubject}</td>
-                <td>{Math.round(exam.score)}%</td>
+        {isTwoColumnLayout ? (
+          <table className="results--table">
+          {currentReports.map((exam) => (
+            <tbody key={exam._id} className="results--table-row">
+              <tr>
+                <td>Exam:</td> <td>{exam.examName}</td>
+              </tr>
+              <tr>
+                <td>Subject:</td> <td>{exam.examSubject}</td>
+              </tr>
+              <tr>
+                <td>Score:</td> <td>{Math.round(exam.score)}% </td>
+              </tr>
+              <tr>
+                <td>Correct Answers:</td>{" "}
                 <td>
                   {exam.numCorrect}/{Object.keys(exam.report).length}
                 </td>
-                <td>
+              </tr>
+              <tr>
+                <td>Feedback</td>
+                <td style={{ marginBottom: "10px" }}>
                   <Button
                     leftIcon={<InfoIcon size="sm" />}
                     colorScheme="teal"
                     borderRadius="20px"
                     size="sm"
                     className={
-                      activeNavItem === "exam-feedback/:id" ? "active" : ""
+                      activeNavItem === `exam-feedback/${exam._id}`
+                        ? "active"
+                        : ""
                     }
-                    onClick={() => onClick(exam._id)}
+                    onClick={() =>
+                      onNavItemClick(`exam-feedback/${exam._id}`)
+                    }
                   >
                     View Feedback
                   </Button>
                 </td>
               </tr>
-            ))}
-          </tbody>
+              <tr>
+                <td
+                  className="last-row"
+                  colSpan="2"
+                  style={{
+                    height: "10px",
+                    backgroundColor: "#edf1f5",
+                    border: "none",
+                  }}
+                ></td>
+              </tr>
+            </tbody>
+          ))}
         </table>
-        <div className="paginationContainer">
-          <Pagination
-            style={{ marginTop: "16px" }}
-            size="sm"
-            total={totalPages}
-            perPage={1}
-            value={pageFocus}
-            onChange={pageSwitchHandler}
-            nextLabel={pageFocus === totalPages ? null : "Next"}
-            prevLabel={pageFocus === 1 ? null : "Previous"}
-            nextDisabled={pageFocus === totalPages}
-            prevDisabled={pageFocus === 1}
-          />
-        </div>
+        ) : (<table className="results--table">
+        <thead>
+          <tr>
+            <th>Exam</th>
+            <th>Subject</th>
+            <th>Score</th>
+            <th>Correct Answers</th>
+            <th>View Feedback</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentReports.map((exam, index) => (
+            <tr key={index}>
+              <td>{exam.examName}</td>
+              <td>{exam.examSubject}</td>
+              <td>{Math.round(exam.score)}%</td>
+              <td>
+                {exam.numCorrect}/{Object.keys(exam.report).length}
+              </td>
+              <td>
+                <Button
+                  leftIcon={<InfoIcon size="sm" />}
+                  colorScheme="teal"
+                  borderRadius="20px"
+                  size="sm"
+                  className={
+                    activeNavItem === "exam-feedback/:id" ? "active" : ""
+                  }
+                  onClick={() => onClick(exam._id)}
+                >
+                  View Feedback
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>)}
+
+        
+
+
+      </div>
+      <div className="paginationContainer">
+        <Pagination
+          style={{ marginTop: "16px" }}
+          size="sm"
+          total={totalPages}
+          perPage={1}
+          value={pageFocus}
+          onChange={pageSwitchHandler}
+          nextLabel={pageFocus === totalPages ? null : "Next"}
+          prevLabel={pageFocus === 1 ? null : "Previous"}
+          nextDisabled={pageFocus === totalPages}
+          prevDisabled={pageFocus === 1}
+        />
       </div>
     </div>
   );
