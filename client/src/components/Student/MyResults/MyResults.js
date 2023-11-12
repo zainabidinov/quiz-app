@@ -57,11 +57,11 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
   };
 
   useEffect(() => {
-    checkTwoColumnLayout(); 
-    window.addEventListener("resize", checkTwoColumnLayout); 
+    checkTwoColumnLayout();
+    window.addEventListener("resize", checkTwoColumnLayout);
 
     return () => {
-      window.removeEventListener("resize", checkTwoColumnLayout); 
+      window.removeEventListener("resize", checkTwoColumnLayout);
     };
   }, []);
 
@@ -72,99 +72,97 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
 
         {isTwoColumnLayout ? (
           <table className="results--table">
-          {currentReports.map((exam) => (
-            <tbody key={exam._id} className="results--table-row">
+            {currentReports.map((exam) => (
+              <tbody key={exam._id} className="results--table-row">
+                <tr>
+                  <td>Exam:</td> <td>{exam.examName}</td>
+                </tr>
+                <tr>
+                  <td>Subject:</td> <td>{exam.examSubject}</td>
+                </tr>
+                <tr>
+                  <td>Score:</td> <td>{Math.round(exam.score)}% </td>
+                </tr>
+                <tr>
+                  <td>Correct Answers:</td>{" "}
+                  <td>
+                    {exam.numCorrect}/{Object.keys(exam.report).length}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Feedback</td>
+                  <td style={{ marginBottom: "10px" }}>
+                    <Button
+                      leftIcon={<InfoIcon size="sm" />}
+                      colorScheme="teal"
+                      borderRadius="20px"
+                      size="sm"
+                      className={
+                        activeNavItem === `exam-feedback/${exam._id}`
+                          ? "active"
+                          : ""
+                      }
+                      onClick={() =>
+                        onNavItemClick(`exam-feedback/${exam._id}`)
+                      }
+                    >
+                      View Feedback
+                    </Button>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className="last-row"
+                    colSpan="2"
+                    style={{
+                      height: "10px",
+                      backgroundColor: "#edf1f5",
+                      border: "none",
+                    }}
+                  ></td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        ) : (
+          <table className="results--table">
+            <thead>
               <tr>
-                <td>Exam:</td> <td>{exam.examName}</td>
+                <th>Exam</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Correct Answers</th>
+                <th>View Feedback</th>
               </tr>
-              <tr>
-                <td>Subject:</td> <td>{exam.examSubject}</td>
-              </tr>
-              <tr>
-                <td>Score:</td> <td>{Math.round(exam.score)}% </td>
-              </tr>
-              <tr>
-                <td>Correct Answers:</td>{" "}
-                <td>
-                  {exam.numCorrect}/{Object.keys(exam.report).length}
-                </td>
-              </tr>
-              <tr>
-                <td>Feedback</td>
-                <td style={{ marginBottom: "10px" }}>
-                  <Button
-                    leftIcon={<InfoIcon size="sm" />}
-                    colorScheme="teal"
-                    borderRadius="20px"
-                    size="sm"
-                    className={
-                      activeNavItem === `exam-feedback/${exam._id}`
-                        ? "active"
-                        : ""
-                    }
-                    onClick={() =>
-                      onNavItemClick(`exam-feedback/${exam._id}`)
-                    }
-                  >
-                    View Feedback
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  className="last-row"
-                  colSpan="2"
-                  style={{
-                    height: "10px",
-                    backgroundColor: "#edf1f5",
-                    border: "none",
-                  }}
-                ></td>
-              </tr>
+            </thead>
+            <tbody>
+              {currentReports.map((exam, index) => (
+                <tr key={index}>
+                  <td>{exam.examName}</td>
+                  <td>{exam.examSubject}</td>
+                  <td>{Math.round(exam.score)}%</td>
+                  <td>
+                    {exam.numCorrect}/{Object.keys(exam.report).length}
+                  </td>
+                  <td>
+                    <Button
+                      leftIcon={<InfoIcon size="sm" />}
+                      colorScheme="teal"
+                      borderRadius="20px"
+                      size="sm"
+                      className={
+                        activeNavItem === "exam-feedback/:id" ? "active" : ""
+                      }
+                      onClick={() => onClick(exam._id)}
+                    >
+                      View Feedback
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-          ))}
-        </table>
-        ) : (<table className="results--table">
-        <thead>
-          <tr>
-            <th>Exam</th>
-            <th>Subject</th>
-            <th>Score</th>
-            <th>Correct Answers</th>
-            <th>View Feedback</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentReports.map((exam, index) => (
-            <tr key={index}>
-              <td>{exam.examName}</td>
-              <td>{exam.examSubject}</td>
-              <td>{Math.round(exam.score)}%</td>
-              <td>
-                {exam.numCorrect}/{Object.keys(exam.report).length}
-              </td>
-              <td>
-                <Button
-                  leftIcon={<InfoIcon size="sm" />}
-                  colorScheme="teal"
-                  borderRadius="20px"
-                  size="sm"
-                  className={
-                    activeNavItem === "exam-feedback/:id" ? "active" : ""
-                  }
-                  onClick={() => onClick(exam._id)}
-                >
-                  View Feedback
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>)}
-
-        
-
-
+          </table>
+        )}
       </div>
       <div className="paginationContainer">
         <Pagination

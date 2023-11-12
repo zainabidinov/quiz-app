@@ -32,6 +32,7 @@ import {
   RadioGroup,
   Radio,
 } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 
 const EditExam = () => {
   const API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
@@ -251,157 +252,135 @@ const EditExam = () => {
 
   return (
     <>
-      <div className="editExamFormContainer">
-        <form className="editExamForm">
-          <Stack direction="row">
-            <FormControl>
-              <FormLabel>Name of Exam</FormLabel>
+      <div className="editExam">
+        <div className="editExam-container">
+          <p>Number of Exam Questions: {numberOfQuestions}</p>
 
-              <Text as="em" textDecoration="underline">
-                {name}
-              </Text>
-            </FormControl>
+          <p>
+            Duration of Exam:{" "}
+            {hours > 0 && `${hours} hour${hours > 1 ? "s" : ""} `}
+            {minutes} minute{minutes !== 1 ? "s" : ""}
+          </p>
 
-            <FormControl>
-              <FormLabel>Number of Exam Questions</FormLabel>
-              <Text as="em" textDecoration="underline">
-                {numberOfQuestions}
-              </Text>
-            </FormControl>
+          <Button
+            type="button"
+            colorScheme="blue"
+            size="md"
+            leftIcon={<EditIcon boxSize={4} />}
+            onClick={handleExamOpenModal}
+          >
+            Edit Exam
+          </Button>
+        </div>
 
-            <FormControl>
-              <FormLabel>Duration of Exam</FormLabel>
-              <Text as="em" textDecoration="underline">
-                {hours > 0 && `${hours} hour${hours > 1 ? "s" : ""} `}
-                {minutes} minute{minutes !== 1 ? "s" : ""}
-              </Text>
-            </FormControl>
-
-            <Button
-              type="button"
-              colorScheme="teal"
-              size="md"
-              mt={8}
-              width="50%"
-              onClick={handleExamOpenModal}
-            >
-              Edit Exam
-            </Button>
-          </Stack>
-        </form>
-      </div>
-
-      <Modal isOpen={isExamOpen} onClose={handleExamCloseModal}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Edit Exam</ModalHeader>
-          <ModalCloseButton />
-          <form onSubmit={onExamFormSubmit}>
-            <ModalBody>
-              <Stack spacing={4}>
-                <FormControl>
-                  <FormLabel>Name of Exam</FormLabel>
-                  <Input
-                    placeholder={name}
-                    value={updatedExam.name}
-                    onChange={(e) =>
-                      setUpdatedExam({
-                        ...updatedExam,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>Number of Exam Questions</FormLabel>
-                  <NumberInput min={1}>
-                    <NumberInputField
-                      name="numberOfQuestions"
-                      _focus={{ boxShadow: "none" }}
-                      bg="white"
-                      placeholder={numberOfQuestions}
-                      value={updatedExam.numberOfQuestions}
+        {/* Modal for editing main exam details */}
+        <Modal isOpen={isExamOpen} onClose={handleExamCloseModal}>
+          <ModalOverlay />
+          <ModalContent mx={2}>
+            <ModalHeader>Edit Exam</ModalHeader>
+            <ModalCloseButton />
+            <form onSubmit={onExamFormSubmit}>
+              <ModalBody>
+                <Stack spacing={4}>
+                  <FormControl>
+                    <FormLabel>Name of Exam</FormLabel>
+                    <Input
+                      placeholder={name}
+                      value={updatedExam.name}
                       onChange={(e) =>
                         setUpdatedExam({
                           ...updatedExam,
-                          numberOfQuestions: parseInt(e.target.value),
+                          name: e.target.value,
                         })
                       }
                     />
-                  </NumberInput>
-                </FormControl>
+                  </FormControl>
 
-                <FormControl>
-                  <FormLabel>Duration of Exam</FormLabel>
-                  <Stack direction="row">
-                    <NumberInput min={0}>
+                  <FormControl>
+                    <FormLabel>Number of Exam Questions</FormLabel>
+                    <NumberInput min={1}>
                       <NumberInputField
-                        name="hours"
+                        name="numberOfQuestions"
                         _focus={{ boxShadow: "none" }}
                         bg="white"
-                        placeholder="Hours"
-                        value={hours}
-                        onChange={(e) => setHours(parseInt(e.target.value))}
+                        placeholder={numberOfQuestions}
+                        value={updatedExam.numberOfQuestions}
+                        onChange={(e) =>
+                          setUpdatedExam({
+                            ...updatedExam,
+                            numberOfQuestions: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </NumberInput>
-                    <NumberInput min={0}>
-                      <NumberInputField
-                        name="minutes"
-                        _focus={{ boxShadow: "none" }}
-                        bg="white"
-                        placeholder="Minutes"
-                        value={minutes}
-                        onChange={(e) => setMinutes(parseInt(e.target.value))}
-                      />
-                    </NumberInput>
-                  </Stack>
-                </FormControl>
-              </Stack>
-            </ModalBody>
+                  </FormControl>
 
-            <ModalFooter>
-              <Button colorScheme="teal" mr={3} type="submit">
-                Save
-              </Button>
-              <Button onClick={handleExamCloseModal}>Cancel</Button>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
-      <div>
-        {currentQuestions.length > 0 ? (
-          <div>
-            {currentQuestions.map((question) => (
-              <div className="editQuestionsContainer" key={question._id}>
-                <div className="editQuestionsForm">
-                  <Stack direction="row">
-                    <div className="editQuestionsForm__absence">
-                      <div>
-                        <p>Question: {question.questionName}</p>
-                        <p>Correct Option: {question.correctOption}</p>
-                      </div>
+                  <FormControl>
+                    <FormLabel>Duration of Exam</FormLabel>
+                    <Stack direction="row">
+                      <NumberInput min={0}>
+                        <NumberInputField
+                          name="hours"
+                          _focus={{ boxShadow: "none" }}
+                          bg="white"
+                          placeholder="Hours"
+                          value={hours}
+                          onChange={(e) => setHours(parseInt(e.target.value))}
+                        />
+                      </NumberInput>
+                      <NumberInput min={0}>
+                        <NumberInputField
+                          name="minutes"
+                          _focus={{ boxShadow: "none" }}
+                          bg="white"
+                          placeholder="Minutes"
+                          value={minutes}
+                          onChange={(e) => setMinutes(parseInt(e.target.value))}
+                        />
+                      </NumberInput>
+                    </Stack>
+                  </FormControl>
+                </Stack>
+              </ModalBody>
 
-                      <Button
-                        colorScheme="red"
-                        mr={3}
-                        type="submit"
-                        size="sm"
-                        onClick={() => handleDeleteQuestion(question._id)}
-                      >
-                        Delete Question
-                      </Button>
+              <ModalFooter>
+                <Button colorScheme="teal" mr={3} type="submit">
+                  Save
+                </Button>
+                <Button onClick={handleExamCloseModal}>Cancel</Button>
+              </ModalFooter>
+            </form>
+          </ModalContent>
+        </Modal>
+
+        <div className="editQuestionsContainer">
+          {currentQuestions.length > 0 ? (
+            <div className="w-full grid">
+              {currentQuestions.map((question) => (
+                <div className="editQuestions-item" key={question._id}>
+                  <div className="editQuestions-item__content">
+                    <div>
+                      <p>Question: {question.questionName}</p>
+                      <p>Correct Option: {question.correctOption}</p>
                     </div>
-                  </Stack>
+
+                    <Button
+                      colorScheme="red"
+                      mr={3}
+                      type="submit"
+                      size="sm"
+                      onClick={() => handleDeleteQuestion(question._id)}
+                    >
+                      Delete Question
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="editQuestionsContainer">
-            <div className="editQuestionsForm">
-              <Stack direction="row">
-                <div className="editQuestionsForm__absence">
+              ))}
+            </div>
+          ) : (
+            <div>
+              <div className="editQuestions">
+                <div className="editQuestions__absence">
                   <p>No Questions For Exam Added Yet</p>
                   <Button
                     colorScheme="teal"
@@ -413,10 +392,208 @@ const EditExam = () => {
                     Add Question
                   </Button>
                 </div>
-              </Stack>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        <div className="EditExamFormFooter">
+          {currentQuestions.length > 0 ? (
+            <div>
+              {isLimitReached === numberOfQuestions ? (
+                ""
+              ) : (
+                <Button
+                  colorScheme="teal"
+                  mt={3}
+                  ml={5}
+                  type="submit"
+                  size="sm"
+                  onClick={handleQuestionOpenModal}
+                >
+                  Add Question
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div>{""}</div>
+          )}
+        </div>
+
+        <Modal isOpen={isQuestionOpen} onClose={handleQuestionCloseModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Add Question</ModalHeader>
+            <ModalCloseButton />
+            <form onSubmit={onQuestionFormSubmit}>
+              <ModalBody>
+                <Stack spacing={2}>
+                  <FormControl>
+                    <FormLabel>Name of Question</FormLabel>
+                    <Input
+                      placeholder="Enter your question"
+                      value={newQuestion.questionName}
+                      onChange={(e) =>
+                        setNewQuestion({
+                          ...newQuestion,
+                          questionName: e.target.value,
+                        })
+                      }
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>Question Type</FormLabel>
+                    <Select
+                      placeholder="Select question type"
+                      value={newQuestion.questionType}
+                      onChange={(e) =>
+                        setNewQuestion({
+                          ...newQuestion,
+                          questionType: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="multipleChoice">Multiple Choice</option>
+                      <option value="trueFalse">True/False</option>
+                      <option value="fillBlank">Fill In The Blank</option>
+                    </Select>
+                  </FormControl>
+
+                  {newQuestion.questionType === "multipleChoice" && (
+                    <>
+                      <FormControl>
+                        <FormLabel>Options</FormLabel>
+                        <Stack spacing={1}>
+                          <Input
+                            value={newQuestion.options[0]}
+                            onChange={(e) =>
+                              setNewQuestion({
+                                ...newQuestion,
+                                options: [
+                                  e.target.value,
+                                  newQuestion.options[1],
+                                  newQuestion.options[2],
+                                  newQuestion.options[3],
+                                ],
+                              })
+                            }
+                            placeholder="a"
+                          />
+                          <Input
+                            value={newQuestion.options[1]}
+                            onChange={(e) =>
+                              setNewQuestion({
+                                ...newQuestion,
+                                options: [
+                                  newQuestion.options[0],
+                                  e.target.value,
+                                  newQuestion.options[2],
+                                  newQuestion.options[3],
+                                ],
+                              })
+                            }
+                            placeholder="b"
+                          />
+                          <Input
+                            value={newQuestion.options[2]}
+                            onChange={(e) =>
+                              setNewQuestion({
+                                ...newQuestion,
+                                options: [
+                                  newQuestion.options[0],
+                                  newQuestion.options[1],
+                                  e.target.value,
+                                  newQuestion.options[3],
+                                ],
+                              })
+                            }
+                            placeholder="c"
+                          />
+                          <Input
+                            value={newQuestion.options[3]}
+                            onChange={(e) =>
+                              setNewQuestion({
+                                ...newQuestion,
+                                options: [
+                                  newQuestion.options[0],
+                                  newQuestion.options[1],
+                                  newQuestion.options[2],
+                                  e.target.value,
+                                ],
+                              })
+                            }
+                            placeholder="d"
+                          />
+                        </Stack>
+                      </FormControl>
+                      <FormControl>
+                        <FormLabel>Correct Option</FormLabel>
+                        <Input
+                          value={newQuestion.correctOption}
+                          onChange={(e) =>
+                            setNewQuestion({
+                              ...newQuestion,
+                              correctOption: e.target.value,
+                            })
+                          }
+                          placeholder="Correct option"
+                        />
+                      </FormControl>
+                    </>
+                  )}
+
+                  {newQuestion.questionType === "trueFalse" && (
+                    <>
+                      <FormControl>
+                        <FormLabel>Correct Option</FormLabel>
+                        <RadioGroup
+                          value={newQuestion.correctOption}
+                          onChange={(value) =>
+                            setNewQuestion({
+                              ...newQuestion,
+                              correctOption: value,
+                            })
+                          }
+                        >
+                          <Stack spacing={1}>
+                            <Radio value="true">True</Radio>
+                            <Radio value="false">False</Radio>
+                          </Stack>
+                        </RadioGroup>
+                      </FormControl>
+                    </>
+                  )}
+
+                  {newQuestion.questionType === "fillBlank" && (
+                    <>
+                      <FormControl>
+                        <FormLabel>Correct Option</FormLabel>
+                        <Input
+                          value={newQuestion.correctOption}
+                          onChange={(e) =>
+                            setNewQuestion({
+                              ...newQuestion,
+                              correctOption: e.target.value,
+                            })
+                          }
+                          placeholder="Correct option"
+                        />
+                      </FormControl>
+                    </>
+                  )}
+
+                  {newQuestion.questionType && (
+                    <Button type="submit" colorScheme="teal">
+                      Submit
+                    </Button>
+                  )}
+                </Stack>
+              </ModalBody>
+            </form>
+          </ModalContent>
+        </Modal>
+
         <div className="paginationContainer">
           <Pagination
             style={{ marginTop: "16px" }}
@@ -432,203 +609,6 @@ const EditExam = () => {
           />
         </div>
       </div>
-
-      <div className="EditExamFormFooter">
-        {currentQuestions.length > 0 ? (
-          <div>
-            {isLimitReached === numberOfQuestions ? (
-              ""
-            ) : (
-              <Button
-                colorScheme="teal"
-                mt={3}
-                ml={5}
-                type="submit"
-                size="sm"
-                onClick={handleQuestionOpenModal}
-              >
-                Add Question
-              </Button>
-            )}
-          </div>
-        ) : (
-          <div>{""}</div>
-        )}
-      </div>
-
-      <Modal isOpen={isQuestionOpen} onClose={handleQuestionCloseModal}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Question</ModalHeader>
-          <ModalCloseButton />
-          <form onSubmit={onQuestionFormSubmit}>
-            <ModalBody>
-              <Stack spacing={2}>
-                <FormControl>
-                  <FormLabel>Name of Question</FormLabel>
-                  <Input
-                    placeholder="Enter your question"
-                    value={newQuestion.questionName}
-                    onChange={(e) =>
-                      setNewQuestion({
-                        ...newQuestion,
-                        questionName: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>Question Type</FormLabel>
-                  <Select
-                    placeholder="Select question type"
-                    value={newQuestion.questionType}
-                    onChange={(e) =>
-                      setNewQuestion({
-                        ...newQuestion,
-                        questionType: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="multipleChoice">Multiple Choice</option>
-                    <option value="trueFalse">True/False</option>
-                    <option value="fillBlank">Fill In The Blank</option>
-                  </Select>
-                </FormControl>
-
-                {newQuestion.questionType === "multipleChoice" && (
-                  <>
-                    <FormControl>
-                      <FormLabel>Options</FormLabel>
-                      <Stack spacing={1}>
-                        <Input
-                          value={newQuestion.options[0]}
-                          onChange={(e) =>
-                            setNewQuestion({
-                              ...newQuestion,
-                              options: [
-                                e.target.value,
-                                newQuestion.options[1],
-                                newQuestion.options[2],
-                                newQuestion.options[3],
-                              ],
-                            })
-                          }
-                          placeholder="a"
-                        />
-                        <Input
-                          value={newQuestion.options[1]}
-                          onChange={(e) =>
-                            setNewQuestion({
-                              ...newQuestion,
-                              options: [
-                                newQuestion.options[0],
-                                e.target.value,
-                                newQuestion.options[2],
-                                newQuestion.options[3],
-                              ],
-                            })
-                          }
-                          placeholder="b"
-                        />
-                        <Input
-                          value={newQuestion.options[2]}
-                          onChange={(e) =>
-                            setNewQuestion({
-                              ...newQuestion,
-                              options: [
-                                newQuestion.options[0],
-                                newQuestion.options[1],
-                                e.target.value,
-                                newQuestion.options[3],
-                              ],
-                            })
-                          }
-                          placeholder="c"
-                        />
-                        <Input
-                          value={newQuestion.options[3]}
-                          onChange={(e) =>
-                            setNewQuestion({
-                              ...newQuestion,
-                              options: [
-                                newQuestion.options[0],
-                                newQuestion.options[1],
-                                newQuestion.options[2],
-                                e.target.value,
-                              ],
-                            })
-                          }
-                          placeholder="d"
-                        />
-                      </Stack>
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel>Correct Option</FormLabel>
-                      <Input
-                        value={newQuestion.correctOption}
-                        onChange={(e) =>
-                          setNewQuestion({
-                            ...newQuestion,
-                            correctOption: e.target.value,
-                          })
-                        }
-                        placeholder="Correct option"
-                      />
-                    </FormControl>
-                  </>
-                )}
-
-                {newQuestion.questionType === "trueFalse" && (
-                  <>
-                    <FormControl>
-                      <FormLabel>Correct Option</FormLabel>
-                      <RadioGroup
-                        value={newQuestion.correctOption}
-                        onChange={(value) =>
-                          setNewQuestion({
-                            ...newQuestion,
-                            correctOption: value,
-                          })
-                        }
-                      >
-                        <Stack spacing={1}>
-                          <Radio value="true">True</Radio>
-                          <Radio value="false">False</Radio>
-                        </Stack>
-                      </RadioGroup>
-                    </FormControl>
-                  </>
-                )}
-
-                {newQuestion.questionType === "fillBlank" && (
-                  <>
-                    <FormControl>
-                      <FormLabel>Correct Option</FormLabel>
-                      <Input
-                        value={newQuestion.correctOption}
-                        onChange={(e) =>
-                          setNewQuestion({
-                            ...newQuestion,
-                            correctOption: e.target.value,
-                          })
-                        }
-                        placeholder="Correct option"
-                      />
-                    </FormControl>
-                  </>
-                )}
-
-                {newQuestion.questionType && (
-                  <Button type="submit" colorScheme="teal">
-                    Submit
-                  </Button>
-                )}
-              </Stack>
-            </ModalBody>
-          </form>
-        </ModalContent>
-      </Modal>
     </>
   );
 };

@@ -119,8 +119,10 @@ const MyProfile = () => {
             alt={getAltText()}
           />
         </div>
+        
+        <div className="user-details">
         <label htmlFor="profilePicUpload" className="profile-pic-label">
-          <Button mt={4} colorScheme="teal" size="sm" as="span">
+          <Button mb={2} colorScheme="teal" size="sm" as="span">
             Change Profile Picture
           </Button>
           <input
@@ -131,7 +133,6 @@ const MyProfile = () => {
             id="profilePicUpload"
           />
         </label>
-        <div className="user-details">
           <h1>
             <strong>About Me</strong>
           </h1>

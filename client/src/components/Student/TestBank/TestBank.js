@@ -95,7 +95,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
   const totalPages = Math.ceil(examData.length / examsPerPage);
 
   return (
-    <div className="examMainContaioner">
+    <div className="examMainContainer">
       <div className="examMainContent">
         <div className="examMainContent__header">
           <h1>Available Exams</h1>
@@ -104,14 +104,17 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
         <div className="examMainContent__content">
           {currentExams &&
             currentExams.map((exam, index) => (
-              <div className="examMainContent__content-items" key={exam._id}>
-                <h1>{exam.name}</h1>
-                <p>Subject: {exam.subject}</p>
-                <p>Number of Questions: {exam.numberOfQuestions}</p>
-                <p>
-                  Duration of Exam:{" "}
-                  {formatTime(convertSecondsToTime(exam.duration))}
-                </p>
+              <div className="examMainContent__content-item" key={exam._id}>
+                  <h1>{exam.name}</h1>
+                  <div className="exam-info">
+                    <p>Subject: {exam.subject}</p>
+                    <p>Number of Questions: {exam.numberOfQuestions}</p>
+                    <p>
+                      Duration of Exam:{" "}
+                      {formatTime(convertSecondsToTime(exam.duration))}
+                    </p>
+                  </div>
+
                 <Button
                   style={{ width: "125px", height: "30px", fontSize: "15px" }}
                   colorScheme="teal"
@@ -144,9 +147,9 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
         </div>
       </div>
 
-      <Modal isOpen={isInfoOpen} onClose={handleInfoCloseModal}>
+      <Modal  isOpen={isInfoOpen} onClose={handleInfoCloseModal}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={2}>
           <ModalHeader>{selectedExam[0]?.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -161,7 +164,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                 complete this exam
               </p>
               <p>
-                There are {selectedExam[0]?.numberOfQuestions} questions in this
+                There are {selectedExam[0]?.numberOfQuestions} questions in the
                 exam
               </p>
             </Stack>
