@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ExamSession.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@chakra-ui/react";
 import Question from "./Question";
@@ -8,6 +8,7 @@ import Question from "./Question";
 const ExamSession = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const location = useLocation();
   const [quiz, setQuiz] = useState({});
   const [currentIndx, setCurrentIndx] = useState(0);
   const [chosenData, setChosenData] = useState({});
@@ -35,7 +36,7 @@ const ExamSession = () => {
   useEffect(() => {
     const fetchExamSessionData = async () => {
       try {
-        const quizId = params.id;
+        const quizId = location.pathname.split("/").pop();
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
@@ -107,10 +108,6 @@ const ExamSession = () => {
       ...prevAnswers,
       [qId]: answer,
     }));
-  };
-
-  const onClick = () => {
-    navigate("/home");
   };
 
   const renderedQuestion = quiz.questions ? quiz.questions[currentIndx] : null;
@@ -278,7 +275,11 @@ const ExamSession = () => {
               </div>
             </div>
             <div>
-              <Button colorScheme="teal" borderRadius="12px" onClick={onClick}>
+              <Button
+                colorScheme="teal"
+                borderRadius="12px"
+                onClick={() => navigate("/home")}
+              >
                 Go Home
               </Button>
             </div>

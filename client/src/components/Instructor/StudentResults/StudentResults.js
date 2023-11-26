@@ -4,8 +4,10 @@ import { Button } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { Pagination } from "@mantine/core";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const StudentResults = ({ activeNavItem, onNavItemClick }) => {
+  const navigate = useNavigate();
   const [examResults, setExamResults] = useState([]);
   const [pageFocus, setPageFocus] = useState(1);
   var reportsPerPage = 8;
@@ -52,11 +54,11 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
   };
 
   useEffect(() => {
-    checkTwoColumnLayout(); 
-    window.addEventListener("resize", checkTwoColumnLayout); 
+    checkTwoColumnLayout();
+    window.addEventListener("resize", checkTwoColumnLayout);
 
     return () => {
-      window.removeEventListener("resize", checkTwoColumnLayout); 
+      window.removeEventListener("resize", checkTwoColumnLayout);
     };
   }, []);
 
@@ -106,9 +108,7 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
                             ? "active"
                             : ""
                         }
-                        onClick={() =>
-                          onNavItemClick(`exam-feedback/${exam._id}`)
-                        }
+                        onClick={() => navigate(`exam-feedback/${exam._id}`)}
                       >
                         View Feedback
                       </Button>
@@ -165,7 +165,8 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
                             : ""
                         }
                         onClick={() =>
-                          onNavItemClick(`exam-feedback/${exam._id}`)
+                          // onNavItemClick(`exam-feedback/${exam._id}`)
+                          navigate(`exam-feedback/${exam._id}`)
                         }
                       >
                         View Feedback
@@ -193,6 +194,7 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
           />
         </div>
       </div>
+      <Outlet />
     </div>
   );
 };

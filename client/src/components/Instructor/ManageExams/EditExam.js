@@ -20,7 +20,7 @@ import {
 } from "../../../redux/examSlice.js";
 import { Pagination } from "@mantine/core";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import {
   FormControl,
   FormLabel,
@@ -609,6 +609,7 @@ const EditExam = () => {
           />
         </div>
       </div>
+      <Outlet />
     </>
   );
 };

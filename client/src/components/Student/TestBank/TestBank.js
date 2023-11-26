@@ -10,6 +10,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { ModalCloseButton, ModalOverlay, Stack } from "@chakra-ui/react";
 
 const TestBank = ({ activeNavItem, onNavItemClick }) => {
+  const navigate = useNavigate();
   const toast = useToast();
   const dispatch = useDispatch();
   const [examData, setExamData] = useState([]);
@@ -65,7 +66,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
   }, []);
 
   const onClick = (quizId) => {
-    onNavItemClick(`exam-session/${quizId}`);
+    navigate(`/exam-session/${quizId}`);
   };
 
   const pageSwitchHandler = (value) => {

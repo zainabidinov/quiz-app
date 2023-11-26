@@ -31,10 +31,9 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 220px;
+  width: 245px;
   height: 100%;
   align-items: center;
-  /* background-color: #fff; */
   font-size: 28px;
   padding-top: 15px;
 }
@@ -45,6 +44,11 @@
   font-size: 28px;
   font: bold;
   color: #000;
+  cursor: pointer;
+}
+
+.sidebar nav {
+  width: 100%;
 }
 
 ul {
@@ -53,7 +57,7 @@ ul {
 }
 
 li {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 300;
   list-style-type: none;
   padding: 15px;
@@ -62,7 +66,13 @@ li {
 }
 
 li:hover {
-  background-color: #edf1f5;
+  background-color: #e6f7ff;
+}
+
+.active {
+  background-color: #e6f7ff;    
+  border-right: 2px solid rgb(24, 144, 160);
+  color: rgb(24, 144, 160);
 }
 
 span {

@@ -13,7 +13,7 @@ const MultipleChoice = ({ options, handleUserAnswers, selectedAnswer }) => {
         Choose your answer
       </FormLabel>
       <RadioGroup mt={4} value={selectedAnswer} onChange={userAnswerChange}>
-        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+        <Grid templateColumns={{base:"1fr", md:"repeat(2, 1fr)"}} gap={4}>
           {options.map((option, index) => (
             <Radio
               size="lg"

@@ -3,7 +3,7 @@ import "./ManageExams.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import { setExam } from "../../../redux/examSlice";
@@ -80,7 +80,8 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
 
       if (success) {
         dispatch(setExam(data));
-        onNavItemClick(`quizzes/edit-exam/${data._id}`);
+        // onNavItemClick(`quizzes/edit-exam/${data._id}`);
+        navigate(`quizzes/edit-exam/${data._id}`);
       } else {
       }
     } catch (error) {
@@ -208,34 +209,35 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
             >
               Add Exam
             </Button> */}
-            
           </div>
         )}
-        <Button
-          className={`btn-addExam ${
-            activeNavItem === "quizzes/create" ? "active" : ""
-          }`}
-          colorScheme="teal"
-          size="sm"
-          onClick={() => onNavItemClick("quizzes/create")}
-          ml={2}
-        >
-          Add Exam
-        </Button>
+        <Link to="quizzes/create">
+          <Button
+            className={`btn-addExam ${
+              activeNavItem === "quizzes/create" ? "active" : ""
+            }`}
+            colorScheme="teal"
+            size="sm"
+            // onClick={() => onNavItemClick("quizzes/create")}
+            ml={2}
+          >
+            Add Exam
+          </Button>
+        </Link>
         <div className="paginationContainer">
-              <Pagination
-                style={{ marginTop: "16px" }}
-                size="sm"
-                total={totalPages}
-                perPage={1}
-                value={pageFocus}
-                onChange={pageSwitchHandler}
-                nextLabel={pageFocus === totalPages ? null : "Next"}
-                prevLabel={pageFocus === 1 ? null : "Previous"}
-                nextDisabled={pageFocus === totalPages}
-                prevDisabled={pageFocus === 1}
-              />
-            </div>
+          <Pagination
+            style={{ marginTop: "16px" }}
+            size="sm"
+            total={totalPages}
+            perPage={1}
+            value={pageFocus}
+            onChange={pageSwitchHandler}
+            nextLabel={pageFocus === totalPages ? null : "Next"}
+            prevLabel={pageFocus === 1 ? null : "Previous"}
+            nextDisabled={pageFocus === totalPages}
+            prevDisabled={pageFocus === 1}
+          />
+        </div>
       </div>
     </>
   );

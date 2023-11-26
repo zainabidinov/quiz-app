@@ -1,22 +1,24 @@
 import React from "react";
 import "./Home.css";
 import Sidebar from "../../Sidebar/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../../redux/userSlice";
 import { useEffect, useState } from "react";
 import ManageExams from "../../Instructor/ManageExams/ManageExams";
-import StudentResults from "../../Instructor/StudentResults/StudentResults";
-import MyProfile from "../MyProfile/MyProfile";
-import MyResults from "../../Student/MyResults/MyResults";
+
 import CreateExams from "../../Instructor/ManageExams/CreateExams";
 import { useToast, Spinner } from "@chakra-ui/react";
-import EditExam from "../../Instructor/ManageExams/EditExam";
-import TestBank from "../../Student/TestBank/TestBank";
-import ExamSession from "../../Student/ExamSession/ExamSession";
-import ExamFeedback from "../ExamFeedback/ExamFeedback";
-import Users from "../../Admin/UsersInfo/Users";
+
 import MobileMenu from "../../MobileMenu/MobileMenu";
+import StudentResults from "../../Instructor/StudentResults/StudentResults";
+import MyProfile from "../MyProfile/MyProfile";
+import EditExam from "../../Instructor/ManageExams/EditExam";
+import ExamFeedback from "../ExamFeedback/ExamFeedback";
+import TestBank from "../../Student/TestBank/TestBank";
+import MyResults from "../../Student/MyResults/MyResults";
+import ExamSession from "../../Student/ExamSession/ExamSession";
+import Users from "../../Admin/UsersInfo/Users";
 
 const Home = () => {
   const toast = useToast();
@@ -26,91 +28,51 @@ const Home = () => {
   const [activeNavItem, setActiveNavItem] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleNavItemClick = (navItem) => {
-    if (navItem !== "home") {
-      if (navItem.startsWith("quizzes/edit-exam")) {
-        setActiveNavItem("quizzes/edit-exam/:id");
-        navigate(`/home/${navItem}`);
-      } else if (navItem.startsWith("exam-feedback")) {
-        setActiveNavItem("exam-feedback/:id");
-        navigate(`/home/${navItem}`);
-      } else if (navItem.startsWith("exam-session")) {
-        setActiveNavItem("exam-session/:id");
-        navigate(`/${navItem}`);
-      } else {
-        setActiveNavItem(navItem);
-        navigate(`/home/${navItem}`);
-      }
-    } else {
-      setActiveNavItem("home");
-      navigate("/home");
-    }
   };
 
   const renderContent = () => {
     if (currentUser && currentUser.admin === true) {
       return (
         <div>
-          {activeNavItem === "home" && (
-            <Users
-              activeNavItem={activeNavItem}
-              onNavItemClick={handleNavItemClick}
-            />
-          )}
-          {activeNavItem === "quizzes" && (
-            <ManageExams
-              activeNavItem={activeNavItem}
-              onNavItemClick={handleNavItemClick}
-            />
-          )}
+          {location.pathname === "/home" && <Users />}
+          {location.pathname === "/home/quizzes" && <ManageExams />}
         </div>
       );
     } else {
       if (currentUser && currentUser.userType === "student") {
         return (
           <div>
-            {activeNavItem === "home" && (
-              <TestBank
-                activeNavItem={activeNavItem}
-                onNavItemClick={handleNavItemClick}
-              />
+            {location.pathname === "/home" && <TestBank />}
+            {location.pathname === "/home/student-results" && <MyResults />}
+            {location.pathname === "/home/profile" && <MyProfile />}
+            {location.pathname.startsWith("/home/exam-feedback") && (
+              <ExamFeedback />
             )}
-            {activeNavItem === "student-results" && (
-              <MyResults
-                activeNavItem={activeNavItem}
-                onNavItemClick={handleNavItemClick}
-              />
-            )}
-            {activeNavItem === "profile" && <MyProfile />}
-            {activeNavItem === "exam-session/:id" && <ExamSession />}
-            {activeNavItem === "exam-feedback/:id" && <ExamFeedback />}
+            {location.pathname.startsWith("/exam-session") && <ExamSession />}
           </div>
         );
       } else if (currentUser && currentUser.userType === "teacher") {
         return (
           <div>
-            {activeNavItem === "home" && (
-              <ManageExams
-                activeNavItem={activeNavItem}
-                onNavItemClick={handleNavItemClick}
-              />
+            {location.pathname === "/home" && <ManageExams />}
+
+            {location.pathname === "/home/exam-results" && <StudentResults />}
+
+            {location.pathname === "/home/profile" && <MyProfile />}
+
+            {location.pathname === "/home/quizzes/create" && <CreateExams />}
+
+            {location.pathname.startsWith("/home/quizzes/edit-exam/") && (
+              <EditExam />
             )}
 
-            {activeNavItem === "quizzes/create" && <CreateExams />}
-            {activeNavItem === "exam-results" && (
-              <StudentResults
-                activeNavItem={activeNavItem}
-                onNavItemClick={handleNavItemClick}
-              />
+            {location.pathname.startsWith("/home/exam-feedback/") && (
+              <ExamFeedback />
             )}
-            {activeNavItem === "profile" && <MyProfile />}
-            {activeNavItem === "quizzes/edit-exam/:id" && <EditExam />}
-            {activeNavItem === "exam-feedback/:id" && <ExamFeedback />}
           </div>
         );
       }
@@ -175,24 +137,19 @@ const Home = () => {
 
       {/* Sidebar */}
       <div className="sidebar">
-        {/* <Sidebar
-          currentUser={currentUser}
-          activeNavItem={activeNavItem}
-          onNavItemClick={handleNavItemClick}
-        /> */}
         <nav>
-          <h1>ONEQUIZ</h1>
+          <h1 onClick={() => navigate("")}>ONEQUIZ</h1>
           {currentUser && currentUser.admin === true ? (
             <ul>
               <li
                 className={activeNavItem === "home" ? "active" : ""}
-                onClick={() => handleNavItemClick("home")}
+                // onClick={() => handleNavItemClick("home")}
               >
                 <span className="mdi mdi-account-multiple-outline"></span> Users
               </li>
               <li
                 className={activeNavItem === "quizzes" ? "active" : ""}
-                onClick={() => handleNavItemClick("quizzes")}
+                // onClick={() => handleNavItemClick("quizzes")}
               >
                 <span className="mdi mdi-account-circle"></span> Exams
               </li>
@@ -202,23 +159,27 @@ const Home = () => {
               {currentUser && currentUser.userType === "student" && (
                 <ul>
                   <li
-                    className={activeNavItem === "home" ? "active" : ""}
-                    onClick={() => handleNavItemClick("home")}
+                    className={location.pathname === "/home" ? "active" : ""}
+                    onClick={() => navigate("")}
                   >
                     <span className="mdi mdi-home"></span> Home
                   </li>
 
                   <li
                     className={
-                      activeNavItem === "student-results" ? "active" : ""
+                      location.pathname === "/home/student-results"
+                        ? "active"
+                        : ""
                     }
-                    onClick={() => handleNavItemClick("student-results")}
+                    onClick={() => navigate("student-results")}
                   >
                     <span className="mdi mdi-list-status"></span> My Results
                   </li>
                   <li
-                    className={activeNavItem === "profile" ? "active" : ""}
-                    onClick={() => handleNavItemClick("profile")}
+                    className={
+                      location.pathname === "/home/profile" ? "active" : ""
+                    }
+                    onClick={() => navigate("profile")}
                   >
                     <span className="mdi mdi-account-circle"></span> My Profile
                   </li>
@@ -227,22 +188,18 @@ const Home = () => {
               {currentUser && currentUser.userType === "teacher" && (
                 <ul>
                   <li
-                    className={activeNavItem === "quizzes" ? "active" : ""}
-                    onClick={() => handleNavItemClick("home")}
+                    className={((location.pathname === "/home") || (location.pathname.startsWith("/home/quizzes/edit-exam"))) ? "active" : ""}
+                    onClick={() => navigate("")}
                   >
                     <span className="mdi mdi-home"></span> Manage Exams
                   </li>
-                  <li
-                    className={activeNavItem === "exam-results" ? "active" : ""}
-                    onClick={() => handleNavItemClick("exam-results")}
-                  >
+
+                  <li className={location.pathname === "/home/exam-results" ? "active" : ""} onClick={() => navigate("exam-results")}>
                     <span className="mdi mdi-monitor-multiple"></span> Student
                     Results
                   </li>
-                  <li
-                    className={activeNavItem === "profile" ? "active" : ""}
-                    onClick={() => handleNavItemClick("profile")}
-                  >
+
+                  <li className={location.pathname === "/home/profile" ? "active" : ""} onClick={() => navigate("profile")}>
                     <span className="mdi mdi-account-circle"></span> My Profile
                   </li>
                 </ul>
@@ -268,12 +225,7 @@ const Home = () => {
             <div className="mobile-menu-closed"></div>
           ) : (
             <div className="mobile-menu-open mobile-sidebar">
-              <MobileMenu
-                currentUser={currentUser}
-                activeNavItem={activeNavItem}
-                onNavItemClick={handleNavItemClick}
-                onToggleMenu={toggleMenu}
-              />
+              <MobileMenu currentUser={currentUser} onToggleMenu={toggleMenu} />
             </div>
           )}
 
@@ -290,10 +242,16 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="hero">{renderContent()}</div>
+        <div className="hero">
+          {/* <HomeHero /> */}
+          {renderContent()}
+        </div>
       </div>
+      <Outlet />
     </div>
   );
 };
 
 export default Home;
+
+export { ManageExams, CreateExams, EditExam };

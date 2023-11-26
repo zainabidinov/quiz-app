@@ -4,12 +4,14 @@ import { Button } from "@chakra-ui/react";
 import axios from "axios";
 import { InfoIcon } from "@chakra-ui/icons";
 import { Pagination } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 const MyResults = ({ activeNavItem, onNavItemClick }) => {
   const [myResults, setMyResults] = useState([]);
   const [pageFocus, setPageFocus] = useState(1);
   var reportsPerPage = 8;
   const [isTwoColumnLayout, setIsTwoColumnLayout] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTheStudentResult = async () => {
@@ -102,9 +104,7 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
                           ? "active"
                           : ""
                       }
-                      onClick={() =>
-                        onNavItemClick(`exam-feedback/${exam._id}`)
-                      }
+                      onClick={() => navigate(`exam-feedback/${exam._id}`)}
                     >
                       View Feedback
                     </Button>
@@ -153,7 +153,7 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
                       className={
                         activeNavItem === "exam-feedback/:id" ? "active" : ""
                       }
-                      onClick={() => onClick(exam._id)}
+                      onClick={() => navigate(`exam-feedback/${exam._id}`)}
                     >
                       View Feedback
                     </Button>

@@ -8,7 +8,7 @@ import {
 import "./CreateExamForm.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { Button, Input, Stack, Select } from "@chakra-ui/react";
 
 const CreateExams = () => {
@@ -151,6 +151,7 @@ const CreateExams = () => {
           </Button>
         </Stack>
       </form>
+      <Outlet />
     </div>
   );
 };

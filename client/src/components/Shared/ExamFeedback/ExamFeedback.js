@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ExamFeedback.css";
-import { useParams } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import { Box, Grid, Heading, Text, Radio, RadioGroup } from "@chakra-ui/react";
 
 const ExamFeedback = () => {
-  const params = useParams();
+  const location = useLocation();
   const [examRecord, setExamRecord] = useState([]);
 
   const fetchExamResult = async () => {
     try {
-      let recordId = params.id;
+      let recordId = location.pathname.split("/").pop();
       const token = localStorage.getItem("token");
 
       const res = await axios.get(

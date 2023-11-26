@@ -26,7 +26,7 @@ const MobileMenu = ({
             <li
               className={activeNavItem === "home" ? "active" : ""}
               onClick={() => {
-                onNavItemClick("home");
+                navigate("");
                 onToggleMenu();
               }}
             >
@@ -35,7 +35,7 @@ const MobileMenu = ({
             <li
               className={activeNavItem === "quizzes" ? "active" : ""}
               onClick={() => {
-                onNavItemClick("quizzes");
+                navigate("quizzes");
                 onToggleMenu();
               }}
             >
@@ -49,7 +49,7 @@ const MobileMenu = ({
                 <li
                   className={activeNavItem === "home" ? "active" : ""}
                   onClick={() => {
-                    onNavItemClick("home");
+                    navigate("");
                     onToggleMenu();
                   }}
                 >
@@ -61,7 +61,7 @@ const MobileMenu = ({
                     activeNavItem === "student-results" ? "active" : ""
                   }
                   onClick={() => {
-                    onNavItemClick("student-results");
+                    navigate("student-results");
                     onToggleMenu();
                   }}
                 >
@@ -70,7 +70,7 @@ const MobileMenu = ({
                 <li
                   className={activeNavItem === "profile" ? "active" : ""}
                   onClick={() => {
-                    onNavItemClick("profile");
+                    navigate("profile");
                     onToggleMenu();
                   }}
                 >
@@ -83,7 +83,7 @@ const MobileMenu = ({
                 <li
                   className={activeNavItem === "quizzes" ? "active" : ""}
                   onClick={() => {
-                    onNavItemClick("home");
+                    navigate("");
                     onToggleMenu();
                   }}
                 >
@@ -92,7 +92,7 @@ const MobileMenu = ({
                 <li
                   className={activeNavItem === "exam-results" ? "active" : ""}
                   onClick={() => {
-                    onNavItemClick("exam-results");
+                    navigate("exam-results");
                     onToggleMenu();
                   }}
                 >
@@ -101,7 +101,7 @@ const MobileMenu = ({
                 <li
                   className={activeNavItem === "profile" ? "active" : ""}
                   onClick={() => {
-                    onNavItemClick("profile");
+                    navigate("profile");
                     onToggleMenu();
                   }}
                 >
