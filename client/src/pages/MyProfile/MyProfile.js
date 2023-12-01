@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentUser } from "../../../redux/userSlice";
+import { setCurrentUser } from "../../redux/userSlice";
 import { Button, useToast } from "@chakra-ui/react";
-import defaultProfilePic from "../../../assets/images/default-profile-pic.png";
+import defaultProfilePic from "../../assets/images/default-profile-pic.png";
 import "./MyProfile.css";
 
 const MyProfile = () => {

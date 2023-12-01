@@ -2,10 +2,10 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 
-import Signup from "./components/Admin/Signup/Signup";
-import Login from "./components/Shared/Login/Login";
-import Home from "./components/Shared/Home/Home";
-import ExamSession from "./components/Student/ExamSession/ExamSession";
+import Signup from "./pages/Signup/Signup";
+import Login from "./pages/Login/Login";
+import Home from "./pages/Home/Home";
+import ExamSession from "./pages/Student/ExamSession/ExamSession";
 
 function App() {
   return (

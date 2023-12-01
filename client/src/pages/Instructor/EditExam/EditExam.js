@@ -11,6 +11,7 @@ import {
   ModalFooter,
   Input,
   Stack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -20,7 +21,7 @@ import {
 } from "../../../redux/examSlice.js";
 import { Pagination } from "@mantine/core";
 import axios from "axios";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import {
   FormControl,
   FormLabel,
@@ -33,10 +34,11 @@ import {
   Radio,
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
+import { useFormik } from "formik";
 
 const EditExam = () => {
   const API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
-  const params = useParams();
+  const location = useLocation();
   const toast = useToast();
   const dispatch = useDispatch();
   const currentExam = useSelector((state) => state.exam);
@@ -57,17 +59,43 @@ const EditExam = () => {
   const isLimitReached = currentExam.exam.questions.length;
 
   const [pageFocus, setPageFocus] = useState(1);
-  const questionsPerPage = 4;
+  const questionsPerPage = 6;
 
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
 
   useEffect(() => {
-    const hours = Math.floor(currentExam.exam.duration / 3600);
-    const minutes = Math.floor((currentExam.exam.duration % 3600) / 60);
-    setHours(hours);
-    setMinutes(minutes);
+    const fetchQuiz = async () => {
+      let quizId = location.pathname.split("/").pop();
+
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await axios.get(
+          `https://quiz-app-zainabidinov-api.onrender.com/api/quizzes/getQuiz/${quizId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const { data } = response.data;
+
+        dispatch(setExam(data));
+
+        const hours = Math.floor(currentExam.exam.duration / 3600);
+        const minutes = Math.floor((currentExam.exam.duration % 3600) / 60);
+        setHours(hours);
+        setMinutes(minutes);
+      } catch (error) {}
+    };
+
+    fetchQuiz();
   }, [currentExam.exam.duration]);
 
   const displayNotification = (message, status) => {
@@ -102,6 +130,93 @@ const EditExam = () => {
   const handleQuestionCloseModal = () => {
     setIsQuestionOpen(false);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      numberOfQuestions: "",
+      duration: "",
+    },
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.name) {
+        errors.name = "Please provide exam name";
+      }
+      if (!values.numberOfQuestions) {
+        errors.numberOfQuestions = "Please provide number of questions";
+      }
+      if (!values.name) {
+        errors.name = "Please provide duration both in hours and minutes";
+      }
+    },
+    onSubmit: async (values) => {
+      values.preventDefault();
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const totalSeconds = hours * 3600 + minutes * 60;
+
+        const updatedExamData = {
+          name: values.name,
+          numberOfQuestions: values.numberOfQuestions,
+          duration: totalSeconds,
+        };
+
+        dispatch(
+          setExamProperty({
+            type: "SET_EXAM_NAME",
+            value: updatedExam.name,
+          })
+        );
+        dispatch(
+          setExamProperty({
+            type: "SET_NUMBER_OF_QUESTIONS",
+            value: updatedExam.numberOfQuestions,
+          })
+        );
+        dispatch(
+          setExamProperty({
+            type: "SET_EXAM_DURATION",
+            value: totalSeconds,
+          })
+        );
+
+        let quizId = location.pathname.split("/").pop();
+
+        const response = await axios.put(
+          `${API_URL}/update-quiz/${quizId}`,
+          updatedExamData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          displayNotification(response.data.message, "success");
+
+          const { name, numberOfQuestions, duration } = response.data.data;
+          dispatch(setExam(response.data.data));
+          setUpdatedExam({
+            ...updatedExam,
+            name: name,
+            numberOfQuestions: numberOfQuestions,
+            duration: duration,
+          });
+          setIsExamOpen(false);
+        } else {
+          displayNotification(response.data.message, "error");
+        }
+      } catch (error) {
+        displayNotification(error.message, "error");
+      }
+    },
+  });
 
   const onExamFormSubmit = async (event) => {
     event.preventDefault();
@@ -138,7 +253,7 @@ const EditExam = () => {
         })
       );
 
-      let quizId = params.id;
+      let quizId = location.pathname.split("/").pop();
 
       const response = await axios.put(
         `${API_URL}/update-quiz/${quizId}`,
@@ -178,7 +293,7 @@ const EditExam = () => {
       if (!token) {
         throw new Error("No token found");
       }
-      let quizId = params.id;
+      let quizId = location.pathname.split("/").pop();
       const response = await axios.post(
         `${API_URL}/add-question/${quizId}`,
         newQuestion,
@@ -214,7 +329,7 @@ const EditExam = () => {
         throw new Error("No token found");
       }
 
-      let quizId = params.id;
+      let quizId = location.pathname.split("/").pop();
 
       const response = await axios.delete(
         `${API_URL}/delete-question/${quizId}/${questionId}`,
@@ -279,24 +394,28 @@ const EditExam = () => {
           <ModalContent mx={2}>
             <ModalHeader>Edit Exam</ModalHeader>
             <ModalCloseButton />
-            <form onSubmit={onExamFormSubmit}>
+            <form onSubmit={formik.handleSubmit}>
               <ModalBody>
                 <Stack spacing={4}>
-                  <FormControl>
+                  <FormControl isInvalid={formik.errors.name && formik.touched.name}>
+                    
                     <FormLabel>Name of Exam</FormLabel>
                     <Input
                       placeholder={name}
-                      value={updatedExam.name}
-                      onChange={(e) =>
-                        setUpdatedExam({
-                          ...updatedExam,
-                          name: e.target.value,
-                        })
-                      }
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBLur}
+                      name="name"
                     />
+                    <FormErrorMessage>{formik.errors.subject}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl
+                    isInvalid={
+                      formik.errors.numberOfQuestions &&
+                      formik.touched.numberOfQuestions
+                    }
+                  >
                     <FormLabel>Number of Exam Questions</FormLabel>
                     <NumberInput min={1}>
                       <NumberInputField
@@ -304,18 +423,21 @@ const EditExam = () => {
                         _focus={{ boxShadow: "none" }}
                         bg="white"
                         placeholder={numberOfQuestions}
-                        value={updatedExam.numberOfQuestions}
-                        onChange={(e) =>
-                          setUpdatedExam({
-                            ...updatedExam,
-                            numberOfQuestions: parseInt(e.target.value),
-                          })
-                        }
+                        value={formik.values.numberOfQuestions}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBLur}
                       />
                     </NumberInput>
+                    <FormErrorMessage>
+                      {formik.errors.numberOfQuestions}
+                    </FormErrorMessage>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl
+                    isInvalid={
+                      formik.errors.duration && formik.touched.duration
+                    }
+                  >
                     <FormLabel>Duration of Exam</FormLabel>
                     <Stack direction="row">
                       <NumberInput min={0}>
@@ -344,7 +466,12 @@ const EditExam = () => {
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="teal" mr={3} type="submit">
+                <Button
+                  colorScheme="teal"
+                  mr={3}
+                  type="submit"
+                  isDisabled={!formik.isValid}
+                >
                   Save
                 </Button>
                 <Button onClick={handleExamCloseModal}>Cancel</Button>
@@ -381,7 +508,9 @@ const EditExam = () => {
             <div>
               <div className="editQuestions">
                 <div className="editQuestions__absence">
-                  <p>No Questions For Exam Added Yet</p>
+                  <p style={{ marginBlock: "10px" }}>
+                    Please add question(s) for the quiz
+                  </p>
                   <Button
                     colorScheme="teal"
                     mr={3}

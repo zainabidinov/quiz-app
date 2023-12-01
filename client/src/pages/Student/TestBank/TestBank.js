@@ -58,7 +58,6 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
 
         setExamData(data);
       } catch (error) {
-        displayNotification(error.message, "error");
       }
     };
 

@@ -1,24 +1,22 @@
 import React from "react";
 import "./Home.css";
-import Sidebar from "../../Sidebar/Sidebar";
-import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentUser } from "../../../redux/userSlice";
+import { setCurrentUser } from "../../redux/userSlice";
 import { useEffect, useState } from "react";
-import ManageExams from "../../Instructor/ManageExams/ManageExams";
 
-import CreateExams from "../../Instructor/ManageExams/CreateExams";
 import { useToast, Spinner } from "@chakra-ui/react";
 
-import MobileMenu from "../../MobileMenu/MobileMenu";
-import StudentResults from "../../Instructor/StudentResults/StudentResults";
-import MyProfile from "../MyProfile/MyProfile";
-import EditExam from "../../Instructor/ManageExams/EditExam";
 import ExamFeedback from "../ExamFeedback/ExamFeedback";
-import TestBank from "../../Student/TestBank/TestBank";
-import MyResults from "../../Student/MyResults/MyResults";
-import ExamSession from "../../Student/ExamSession/ExamSession";
-import Users from "../../Admin/UsersInfo/Users";
+import CreateExam from "../Instructor/CreateExam/CreateExam";
+import EditExam from "../Instructor/EditExam/EditExam";
+import ManageExams from "../Instructor/ManageExams/ManageExams";
+import StudentResults from "../Instructor/StudentResults/StudentResults";
+import MyProfile from "../MyProfile/MyProfile";
+import ExamSession from "../Student/ExamSession/ExamSession";
+import MyResults from "../Student/MyResults/MyResults";
+import TestBank from "../Student/TestBank/TestBank";
+import MobileMenu from "../../components/MobileMenu/MobileMenu";
 
 const Home = () => {
   const toast = useToast();
@@ -38,7 +36,7 @@ const Home = () => {
     if (currentUser && currentUser.admin === true) {
       return (
         <div>
-          {location.pathname === "/home" && <Users />}
+          {location.pathname === "/home" && <TestBank />}
           {location.pathname === "/home/quizzes" && <ManageExams />}
         </div>
       );
@@ -64,7 +62,7 @@ const Home = () => {
 
             {location.pathname === "/home/profile" && <MyProfile />}
 
-            {location.pathname === "/home/quizzes/create" && <CreateExams />}
+            {location.pathname === "/home/quizzes/create" && <CreateExam />}
 
             {location.pathname.startsWith("/home/quizzes/edit-exam/") && (
               <EditExam />
@@ -188,18 +186,33 @@ const Home = () => {
               {currentUser && currentUser.userType === "teacher" && (
                 <ul>
                   <li
-                    className={((location.pathname === "/home") || (location.pathname.startsWith("/home/quizzes/edit-exam"))) ? "active" : ""}
+                    className={
+                      location.pathname === "/home" ||
+                      location.pathname.startsWith("/home/quizzes/edit-exam")
+                        ? "active"
+                        : ""
+                    }
                     onClick={() => navigate("")}
                   >
                     <span className="mdi mdi-home"></span> Manage Exams
                   </li>
 
-                  <li className={location.pathname === "/home/exam-results" ? "active" : ""} onClick={() => navigate("exam-results")}>
+                  <li
+                    className={
+                      location.pathname === "/home/exam-results" ? "active" : ""
+                    }
+                    onClick={() => navigate("exam-results")}
+                  >
                     <span className="mdi mdi-monitor-multiple"></span> Student
                     Results
                   </li>
 
-                  <li className={location.pathname === "/home/profile" ? "active" : ""} onClick={() => navigate("profile")}>
+                  <li
+                    className={
+                      location.pathname === "/home/profile" ? "active" : ""
+                    }
+                    onClick={() => navigate("profile")}
+                  >
                     <span className="mdi mdi-account-circle"></span> My Profile
                   </li>
                 </ul>
@@ -233,11 +246,11 @@ const Home = () => {
           {/* <h1>ONEQUIZ</h1> */}
           <p>
             {currentUser && !currentUser.admin && (
-              <p>
-                {currentUser.firstName} {currentUser.lastName} |{" "}
+              <div>
+                {currentUser.firstName} {""}{currentUser.lastName} |{" "}
                 {currentUser.userType[0].toUpperCase() +
                   currentUser.userType.slice(1)}
-              </p>
+              </div>
             )}
           </p>
         </div>
@@ -253,5 +266,3 @@ const Home = () => {
 };
 
 export default Home;
-
-export { ManageExams, CreateExams, EditExam };

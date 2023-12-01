@@ -17,7 +17,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [pageFocus, setPageFocus] = useState(1);
-  const examsPerPage = 5;
+  const examsPerPage = 6;
 
   const displayNotification = (message, status) => {
     toast({
@@ -49,7 +49,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
 
         setExamData(data);
       } catch (error) {
-        displayNotification(error.message, "error");
+        // displayNotification("No exam found in the database", "error");
       }
     };
 
@@ -79,7 +79,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       const { success, message, data } = response.data;
 
       if (success) {
-        dispatch(setExam(data));
+        // dispatch(setExam(data));
         // onNavItemClick(`quizzes/edit-exam/${data._id}`);
         navigate(`quizzes/edit-exam/${data._id}`);
       } else {
@@ -134,7 +134,7 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
   return (
     <>
       <div className="manage-exams">
-        <div className="manage-exams__header">Available Exams</div>
+        <div className="manage-exams__header">Manage Exams</div>
         {currentExams.length > 0 ? (
           <div className="examContent">
             {currentExams.map((exam) => (
@@ -182,33 +182,10 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
                 </div>
               </div>
             ))}
-
-            {/* <div className="paginationContainer">
-              <Pagination
-                style={{ marginTop: "16px" }}
-                size="sm"
-                total={totalPages}
-                perPage={1}
-                value={pageFocus}
-                onChange={pageSwitchHandler}
-                nextLabel={pageFocus === totalPages ? null : "Next"}
-                prevLabel={pageFocus === 1 ? null : "Previous"}
-                nextDisabled={pageFocus === totalPages}
-                prevDisabled={pageFocus === 1}
-              />
-            </div> */}
           </div>
         ) : (
           <div>
-            <h1>No exams to show</h1>
-            {/* <Button
-              className={activeNavItem === "quizzes/create" ? "active" : ""}
-              colorScheme="teal"
-              size="sm"
-              onClick={() => onNavItemClick("quizzes/create")}
-            >
-              Add Exam
-            </Button> */}
+            <h1 style={{marginTop: "10rem", marginBottom: "1rem"}}>You haven't created any exams yet. Would you like to add one?</h1>
           </div>
         )}
         <Link to="quizzes/create">
@@ -218,7 +195,6 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
             }`}
             colorScheme="teal"
             size="sm"
-            // onClick={() => onNavItemClick("quizzes/create")}
             ml={2}
           >
             Add Exam
