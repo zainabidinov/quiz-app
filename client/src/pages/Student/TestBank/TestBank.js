@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./TestBank.css";
+import dogWalking from "../../../assets/images/dog_walking.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ModalContent, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -57,8 +58,7 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
         const { data } = response.data;
 
         setExamData(data);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     fetchExamData();
@@ -101,10 +101,11 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
           <h1>Available Exams</h1>
         </div>
 
-        <div className="examMainContent__content">
-          {currentExams &&
+        <div>
+          {currentExams.length > 0 ? (
             currentExams.map((exam, index) => (
-              <div className="examMainContent__content-item" key={exam._id}>
+              <div className="examMainContent__content">
+                <div className="examMainContent__content-item" key={exam._id}>
                   <h1>{exam.name}</h1>
                   <div className="exam-info">
                     <p>Subject: {exam.subject}</p>
@@ -115,39 +116,49 @@ const TestBank = ({ activeNavItem, onNavItemClick }) => {
                     </p>
                   </div>
 
-                <Button
-                  style={{ width: "125px", height: "30px", fontSize: "15px" }}
-                  colorScheme="teal"
-                  variant="outline"
-                  mt={2}
-                  className={
-                    activeNavItem === "exam-session/:id" ? "active" : ""
-                  }
-                  type="button"
-                  onClick={() => handleInfoOpenModal(exam._id)}
-                >
-                  Attempt exam
-                </Button>
+                  <Button
+                    style={{ width: "125px", height: "30px", fontSize: "15px" }}
+                    colorScheme="teal"
+                    variant="outline"
+                    mt={2}
+                    className={
+                      activeNavItem === "exam-session/:id" ? "active" : ""
+                    }
+                    type="button"
+                    onClick={() => handleInfoOpenModal(exam._id)}
+                  >
+                    Attempt exam
+                  </Button>
+                </div>
               </div>
-            ))}
-        </div>
-        <div className="paginationContainer">
-          <Pagination
-            style={{ marginTop: "16px" }}
-            size="sm"
-            total={totalPages}
-            perPage={1}
-            value={pageFocus}
-            onChange={pageSwitchHandler}
-            nextLabel={pageFocus === totalPages ? null : "Next"}
-            prevLabel={pageFocus === 1 ? null : "Previous"}
-            nextDisabled={pageFocus === totalPages}
-            prevDisabled={pageFocus === 1}
-          />
+            ))
+          ) : (
+            <div className="examMainContent__empty">
+              <img src={dogWalking} alt="dog walking" />
+              <p style={{ fontWeight: "bold" }}>
+                No exams available at the moment.
+              </p>
+              <p style={{ fontWeight: "bold" }}>Take a break and relax!</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <Modal  isOpen={isInfoOpen} onClose={handleInfoCloseModal}>
+      <div className="paginationContainer">
+        <Pagination
+          style={{ marginTop: "16px" }}
+          size="sm"
+          total={totalPages}
+          perPage={1}
+          value={pageFocus}
+          onChange={pageSwitchHandler}
+          nextLabel={pageFocus === totalPages ? null : "Next"}
+          prevLabel={pageFocus === 1 ? null : "Previous"}
+          nextDisabled={pageFocus === totalPages}
+          prevDisabled={pageFocus === 1}
+        />
+      </div>
+      <Modal isOpen={isInfoOpen} onClose={handleInfoCloseModal}>
         <ModalOverlay />
         <ModalContent mx={2}>
           <ModalHeader>{selectedExam[0]?.name}</ModalHeader>

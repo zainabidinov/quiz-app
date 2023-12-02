@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ManageExams.css";
+import teacher from "../../../assets/images/teacher.svg";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
@@ -49,16 +50,16 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
 
         setExamData(data);
       } catch (error) {
-        // displayNotification("No exam found in the database", "error");
+        console.log("No exam found in the database", error);
       }
     };
 
     fetchExamData();
   }, []);
 
-  const onButtonClick = () => {
-    onNavItemClick("quizzes/create");
-  };
+  // const onButtonClick = () => {
+  //   onNavItemClick("quizzes/create");
+  // };
 
   const handleEditExamButton = async (quizId) => {
     try {
@@ -136,84 +137,119 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       <div className="manage-exams">
         <div className="manage-exams__header">Manage Exams</div>
         {currentExams.length > 0 ? (
-          <div className="examContent">
-            {currentExams.map((exam) => (
-              <div className="examContent-item">
-                <div key={exam._id}>
-                  <p>
-                    Subject: <span className="examSubject">{exam.subject}</span>
-                  </p>
-                  <p>
-                    Exam Name: <span className="examName">{exam.name}</span>
-                  </p>
-                  <p>
-                    Total Questions:{" "}
-                    <span className="examName">{exam.numberOfQuestions}</span>
-                  </p>
-                </div>
+          <div className="manage-exams__layout">
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div className="examContent">
+                {currentExams.map((exam) => (
+                  <div className="examContent-item">
+                    <div key={exam._id}>
+                      <p>
+                        Subject:{" "}
+                        <span className="examSubject">{exam.subject}</span>
+                      </p>
+                      <p>
+                        Exam Name: <span className="examName">{exam.name}</span>
+                      </p>
+                      <p>
+                        Total Questions:{" "}
+                        <span className="examName">
+                          {exam.numberOfQuestions}
+                        </span>
+                      </p>
+                    </div>
 
-                <div className="examContent__buttons">
-                  <Button
-                    className={
-                      activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
-                    }
-                    margin={1}
-                    size="sm"
-                    colorScheme="blue"
-                    variant="solid"
-                    leftIcon={<EditIcon boxSize={4} />}
-                    onClick={() => handleEditExamButton(exam._id)}
-                  >
-                    Edit Exam
-                  </Button>
-                  <Button
-                    className={
-                      activeNavItem === "quizzes/edit-exam/:id" ? "active" : ""
-                    }
-                    margin={1}
-                    size="sm"
-                    colorScheme="red"
-                    variant="solid"
-                    leftIcon={<DeleteIcon boxSize={4} />}
-                    onClick={() => handleDeleteExamButton(exam._id)}
-                  >
-                    Delete Exam
-                  </Button>
-                </div>
+                    <div className="examContent__buttons">
+                      <Button
+                        className={
+                          activeNavItem === "quizzes/edit-exam/:id"
+                            ? "active"
+                            : ""
+                        }
+                        margin={1}
+                        size="sm"
+                        colorScheme="blue"
+                        variant="solid"
+                        leftIcon={<EditIcon boxSize={4} />}
+                        onClick={() => handleEditExamButton(exam._id)}
+                      >
+                        Edit Exam
+                      </Button>
+                      <Button
+                        className={
+                          activeNavItem === "quizzes/edit-exam/:id"
+                            ? "active"
+                            : ""
+                        }
+                        margin={1}
+                        size="sm"
+                        colorScheme="red"
+                        variant="solid"
+                        leftIcon={<DeleteIcon boxSize={4} />}
+                        onClick={() => handleDeleteExamButton(exam._id)}
+                      >
+                        Delete Exam
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+              <Link to="quizzes/create">
+                <Button
+                  className="btn-addExam"
+                  colorScheme="teal"
+                  size="sm"
+                  ml={2}
+                >
+                  Add Exam
+                </Button>
+              </Link>
+            </div>
+
+            <div className="paginationContainer">
+              <Pagination
+                style={{ marginTop: "16px" }}
+                size="sm"
+                total={totalPages}
+                perPage={1}
+                value={pageFocus}
+                onChange={pageSwitchHandler}
+                nextLabel={pageFocus === totalPages ? null : "Next"}
+                prevLabel={pageFocus === 1 ? null : "Previous"}
+                nextDisabled={pageFocus === totalPages}
+                prevDisabled={pageFocus === 1}
+              />
+            </div>
           </div>
         ) : (
-          <div>
-            <h1 style={{marginTop: "10rem", marginBottom: "1rem"}}>You haven't created any exams yet. Would you like to add one?</h1>
+          <div className="results--content__empty">
+            <img src={teacher} alt="teacher" />
+            <p
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              You haven't created any exams yet.
+            </p>
+            <p
+              style={{
+                marginBottom: "0.5rem",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              {" "}
+              Would you like to add one?
+            </p>
           </div>
         )}
-        <Link to="quizzes/create">
-          <Button
-            className={`btn-addExam ${
-              activeNavItem === "quizzes/create" ? "active" : ""
-            }`}
-            colorScheme="teal"
-            size="sm"
-            ml={2}
-          >
-            Add Exam
-          </Button>
-        </Link>
-        <div className="paginationContainer">
-          <Pagination
-            style={{ marginTop: "16px" }}
-            size="sm"
-            total={totalPages}
-            perPage={1}
-            value={pageFocus}
-            onChange={pageSwitchHandler}
-            nextLabel={pageFocus === totalPages ? null : "Next"}
-            prevLabel={pageFocus === 1 ? null : "Previous"}
-            nextDisabled={pageFocus === totalPages}
-            prevDisabled={pageFocus === 1}
-          />
-        </div>
       </div>
     </>
   );

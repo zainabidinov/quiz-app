@@ -1,14 +1,14 @@
 .editExam {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
   padding-top: 18px;
   padding-inline: 10px;
-  height: 100%;
+  height: 93vh;
 }
 
-.editExam-container {
+.editExam-header {
   display: flex;
   justify-content: space-around;
   align-items: baseline;
@@ -20,7 +20,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.editExam-container p {
+.editExam-header p {
   font-weight: 600;
   font-size: 18px;
 }
@@ -29,10 +29,18 @@
 
 .editQuestionsContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   margin-top: 5px;
   width: 100%;
   max-width: 1100px;
+}
+
+.editQuestions-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .grid {
@@ -65,7 +73,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .editExam-container {
+  .editExam-header {
     flex-direction: column;
     align-items: center;
     row-gap: 2px;

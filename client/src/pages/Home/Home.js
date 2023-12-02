@@ -255,10 +255,10 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="hero">
+        
           {/* <HomeHero /> */}
           {renderContent()}
-        </div>
+        
       </div>
       <Outlet />
     </div>

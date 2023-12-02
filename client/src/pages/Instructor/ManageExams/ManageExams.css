@@ -3,7 +3,7 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 93vh;
   overflow: auto;
 }
 
@@ -30,6 +30,19 @@
   height: 100%;
   align-self: center;
   justify-self: center;
+}
+
+.manage-exams__layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.manage-exams__layout .btn-addExam {
+  align-self: center;
+  justify-content: center;
 }
 
 .examContent {

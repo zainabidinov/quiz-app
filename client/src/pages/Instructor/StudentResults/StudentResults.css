@@ -1,12 +1,4 @@
-.results--container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 12px;
-  padding-inline: 10px;
-  overflow: auto;
-  height: 100%;
-}
+
 
 .results--content__header {
   display: flex;
@@ -54,6 +46,7 @@
   background-color: #fff;
   color: #54667a;
 }
+
 
 
 @media (max-width: 598px) {

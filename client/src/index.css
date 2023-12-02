@@ -17,9 +17,14 @@ body,
   width: 100%;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .paginationContainer {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* margin-bottom: 10px; */
   height: 50px;
   align-self: center;
 }

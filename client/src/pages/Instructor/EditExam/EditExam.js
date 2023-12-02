@@ -14,11 +14,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setExam,
-  setExamProperty,
-  setQuestionProperty,
-} from "../../../redux/examSlice.js";
+import { setExam, setExamProperty } from "../../../redux/examSlice.js";
 import { Pagination } from "@mantine/core";
 import axios from "axios";
 import { Outlet, useLocation } from "react-router-dom";
@@ -61,7 +57,6 @@ const EditExam = () => {
   const [pageFocus, setPageFocus] = useState(1);
   const questionsPerPage = 6;
 
-  const [totalSeconds, setTotalSeconds] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
 
@@ -130,93 +125,6 @@ const EditExam = () => {
   const handleQuestionCloseModal = () => {
     setIsQuestionOpen(false);
   };
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      numberOfQuestions: "",
-      duration: "",
-    },
-    validate: (values) => {
-      const errors = {};
-
-      if (!values.name) {
-        errors.name = "Please provide exam name";
-      }
-      if (!values.numberOfQuestions) {
-        errors.numberOfQuestions = "Please provide number of questions";
-      }
-      if (!values.name) {
-        errors.name = "Please provide duration both in hours and minutes";
-      }
-    },
-    onSubmit: async (values) => {
-      values.preventDefault();
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No token found");
-        }
-
-        const totalSeconds = hours * 3600 + minutes * 60;
-
-        const updatedExamData = {
-          name: values.name,
-          numberOfQuestions: values.numberOfQuestions,
-          duration: totalSeconds,
-        };
-
-        dispatch(
-          setExamProperty({
-            type: "SET_EXAM_NAME",
-            value: updatedExam.name,
-          })
-        );
-        dispatch(
-          setExamProperty({
-            type: "SET_NUMBER_OF_QUESTIONS",
-            value: updatedExam.numberOfQuestions,
-          })
-        );
-        dispatch(
-          setExamProperty({
-            type: "SET_EXAM_DURATION",
-            value: totalSeconds,
-          })
-        );
-
-        let quizId = location.pathname.split("/").pop();
-
-        const response = await axios.put(
-          `${API_URL}/update-quiz/${quizId}`,
-          updatedExamData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          displayNotification(response.data.message, "success");
-
-          const { name, numberOfQuestions, duration } = response.data.data;
-          dispatch(setExam(response.data.data));
-          setUpdatedExam({
-            ...updatedExam,
-            name: name,
-            numberOfQuestions: numberOfQuestions,
-            duration: duration,
-          });
-          setIsExamOpen(false);
-        } else {
-          displayNotification(response.data.message, "error");
-        }
-      } catch (error) {
-        displayNotification(error.message, "error");
-      }
-    },
-  });
 
   const onExamFormSubmit = async (event) => {
     event.preventDefault();
@@ -368,54 +276,30 @@ const EditExam = () => {
   return (
     <>
       <div className="editExam">
-        <div className="editExam-container">
-          <p>Number of Exam Questions: {numberOfQuestions}</p>
-
-          <p>
-            Duration of Exam:{" "}
-            {hours > 0 && `${hours} hour${hours > 1 ? "s" : ""} `}
-            {minutes} minute{minutes !== 1 ? "s" : ""}
-          </p>
-
-          <Button
-            type="button"
-            colorScheme="blue"
-            size="md"
-            leftIcon={<EditIcon boxSize={4} />}
-            onClick={handleExamOpenModal}
-          >
-            Edit Exam
-          </Button>
-        </div>
-
         {/* Modal for editing main exam details */}
         <Modal isOpen={isExamOpen} onClose={handleExamCloseModal}>
           <ModalOverlay />
           <ModalContent mx={2}>
             <ModalHeader>Edit Exam</ModalHeader>
             <ModalCloseButton />
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={onExamFormSubmit}>
               <ModalBody>
                 <Stack spacing={4}>
-                  <FormControl isInvalid={formik.errors.name && formik.touched.name}>
-                    
+                  <FormControl>
                     <FormLabel>Name of Exam</FormLabel>
                     <Input
                       placeholder={name}
-                      value={formik.values.name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBLur}
-                      name="name"
+                      value={updatedExam.name}
+                      onChange={(e) =>
+                        setUpdatedExam({
+                          ...updatedExam,
+                          name: e.target.value,
+                        })
+                      }
                     />
-                    <FormErrorMessage>{formik.errors.subject}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl
-                    isInvalid={
-                      formik.errors.numberOfQuestions &&
-                      formik.touched.numberOfQuestions
-                    }
-                  >
+                  <FormControl>
                     <FormLabel>Number of Exam Questions</FormLabel>
                     <NumberInput min={1}>
                       <NumberInputField
@@ -423,21 +307,18 @@ const EditExam = () => {
                         _focus={{ boxShadow: "none" }}
                         bg="white"
                         placeholder={numberOfQuestions}
-                        value={formik.values.numberOfQuestions}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBLur}
+                        value={updatedExam.numberOfQuestions}
+                        onChange={(e) =>
+                          setUpdatedExam({
+                            ...updatedExam,
+                            numberOfQuestions: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </NumberInput>
-                    <FormErrorMessage>
-                      {formik.errors.numberOfQuestions}
-                    </FormErrorMessage>
                   </FormControl>
 
-                  <FormControl
-                    isInvalid={
-                      formik.errors.duration && formik.touched.duration
-                    }
-                  >
+                  <FormControl>
                     <FormLabel>Duration of Exam</FormLabel>
                     <Stack direction="row">
                       <NumberInput min={0}>
@@ -466,12 +347,7 @@ const EditExam = () => {
               </ModalBody>
 
               <ModalFooter>
-                <Button
-                  colorScheme="teal"
-                  mr={3}
-                  type="submit"
-                  isDisabled={!formik.isValid}
-                >
+                <Button colorScheme="teal" mr={3} type="submit">
                   Save
                 </Button>
                 <Button onClick={handleExamCloseModal}>Cancel</Button>
@@ -482,28 +358,75 @@ const EditExam = () => {
 
         <div className="editQuestionsContainer">
           {currentQuestions.length > 0 ? (
-            <div className="w-full grid">
-              {currentQuestions.map((question) => (
-                <div className="editQuestions-item" key={question._id}>
-                  <div className="editQuestions-item__content">
-                    <div>
-                      <p>Question: {question.questionName}</p>
-                      <p>Correct Option: {question.correctOption}</p>
-                    </div>
+            <>
+              <div className="editExam-header">
+                <p>Number of Exam Questions: {numberOfQuestions}</p>
 
-                    <Button
-                      colorScheme="red"
-                      mr={3}
-                      type="submit"
-                      size="sm"
-                      onClick={() => handleDeleteQuestion(question._id)}
-                    >
-                      Delete Question
-                    </Button>
+                <p>
+                  Duration of Exam:{" "}
+                  {hours > 0 && `${hours} hour${hours > 1 ? "s" : ""} `}
+                  {minutes} minute{minutes !== 1 ? "s" : ""}
+                </p>
+
+                <Button
+                  type="button"
+                  colorScheme="blue"
+                  size="md"
+                  leftIcon={<EditIcon boxSize={4} />}
+                  onClick={handleExamOpenModal}
+                >
+                  Edit Exam
+                </Button>
+              </div>
+
+              <div className="w-full grid">
+                {currentQuestions.map((question) => (
+                  <div className="editQuestions-item" key={question._id}>
+                    <div className="editQuestions-item__content">
+                      <div>
+                        <p>Question: {question.questionName}</p>
+                        <p>Correct Option: {question.correctOption}</p>
+                      </div>
+
+                      <Button
+                        colorScheme="red"
+                        mr={3}
+                        type="submit"
+                        size="sm"
+                        onClick={() => handleDeleteQuestion(question._id)}
+                      >
+                        Delete Question
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+              <div
+                style={{ alignSelf: "center" }}
+                className="EditExamFormFooter"
+              >
+                {currentQuestions.length > 0 ? (
+                  <div>
+                    {isLimitReached === numberOfQuestions ? (
+                      ""
+                    ) : (
+                      <Button
+                        colorScheme="teal"
+                        mt={3}
+                        ml={5}
+                        type="submit"
+                        size="sm"
+                        onClick={handleQuestionOpenModal}
+                      >
+                        Add Question
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <div>{""}</div>
+                )}
+              </div>
+            </>
           ) : (
             <div>
               <div className="editQuestions">
@@ -526,27 +449,19 @@ const EditExam = () => {
           )}
         </div>
 
-        <div className="EditExamFormFooter">
-          {currentQuestions.length > 0 ? (
-            <div>
-              {isLimitReached === numberOfQuestions ? (
-                ""
-              ) : (
-                <Button
-                  colorScheme="teal"
-                  mt={3}
-                  ml={5}
-                  type="submit"
-                  size="sm"
-                  onClick={handleQuestionOpenModal}
-                >
-                  Add Question
-                </Button>
-              )}
-            </div>
-          ) : (
-            <div>{""}</div>
-          )}
+        <div className="paginationContainer">
+          <Pagination
+            style={{ marginTop: "16px" }}
+            size="sm"
+            total={totalPages}
+            perPage={1}
+            value={pageFocus}
+            onChange={pageSwitchHandler}
+            nextLabel={pageFocus === totalPages ? null : "Next"}
+            prevLabel={pageFocus === 1 ? null : "Previous"}
+            nextDisabled={pageFocus === totalPages}
+            prevDisabled={pageFocus === 1}
+          />
         </div>
 
         <Modal isOpen={isQuestionOpen} onClose={handleQuestionCloseModal}>
@@ -722,21 +637,6 @@ const EditExam = () => {
             </form>
           </ModalContent>
         </Modal>
-
-        <div className="paginationContainer">
-          <Pagination
-            style={{ marginTop: "16px" }}
-            size="sm"
-            total={totalPages}
-            perPage={1}
-            value={pageFocus}
-            onChange={pageSwitchHandler}
-            nextLabel={pageFocus === totalPages ? null : "Next"}
-            prevLabel={pageFocus === 1 ? null : "Previous"}
-            nextDisabled={pageFocus === totalPages}
-            prevDisabled={pageFocus === 1}
-          />
-        </div>
       </div>
       <Outlet />
     </>
