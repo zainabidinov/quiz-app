@@ -23,7 +23,6 @@ const Home = () => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [activeNavItem, setActiveNavItem] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -139,16 +138,10 @@ const Home = () => {
           <h1 onClick={() => navigate("")}>ONEQUIZ</h1>
           {currentUser && currentUser.admin === true ? (
             <ul>
-              <li
-                className={activeNavItem === "home" ? "active" : ""}
-                // onClick={() => handleNavItemClick("home")}
-              >
+              <li>
                 <span className="mdi mdi-account-multiple-outline"></span> Users
               </li>
-              <li
-                className={activeNavItem === "quizzes" ? "active" : ""}
-                // onClick={() => handleNavItemClick("quizzes")}
-              >
+              <li>
                 <span className="mdi mdi-account-circle"></span> Exams
               </li>
             </ul>
@@ -165,7 +158,8 @@ const Home = () => {
 
                   <li
                     className={
-                      location.pathname === "/home/student-results"
+                      location.pathname === "/home/student-results" ||
+                      location.pathname.startsWith("/home/exam-feedback")
                         ? "active"
                         : ""
                     }
@@ -199,7 +193,10 @@ const Home = () => {
 
                   <li
                     className={
-                      location.pathname === "/home/exam-results" ? "active" : ""
+                      location.pathname === "/home/exam-results" ||
+                      location.pathname.startsWith("/home/exam-feedback")
+                        ? "active"
+                        : ""
                     }
                     onClick={() => navigate("exam-results")}
                   >
@@ -243,11 +240,11 @@ const Home = () => {
           )}
 
           <span class="mdi mdi-menu header-icon" onClick={toggleMenu}></span>
-          {/* <h1>ONEQUIZ</h1> */}
           <p>
             {currentUser && !currentUser.admin && (
               <div>
-                {currentUser.firstName} {""}{currentUser.lastName} |{" "}
+                {currentUser.firstName} {""}
+                {currentUser.lastName} |{" "}
                 {currentUser.userType[0].toUpperCase() +
                   currentUser.userType.slice(1)}
               </div>
@@ -255,10 +252,8 @@ const Home = () => {
           </p>
         </div>
 
-        
-          {/* <HomeHero /> */}
-          {renderContent()}
-        
+        {/* <HomeHero /> */}
+        {renderContent()}
       </div>
       <Outlet />
     </div>

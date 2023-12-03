@@ -167,7 +167,6 @@ const StudentResults = ({ activeNavItem, onNavItemClick }) => {
                               : ""
                           }
                           onClick={() =>
-                            // onNavItemClick(`exam-feedback/${exam._id}`)
                             navigate(`exam-feedback/${exam._id}`)
                           }
                         >

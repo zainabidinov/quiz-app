@@ -1,6 +1,5 @@
 import React from "react";
 import "./Signup.css";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logIn, signUp } from "../../components/Auth/userAuth";
 import {
@@ -68,12 +67,6 @@ const Signup = () => {
         const response = await logIn(loginVal);
 
         if (response.success) {
-          // toast({
-          //   description: response.message,
-          //   status: "success",
-          //   duration: 9000,
-          //   isClosable: true,
-          // });
           localStorage.setItem("token", response.data);
           navigate("/home");
           formik.resetForm();
@@ -95,80 +88,6 @@ const Signup = () => {
       }
     },
   });
-
-  // const [formValues, setFormValues] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   password: "",
-  //   password2: "",
-  //   userType: "",
-  // });
-
-  // const { password, password2 } = formValues;
-
-  // function updateForm(value) {
-  //   return setFormValues((prevState) => {
-  //     let updatedFormValues = { ...prevState, ...value };
-
-  //     if (updatedFormValues.userType === "undefined") {
-  //       updatedFormValues.userType = "student";
-  //     }
-
-  //     return updatedFormValues;
-  //   });
-  // }
-
-  // const onSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const newUser = { ...formValues };
-
-  //   if (password !== password2) {
-  //     toast({
-  //       title: "Passwords do not match!",
-  //       status: "error",
-  //       duration: 9000,
-  //       isClosable: true,
-  //     });
-  //   } else {
-  //     try {
-  //       const response = await signUp(newUser);
-
-  //       if (response.success) {
-  //         toast({
-  //           description: response.message,
-  //           status: "success",
-  //           duration: 9000,
-  //           isClosable: true,
-  //         });
-  //         navigate("/home");
-  //         setFormValues({
-  //           firstName: "",
-  //           lastName: "",
-  //           email: "",
-  //           password: "",
-  //           password2: "",
-  //           userType: "",
-  //         });
-  //       } else {
-  //         toast({
-  //           description: response.message,
-  //           status: "error",
-  //           duration: 9000,
-  //           isClosable: true,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       toast({
-  //         description: error.message,
-  //         status: "error",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //     }
-  //   }
-  // };
 
   return (
     <div className="signup">
@@ -276,16 +195,6 @@ const Signup = () => {
                 ></Input>
               </FormControl>
 
-              {/* <label htmlFor="password">Confirm Password</label>
-              <input
-                type="password"
-                id="password2"
-                placeholder="Confirm Password"
-                value={formValues.password2}
-                onChange={(e) => updateForm({ password2: e.target.value })}
-              ></input> */}
-
-              {/* <div className="signup-form__user-type"> */}
               <FormControl
                 isInvalid={formik.errors.userType && formik.touched.userType}
               >
@@ -306,12 +215,10 @@ const Signup = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {/* <option value="">Select user type</option> */}
                   <option value="student">Student</option>
                   <option value="teacher">Teacher</option>
                 </Select>
               </FormControl>
-              {/* </div> */}
 
               <div className="signup-form__btn">
                 <Button

@@ -1,10 +1,18 @@
 import React from "react";
 import { Input, FormLabel, FormControl } from "@chakra-ui/react";
 
-const FillBlank = ({ handleUserAnswers, selectedAnswer }) => {
+const FillBlank = ({
+  handleUserAnswers,
+  selectedAnswer,
+  question,
+  chosenData,
+}) => {
   const userAnswerChange = (e) => {
     handleUserAnswers(e.target.value);
   };
+
+  const isAnswerSelected = chosenData.hasOwnProperty(question._id);
+  const selectedValue = isAnswerSelected ? chosenData[question._id] : "";
 
   return (
     <FormControl>
@@ -13,8 +21,8 @@ const FillBlank = ({ handleUserAnswers, selectedAnswer }) => {
       </FormLabel>
       <Input
         variant="filled"
-        placeholder="Enter your answer"
-        value={selectedAnswer}
+        placeholder="Type your answer"
+        value={selectedValue}
         onChange={userAnswerChange}
       />
     </FormControl>

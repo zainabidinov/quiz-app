@@ -51,7 +51,7 @@
 
 @media (max-width: 598px) {
   table.results--table tbody {
-    margin-bottom: 10px; /* Adjust this value to set your desired gap size */
+    margin-bottom: 10px; 
   }
 
   .results--table th {
@@ -67,14 +67,13 @@
       rgb(54, 184, 207) 100%
     );
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: none; /* Remove border for headers in two-column layout */
+    border: none; 
   }
   
-  /* Define styles for table cells in two-column layout */
   .results--table td {
     background-color: #fff;
     color: #54667a;
-    border: 1px solid #ddd; /* Add border to table cells in two-column layout */
+    border: 1px solid #ddd; 
   }
 
 

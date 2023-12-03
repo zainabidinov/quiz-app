@@ -213,6 +213,7 @@ const ExamSession = () => {
                   question={renderedQuestion}
                   handleUserAnswers={handleUserAnswers}
                   selectedAnswer={chosenData[renderedQuestion._id]}
+                  chosenData={chosenData}
                 />
               )}
             </div>

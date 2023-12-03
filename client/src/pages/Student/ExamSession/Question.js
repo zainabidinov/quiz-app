@@ -3,7 +3,12 @@ import MultipleChoice from "./MultipleChoice";
 import TrueFalse from "./TrueFalse";
 import FillBlank from "./FillBlank";
 
-const Question = ({ question, handleUserAnswers, selectedAnswer }) => {
+const Question = ({
+  question,
+  handleUserAnswers,
+  selectedAnswer,
+  chosenData,
+}) => {
   return (
     <div>
       {question.questionType === "multipleChoice" && (
@@ -21,6 +26,8 @@ const Question = ({ question, handleUserAnswers, selectedAnswer }) => {
             handleUserAnswers(question._id, answer)
           }
           selectedAnswer={selectedAnswer}
+          question={question}
+          chosenData={chosenData}
         />
       )}
       {question.questionType === "fillBlank" && (
@@ -29,6 +36,8 @@ const Question = ({ question, handleUserAnswers, selectedAnswer }) => {
             handleUserAnswers(question._id, answer)
           }
           selectedAnswer={selectedAnswer}
+          question={question}
+          chosenData={chosenData}
         />
       )}
     </div>

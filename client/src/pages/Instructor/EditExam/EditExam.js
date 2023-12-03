@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./EditExam.css";
 import {
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -11,7 +10,6 @@ import {
   ModalFooter,
   Input,
   Stack,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setExam, setExamProperty } from "../../../redux/examSlice.js";
@@ -30,7 +28,6 @@ import {
   Radio,
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-import { useFormik } from "formik";
 
 const EditExam = () => {
   const API_URL = "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";

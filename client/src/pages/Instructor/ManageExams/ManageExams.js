@@ -57,10 +57,6 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
     fetchExamData();
   }, []);
 
-  // const onButtonClick = () => {
-  //   onNavItemClick("quizzes/create");
-  // };
-
   const handleEditExamButton = async (quizId) => {
     try {
       const token = localStorage.getItem("token");
@@ -80,8 +76,6 @@ const ManageExams = ({ activeNavItem, onNavItemClick }) => {
       const { success, message, data } = response.data;
 
       if (success) {
-        // dispatch(setExam(data));
-        // onNavItemClick(`quizzes/edit-exam/${data._id}`);
         navigate(`quizzes/edit-exam/${data._id}`);
       } else {
       }

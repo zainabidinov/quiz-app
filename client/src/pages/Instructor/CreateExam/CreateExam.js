@@ -8,7 +8,6 @@ import {
 import "./CreateExam.css";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { useNavigate, Outlet } from "react-router-dom";
 import {
   Button,
   Input,
@@ -19,11 +18,6 @@ import {
 import { useFormik } from "formik";
 
 const CreateExams = () => {
-  const [subject, setSubject] = useState("");
-  const [examName, setExamName] = useState("");
-  const [examQuestions, setExamQuestions] = useState("");
-  const [examDurationHours, setExamDurationHours] = useState("");
-  const [examDurationMinutes, setExamDurationMinutes] = useState("");
   const BASE_API_URL =
     "https://quiz-app-zainabidinov-api.onrender.com/api/quizzes";
   const toast = useToast();
@@ -104,40 +98,6 @@ const CreateExams = () => {
       }
     },
   });
-
-  // const onSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const durationInSeconds =
-  //     (parseInt(examDurationHours) * 60 + parseInt(examDurationMinutes)) * 60;
-
-  //   const formValues = {
-  //     subject: subject,
-  //     examName: examName,
-  //     numberOfQuestions: examQuestions,
-  //     examDuration: durationInSeconds,
-  //   };
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //       throw new Error("No token found");
-  //     }
-
-  //     const response = await axios.post(`${BASE_API_URL}/create`, formValues, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (response.data.success) {
-  //       displayNotification(response.data.message, "success");
-  //     } else {
-  //       displayNotification(response.data.message, "error");
-  //     }
-  //   } catch (error) {
-  //     displayNotification(error.message, "error");
-  //   }
-  // };
 
   return (
     <div className="createExamFormContainer">

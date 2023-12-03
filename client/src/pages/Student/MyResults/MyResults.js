@@ -37,11 +37,6 @@ const MyResults = ({ activeNavItem, onNavItemClick }) => {
     fetchTheStudentResult();
   }, []);
 
-  const onClick = (id) => {
-    const navItem = `exam-feedback/${id}`;
-    onNavItemClick(navItem);
-  };
-
   const pageSwitchHandler = (value) => {
     setPageFocus(value);
   };

@@ -22,9 +22,6 @@ body,
 }
 
 .paginationContainer {
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* margin-bottom: 10px; */
   height: 50px;
   align-self: center;
 }
