@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ecbf6a38.css",
+    "main.js": "/static/js/main.ffc840eb.js",
+    "static/media/materialdesignicons-webfont.eot": "/static/media/materialdesignicons-webfont.d95c91e88cc28d3305af.eot",
+    "static/media/materialdesignicons-webfont.ttf?v=7.2.96": "/static/media/materialdesignicons-webfont.0207b94ccbbd5be9a50b.ttf",
+    "static/media/materialdesignicons-webfont.woff?v=7.2.96": "/static/media/materialdesignicons-webfont.2e62b6565e8fb8e62ffc.woff",
+    "static/media/materialdesignicons-webfont.woff2?v=7.2.96": "/static/media/materialdesignicons-webfont.66f2d337503c6bd54e84.woff2",
+    "static/media/login.svg": "/static/media/login.bb13226c351803f8fc8c262b01367328.svg",
+    "static/media/default-profile-pic.png": "/static/media/default-profile-pic.b19663f610898bcf3e05.png",
+    "static/media/signup.svg": "/static/media/signup.d67c2fdb65a300be6eeef06af20567ff.svg",
+    "static/media/teacher.svg": "/static/media/teacher.c8e70400a0d3daedbb230486789e366f.svg",
+    "static/media/dog_walking.svg": "/static/media/dog_walking.344e609c4d04df0f4126c6215595fbf5.svg",
+    "static/media/no_data.svg": "/static/media/no_data.810627350e9ed2c1d963d2fe1dfac495.svg",
+    "index.html": "/index.html",
+    "main.ecbf6a38.css.map": "/static/css/main.ecbf6a38.css.map",
+    "main.ffc840eb.js.map": "/static/js/main.ffc840eb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ecbf6a38.css",
+    "static/js/main.ffc840eb.js"
+  ]
+}
